@@ -8,8 +8,10 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -21,7 +23,6 @@ import com.snacks.nuvo.ui.profile.profileGraph
 import com.snacks.nuvo.ui.ranking.rankingGraph
 import com.snacks.nuvo.ui.script.scriptGraph
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,18 +31,22 @@ fun NuvoNavHost(appState: NuvoAppState) {
 
     Scaffold(
         bottomBar = {
-            AnimatedVisibility(
-                visible = appState.shouldShowBottomBar,
-                enter = slideInVertically { it },
-                exit = slideOutVertically { it },
+            Surface(
+                color = Color.White
             ) {
-                NuvoBottomNavigationBar(
-                    destinations = appState.topLevelDestinations,
-                    currentDestination = appState.currentDestination,
-                    onNavigateToDestination = { destination ->
-                        appState.navigateToTopLevelDestination(destination)
-                    }
-                )
+                AnimatedVisibility(
+                    visible = appState.shouldShowBottomBar,
+                    enter = slideInVertically { it },
+                    exit = slideOutVertically { it },
+                ) {
+                    NuvoBottomNavigationBar(
+                        destinations = appState.topLevelDestinations,
+                        currentDestination = appState.currentDestination,
+                        onNavigateToDestination = { destination ->
+                            appState.navigateToTopLevelDestination(destination)
+                        }
+                    )
+                }
             }
         }
     ) { paddingValues ->
