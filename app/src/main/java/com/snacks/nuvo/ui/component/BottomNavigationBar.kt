@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -32,7 +33,7 @@ import com.snacks.nuvo.R
 
 @Composable
 fun BottomNavigationBar(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
     Surface(
@@ -41,8 +42,8 @@ fun BottomNavigationBar(
             .navigationBarsPadding()
             .shadow(
                 elevation = 12.dp,
-                spotColor = Color(0X1F000000),
-                ambientColor = Color(0X1F000000)
+                spotColor = Color(0x1F000000),
+                ambientColor = Color(0x1F000000)
             ),
         shape = RoundedCornerShape(
             topStart = 76.dp, topEnd = 76.dp, bottomStart = 76.dp, bottomEnd = 76.dp
@@ -55,19 +56,18 @@ fun BottomNavigationBar(
                 .background(
                     Brush.verticalGradient(
                         colorStops = arrayOf(
-                            0.4f to Color(0XFF32757E).copy(alpha = 0.8f),
-                            1f to Color(0XFF53A790).copy(alpha = 0.8f)
+                            0.4f to Color(0xFF32757E).copy(alpha = 0.8f),
+                            1f to Color(0xFF53A790).copy(alpha = 0.8f)
                         )
                     )
                 )
-                .padding(horizontal = 20.dp, vertical = 8.dp)
+                .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
-            )
-            {
+            ) {
                 content()
             }
         }
@@ -90,7 +90,7 @@ fun BottomNavigationBarItem(
         interactionSource = NoRippleInteractionSource()
     ) {
         Box(
-            modifier.padding(vertical = 8.dp, horizontal = 14.dp),
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 12.dp),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -98,12 +98,13 @@ fun BottomNavigationBarItem(
             ) {
                 Icon(
                     painter = painterResource(id = if (selected) selectedIcon else unselectedIcon),
-                    contentDescription = null,
-                    tint = Color.White
+                    contentDescription = label,
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
                 )
-                Spacer(modifier = Modifier.height(2.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    label,
+                    text = label,
                     style = TextStyle(
                         fontSize = 12.sp,
                         fontWeight = FontWeight.W400,
