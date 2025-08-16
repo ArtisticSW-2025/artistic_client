@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -29,15 +30,22 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.home.component.RecommendScriptCard
 import com.snacks.nuvo.ui.home.component.TodayMissionCard
+import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.theme.NuvoTheme
+import androidx.compose.runtime.getValue
+import com.snacks.nuvo.util.toCommaFormat
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Preview
 @Composable
-internal fun HomeScreen() {
+internal fun HomeScreen(
+    viewModel: HomeViewModel = viewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsState()
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     Box(
@@ -72,7 +80,7 @@ internal fun HomeScreen() {
                             style = NuvoTheme.typography.interSemiBold24.copy(color = NuvoTheme.colors.white)
                         )
                         Text(
-                            "USER1!",
+                            uiState.userName,
                             style = NuvoTheme.typography.interBlack24.copy(color = NuvoTheme.colors.white)
                         )
                     }
@@ -90,13 +98,13 @@ internal fun HomeScreen() {
                         )
                         Spacer(Modifier.width(4.dp))
                         Text(
-                            "RANK 128",
+                            "RANK ${uiState.rank.toCommaFormat()}",
                             style = NuvoTheme.typography.interMedium15.copy(color = NuvoTheme.colors.white)
                         )
                     }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        "13,847",
+                        uiState.score.toCommaFormat(),
                         style = NuvoTheme.typography.interBlack48.copy(color = NuvoTheme.colors.white)
                     )
                     Spacer(modifier = Modifier.weight(1f))
@@ -118,7 +126,7 @@ internal fun HomeScreen() {
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
                         contentPadding = PaddingValues(start = 20.dp, end = 20.dp)
                     ) {
-                        items(recommendScripts) { script ->
+                        items(uiState.recommendScripts) { script ->
                             RecommendScriptCard(
                                 modifier = Modifier,
                                 title = script.title,
@@ -137,20 +145,11 @@ internal fun HomeScreen() {
         ) {
             TodayMissionCard(
                 modifier = Modifier,
-                mission = "오늘 하루를 요약해서 말해보자"
+                mission = uiState.todayMission
             ) { }
+        }
+        if (uiState.isLoading) {
+            LoadingIndicator()
         }
     }
 }
-
-data class RecommendScript(
-    val id: Int,
-    val title: String,
-    val description: String,
-)
-
-val recommendScripts = listOf<RecommendScript>(
-    RecommendScript(id = 1, title = "택배 배송 문의", description = "배송 지연이나 변경이 필요할 때"),
-    RecommendScript(id = 2, title = "회의 일정 조율", description = "상사나 동료에게 일정 확인이 필요할 때"),
-    RecommendScript(id = 3, title = "병원 진료 예약", description = "전화로 병원 예약할 때"),
-)
