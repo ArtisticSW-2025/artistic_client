@@ -5,7 +5,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -30,6 +32,7 @@ fun NuvoNavHost(appState: NuvoAppState) {
     val navController = appState.navController
 
     Scaffold(
+        modifier = Modifier.statusBarsPadding(),
         bottomBar = {
             Surface(
                 color = Color.White
