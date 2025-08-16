@@ -141,7 +141,7 @@ internal fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 34.dp)
-                .offset(y = screenHeight * 0.5f - 40.dp)
+                .offset(y = screenHeight * 0.5f - 30.dp)
         ) {
             TodayMissionCard(
                 modifier = Modifier,
