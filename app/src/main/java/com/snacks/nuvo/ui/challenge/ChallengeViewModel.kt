@@ -19,10 +19,20 @@ class ChallengeViewModel @Inject constructor() : ViewModel() {
 
     init {
         _uiState.value = _uiState.value.copy(isLoading = true)
+        getToday()
+        getPhrase()
         getWeeklyMission()
         getDailyNodeList()
         initSelectedNode()
         _uiState.value = _uiState.value.copy(isLoading = false)
+    }
+
+    private fun getToday() {
+        _uiState.value = _uiState.value.copy(today = LocalDate.now())
+    }
+
+    private fun getPhrase() {
+        _uiState.value = _uiState.value.copy(phrase = "오늘의 한 마디, 내일의 자신감!")
     }
 
     private fun getWeeklyMission() {
@@ -37,11 +47,16 @@ class ChallengeViewModel @Inject constructor() : ViewModel() {
         val nodeList = mutableListOf<ChallengeNode>()
         var currentDate = firstDayOfMonth
 
+        nodeList.add(
+            ChallengeNode(
+                id = null,
+                date = currentDate,
+            )
+        )
         while (!currentDate.isAfter(lastDayOfMonth)) {
             nodeList.add(
                 ChallengeNode(
                     id = currentDate.dayOfMonth,
-                    phrase = "오늘의 한 마디, 내일의 자신감!",
                     description = "오늘(${currentDate.dayOfMonth}일) 하루를 요약해서 말해보자",
                     date = currentDate,
                     status = when {
@@ -51,15 +66,20 @@ class ChallengeViewModel @Inject constructor() : ViewModel() {
                     },
                 )
             )
-            currentDate = currentDate.plusDays(1) // 다음 날로 이동
+            currentDate = currentDate.plusDays(1)
         }
         _uiState.value = _uiState.value.copy(nodeList = nodeList)
     }
 
-
     private fun initSelectedNode() {
         _uiState.value = _uiState.value.copy(
             selectedNode = _uiState.value.nodeList.find { node -> node.date == LocalDate.now() }
+        )
+    }
+
+    public fun onNodeClicked(id: Int?) {
+        _uiState.value = _uiState.value.copy(
+            selectedNode = _uiState.value.nodeList.find { node -> node.id == id }
         )
     }
 }

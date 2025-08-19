@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,6 +21,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.snacks.nuvo.ui.challenge.component.CourseMap
 import com.snacks.nuvo.ui.challenge.component.DatePhraseCard
 import com.snacks.nuvo.ui.challenge.component.WeeklyMissionCard
 import com.snacks.nuvo.ui.component.LoadingIndicator
@@ -31,7 +35,7 @@ internal fun ChallengeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-
+    val scrollState = rememberScrollState()
 
     Box(
         modifier = Modifier
@@ -45,7 +49,19 @@ internal fun ChallengeScreen(
                     )
                 )
             ),
+        contentAlignment = Alignment.Center
     ) {
+
+        CourseMap(
+            nodes = uiState.nodeList,
+            modifier = Modifier
+                .width(width = 319.dp)
+                .fillMaxSize()
+                .verticalScroll(scrollState),
+            onNodeClick = { nodeId ->
+                viewModel.onNodeClicked(nodeId)
+            }
+        )
 
         Column(
             modifier = Modifier
@@ -54,7 +70,8 @@ internal fun ChallengeScreen(
         ) {
             DatePhraseCard(
                 modifier = Modifier,
-                node = uiState.selectedNode,
+                date = uiState.today,
+                phrase = uiState.phrase,
             )
             Spacer(Modifier.height(26.dp))
             Box(
@@ -70,8 +87,6 @@ internal fun ChallengeScreen(
             }
 
         }
-
-
 
         if (uiState.isLoading) {
             LoadingIndicator()
