@@ -1,17 +1,65 @@
 package com.snacks.nuvo.ui.challenge
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
-import com.snacks.nuvo.ui.home.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.time.LocalDate
+import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ChallengeViewModel @Inject constructor() : ViewModel() {
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(ChallengeUiState())
+    val uiState: StateFlow<ChallengeUiState> = _uiState.asStateFlow()
+
+    init {
+        _uiState.value = _uiState.value.copy(isLoading = true)
+        getWeeklyMission()
+        getDailyNodeList()
+        initSelectedNode()
+        _uiState.value = _uiState.value.copy(isLoading = false)
+    }
+
+    private fun getWeeklyMission() {
+        _uiState.value = _uiState.value.copy(weeklyMission = "30분 이상 통화하기")
+    }
+
+    private fun getDailyNodeList() {
+        val today = LocalDate.now()
+        val firstDayOfMonth = today.withDayOfMonth(1)
+        val lastDayOfMonth = today.with(TemporalAdjusters.lastDayOfMonth())
+
+        val nodeList = mutableListOf<ChallengeNode>()
+        var currentDate = firstDayOfMonth
+
+        while (!currentDate.isAfter(lastDayOfMonth)) {
+            nodeList.add(
+                ChallengeNode(
+                    id = currentDate.dayOfMonth,
+                    phrase = "오늘의 한 마디, 내일의 자신감!",
+                    description = "오늘(${currentDate.dayOfMonth}일) 하루를 요약해서 말해보자",
+                    date = currentDate,
+                    status = when {
+                        currentDate.isAfter(today) -> NodeStatus.LOCKED
+                        currentDate.isEqual(today) -> NodeStatus.UNLOCKED
+                        else -> NodeStatus.COMPLETED
+                    },
+                )
+            )
+            currentDate = currentDate.plusDays(1) // 다음 날로 이동
+        }
+        _uiState.value = _uiState.value.copy(nodeList = nodeList)
+    }
 
 
+    private fun initSelectedNode() {
+        _uiState.value = _uiState.value.copy(
+            selectedNode = _uiState.value.nodeList.find { node -> node.date == LocalDate.now() }
+        )
+    }
 }

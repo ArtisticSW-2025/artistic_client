@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.snacks.nuvo.ui.challenge.ChallengeNode
 import com.snacks.nuvo.ui.theme.NuvoTheme
 import com.snacks.nuvo.util.dropShadow
 import java.time.LocalDate
@@ -30,8 +31,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 internal fun DatePhraseCard(
     modifier: Modifier,
-    date: LocalDate,
-    phrase: String
+    node: ChallengeNode?,
 ) {
     Card (
         modifier = modifier
@@ -76,15 +76,17 @@ internal fun DatePhraseCard(
                 Column (
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Text(
-                        text = date.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")),
-                        style = NuvoTheme.typography.interBold20.copy(color = NuvoTheme.colors.subNavy)
-                    )
-                    Spacer(Modifier.height(1.dp))
-                    Text(
-                        text = phrase,
-                        style = NuvoTheme.typography.interSemiBold13.copy(color = NuvoTheme.colors.lightGradient2)
-                    )
+                    if (node != null) {
+                        Text(
+                            text = node.date.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")),
+                            style = NuvoTheme.typography.interBold20.copy(color = NuvoTheme.colors.subNavy)
+                        )
+                        Spacer(Modifier.height(1.dp))
+                        Text(
+                            text = node.phrase,
+                            style = NuvoTheme.typography.interSemiBold13.copy(color = NuvoTheme.colors.lightGradient2)
+                        )
+                    }
                 }
             }
         }
@@ -97,7 +99,9 @@ internal fun DatePhraseCard(
 internal fun PreviewDatePhraseCard() {
     DatePhraseCard(
         modifier = Modifier,
-        date = LocalDate.now(),
-        phrase = "오늘의 한 마디, 내일의 자신감!"
+        node = ChallengeNode(
+            date = LocalDate.now(),
+            phrase = "오늘의 한 마디, 내일의 자신감!",
+        )
     )
 }

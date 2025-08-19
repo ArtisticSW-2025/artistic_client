@@ -22,7 +22,6 @@ import com.snacks.nuvo.ui.challenge.component.DatePhraseCard
 import com.snacks.nuvo.ui.challenge.component.WeeklyMissionCard
 import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.theme.NuvoTheme
-import java.time.LocalDate
 
 @SuppressLint("NewApi")
 @Preview
@@ -30,7 +29,6 @@ import java.time.LocalDate
 internal fun ChallengeScreen(
     viewModel: ChallengeViewModel = viewModel(),
 ) {
-
     val uiState by viewModel.uiState.collectAsState()
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
@@ -56,8 +54,7 @@ internal fun ChallengeScreen(
         ) {
             DatePhraseCard(
                 modifier = Modifier,
-                date = LocalDate.now(),
-                phrase = "오늘의 한 마디, 내일의 자신감!",
+                node = uiState.selectedNode,
             )
             Spacer(Modifier.height(26.dp))
             Box(
@@ -66,7 +63,7 @@ internal fun ChallengeScreen(
             ) {
                 WeeklyMissionCard(
                     modifier = Modifier,
-                    mission = "30분 이상 통화하기"
+                    mission = uiState.weeklyMission
                 ) {
 
                 }
