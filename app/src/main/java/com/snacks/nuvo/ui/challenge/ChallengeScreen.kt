@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.ui.challenge.component.CourseMap
 import com.snacks.nuvo.ui.challenge.component.DatePhraseCard
+import com.snacks.nuvo.ui.challenge.component.TodayMissionDialog
 import com.snacks.nuvo.ui.challenge.component.WeeklyMissionCard
 import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.theme.NuvoTheme
@@ -86,6 +87,15 @@ internal fun ChallengeScreen(
                 }
             }
 
+        }
+
+        if (uiState.selectedNode !== null) {
+            TodayMissionDialog(
+                modifier = Modifier,
+                node = uiState.selectedNode!!,
+                onConfirm = { } ,
+                onDismiss = { viewModel.clearSelectedNode() },
+            )
         }
 
         if (uiState.isLoading) {

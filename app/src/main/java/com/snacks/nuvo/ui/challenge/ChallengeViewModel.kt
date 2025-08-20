@@ -23,7 +23,6 @@ class ChallengeViewModel @Inject constructor() : ViewModel() {
         getPhrase()
         getWeeklyMission()
         getDailyNodeList()
-        initSelectedNode()
         _uiState.value = _uiState.value.copy(isLoading = false)
     }
 
@@ -71,13 +70,11 @@ class ChallengeViewModel @Inject constructor() : ViewModel() {
         _uiState.value = _uiState.value.copy(nodeList = nodeList)
     }
 
-    private fun initSelectedNode() {
-        _uiState.value = _uiState.value.copy(
-            selectedNode = _uiState.value.nodeList.find { node -> node.date == LocalDate.now() }
-        )
+    fun clearSelectedNode() {
+        _uiState.value = _uiState.value.copy(selectedNode = null)
     }
 
-    public fun onNodeClicked(id: Int?) {
+    fun onNodeClicked(id: Int?) {
         _uiState.value = _uiState.value.copy(
             selectedNode = _uiState.value.nodeList.find { node -> node.id == id }
         )
