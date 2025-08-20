@@ -26,6 +26,7 @@ import com.snacks.nuvo.util.dropShadow
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun DatePhraseCard(
     modifier: Modifier,

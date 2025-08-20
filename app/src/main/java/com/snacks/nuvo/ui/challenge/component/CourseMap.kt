@@ -99,41 +99,32 @@ fun CourseMap(
                 for (i in 1 until nodePixelPositions.size - 1) {
                     val current = nodePixelPositions[i]
                     val next = nodePixelPositions[i+1]
-                    if (i % 8 == 4)
-                    {
+                    if (i % 8 == 4) {
                         cubicTo(current.x + 30, current.y - 100, next.x - 75, next.y, next.x, next.y)
                     }
-                    if (i % 8 == 0)
-                    {
+                    if (i % 8 == 0) {
                         cubicTo(current.x - 30, current.y - 100, next.x + 75, next.y, next.x, next.y)
                     }
 
-                    if (i % 8 == 3)
-                    {
+                    if (i % 8 == 3) {
                         cubicTo(current.x - 30, current.y - 50, next.x - 30, next.y + 50, next.x, next.y)
                     }
-                    if (i % 8 == 7)
-                    {
+                    if (i % 8 == 7) {
                         cubicTo(current.x + 30, current.y - 50, next.x + 30, next.y + 50, next.x, next.y)
                     }
 
-                    if (i % 8 == 2)
-                    {
+                    if (i % 8 == 2) {
                         cubicTo(current.x - 75, current.y, next.x + 30, next.y + 100, next.x, next.y)
                     }
-                    if (i % 8 == 6)
-                    {
+                    if (i % 8 == 6) {
                         cubicTo(current.x + 75, current.y, next.x - 30, next.y + 100, next.x, next.y)
                     }
 
-                    if (i % 4 == 1)
-                    {
+                    if (i % 4 == 1) {
                         lineTo(next.x, next.y)
                     }
-
                 }
             }
-
             drawPath(path, color = pathColor, style = Stroke(width = 25f))
         }
 
