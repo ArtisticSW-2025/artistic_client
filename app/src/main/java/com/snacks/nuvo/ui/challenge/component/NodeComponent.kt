@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -24,11 +23,15 @@ import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.ui.challenge.ChallengeNode
 import com.snacks.nuvo.ui.challenge.NodeStatus
 import com.snacks.nuvo.ui.theme.NuvoTheme
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.hazeEffect
 import java.time.LocalDate
 
 @Composable
 fun NodeComponent(
     node: ChallengeNode,
+    hazeState: HazeState,
     modifier: Modifier,
 ) {
     val fillColor = NuvoTheme.colors.mainGreen
@@ -71,6 +74,15 @@ fun NodeComponent(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .hazeEffect(
+                        state = hazeState,
+                        style = HazeStyle(
+                            backgroundColor = NuvoTheme.colors.white.copy(alpha = 0.8f),
+                            blurRadius = 20.dp,
+                            tint = null,
+                            noiseFactor = 0f,
+                        )
+                    )
                     .background(
                         color = when (node.status) {
                             NodeStatus.LOCKED -> NuvoTheme.colors.white.copy(alpha = 0.8f)
@@ -78,7 +90,6 @@ fun NodeComponent(
                             NodeStatus.COMPLETED -> NuvoTheme.colors.mainGreen.copy(alpha = 0.8f)
                         }
                     )
-                    .blur(radius = 20.dp)
             ) { }
             Text(
                 text = "${node.id}",
@@ -97,7 +108,11 @@ fun NodeComponent(
 fun NodePreview(
     @PreviewParameter(NodePreviewParameterProvider::class) node: ChallengeNode
 ) {
-    NodeComponent(node, modifier = Modifier)
+    NodeComponent(
+        node,
+        modifier = Modifier,
+        hazeState = HazeState()
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

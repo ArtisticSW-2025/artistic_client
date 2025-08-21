@@ -23,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -32,10 +31,14 @@ import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.theme.NuvoTheme
 import com.snacks.nuvo.util.dropShadow
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.hazeEffect
 
 @Composable
 internal fun WeeklyMissionCard(
     modifier: Modifier,
+    hazeState: HazeState,
     mission: String,
     onClick: () -> Unit,
 ) {
@@ -67,8 +70,15 @@ internal fun WeeklyMissionCard(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = NuvoTheme.colors.white.copy(alpha = 0.9f))
-                    .blur(radius = 20.dp),
+                    .hazeEffect(
+                        state = hazeState,
+                        style = HazeStyle(
+                            blurRadius = 20.dp,
+                            tint = null,
+                            noiseFactor = 0f,
+                        )
+                    )
+                    .background(color = NuvoTheme.colors.white.copy(alpha = 0.9f)),
                 contentAlignment = Alignment.Center,
             ) { }
 
@@ -140,6 +150,7 @@ internal fun WeeklyMissionCard(
 internal fun PreviewWeeklyMissionCard() {
     WeeklyMissionCard(
         modifier = Modifier,
+        hazeState = HazeState(),
         mission = "30분 이상 통화하기",
     ) { }
 }

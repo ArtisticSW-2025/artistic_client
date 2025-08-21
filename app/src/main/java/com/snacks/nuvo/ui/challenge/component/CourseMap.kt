@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.ui.challenge.ChallengeNode
 import com.snacks.nuvo.ui.theme.NuvoTheme
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -38,6 +40,7 @@ fun CourseMap(
 
     val density = LocalDensity.current
 
+    val hazeState = rememberHazeState()
     val pathColor = NuvoTheme.colors.mainGreen
 
     // Box를 사용해 캔버스(배경)와 노드(콘텐츠)를 겹치게 배치
@@ -93,7 +96,11 @@ fun CourseMap(
         }
 
         // ## 2. 배경에 부드러운 경로만 그리는 Canvas ##
-        Canvas(modifier = Modifier.fillMaxSize()) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .hazeSource(state = hazeState)
+        ) {
             val path = Path().apply {
                 moveTo(nodePixelPositions.first().x, nodePixelPositions.first().y)
                 for (i in 1 until nodePixelPositions.size - 1) {
@@ -135,6 +142,7 @@ fun CourseMap(
 
             NodeComponent(
                 node = node,
+                hazeState = hazeState,
                 modifier = Modifier
                     .offset(
                         x = xInDp - (nodeSize / 2),

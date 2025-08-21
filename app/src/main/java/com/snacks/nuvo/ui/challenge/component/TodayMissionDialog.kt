@@ -27,14 +27,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogWindowProvider
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.challenge.ChallengeNode
 import com.snacks.nuvo.ui.theme.NuvoTheme
 import com.snacks.nuvo.util.dropShadow
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -42,11 +48,13 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TodayMissionDialog(
     modifier: Modifier,
+    hazeState: HazeState,
     node: ChallengeNode,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
     Dialog(onDismissRequest = onDismiss) {
+        (LocalView.current.parent as DialogWindowProvider).window.setDimAmount(0.5f)
         Card (
             modifier = modifier
                 .height(height = 381.dp)
@@ -72,8 +80,15 @@ fun TodayMissionDialog(
                 Box (
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(color = NuvoTheme.colors.mainGreen.copy(alpha = 0.8f))
-                        .blur(radius = 5.dp),
+                        .hazeEffect(
+                            state = hazeState,
+                            style = HazeStyle(
+                                blurRadius = 5.dp,
+                                tint = HazeTint(NuvoTheme.colors.black.copy(alpha = 0.5f)),
+                                noiseFactor = 0f,
+                            )
+                        )
+                        .background(color = NuvoTheme.colors.mainGreen.copy(alpha = 0.8f)),
                 ) { }
 
                 Box (
@@ -169,6 +184,7 @@ fun TodayMissionDialog(
 fun PreviewTodayMissionDialog() {
     TodayMissionDialog(
         modifier = Modifier,
+        hazeState = HazeState(),
         node = ChallengeNode(
             description = "오늘 하루를 요약해서 말해보자",
             date = LocalDate.now(),

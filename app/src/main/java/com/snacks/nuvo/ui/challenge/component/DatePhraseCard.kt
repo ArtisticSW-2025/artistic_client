@@ -17,12 +17,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.ui.theme.NuvoTheme
 import com.snacks.nuvo.util.dropShadow
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.hazeEffect
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -30,6 +32,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 internal fun DatePhraseCard(
     modifier: Modifier,
+    hazeState: HazeState,
     date: LocalDate?,
     phrase: String,
 ) {
@@ -63,8 +66,15 @@ internal fun DatePhraseCard(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = NuvoTheme.colors.white.copy(alpha = 0.9f))
-                    .blur(radius = 20.dp),
+                    .hazeEffect(
+                        state = hazeState,
+                        style = HazeStyle(
+                            blurRadius = 20.dp,
+                            tint = null,
+                            noiseFactor = 0f,
+                        )
+                    )
+                    .background(color = NuvoTheme.colors.white.copy(alpha = 0.9f)),
                 contentAlignment = Alignment.Center,
             ) { }
 
@@ -97,6 +107,7 @@ internal fun DatePhraseCard(
 internal fun PreviewDatePhraseCard() {
     DatePhraseCard(
         modifier = Modifier,
+        hazeState = HazeState(),
         date = LocalDate.now(),
         phrase = "오늘의 한 마디, 내일의 자신감!",
     )

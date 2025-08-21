@@ -84,4 +84,7 @@ dependencies {
     // bottom navigation bar
     implementation(libs.nav)
 
+    // background blur
+    implementation(libs.haze)
+
 }

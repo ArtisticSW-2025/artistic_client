@@ -60,7 +60,6 @@ class ChallengeViewModel @Inject constructor() : ViewModel() {
                     date = currentDate,
                     status = when {
                         currentDate.isAfter(today) -> NodeStatus.LOCKED
-                        currentDate.isEqual(today) -> NodeStatus.UNLOCKED
                         else -> NodeStatus.COMPLETED
                     },
                 )
