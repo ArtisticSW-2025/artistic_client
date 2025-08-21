@@ -14,7 +14,7 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
 internal fun ScriptChip(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     isSelected: Boolean,
     label: String,
     onClick: () -> Unit,
@@ -48,7 +48,6 @@ internal fun ScriptChip(
 @Composable
 fun ScriptChipPreview() {
     ScriptChip(
-        modifier = Modifier,
         isSelected = true,
         label = "의료",
     ) {}
@@ -58,7 +57,6 @@ fun ScriptChipPreview() {
 @Composable
 fun ScriptChipPreview2() {
     ScriptChip(
-        modifier = Modifier,
         isSelected = false,
         label = "서비스/쇼핑",
     ) {}
