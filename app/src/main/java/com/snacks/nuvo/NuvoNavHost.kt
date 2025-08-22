@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
+import com.snacks.nuvo.ui.call.callGraph
 import com.snacks.nuvo.ui.home.homeGraph
 import com.snacks.nuvo.ui.challenge.challengeGraph
 import com.snacks.nuvo.ui.component.BottomNavigationBar
@@ -61,8 +62,9 @@ fun NuvoNavHost(appState: NuvoAppState) {
             homeGraph()
             scriptGraph()
             rankingGraph()
-            challengeGraph()
+            challengeGraph(appState)
             profileGraph()
+            callGraph(appState)
         }
     }
 }

@@ -23,5 +23,7 @@ object Routes {
         const val ROUTE = "profileRoute"
     }
 
-
+    object Call {
+        const val ROUTE = "call"
+    }
 }
