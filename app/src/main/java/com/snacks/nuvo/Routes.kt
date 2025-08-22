@@ -9,6 +9,8 @@ object Routes {
 
     object Script {
         const val ROUTE = "scriptRoute"
+
+        const val SCRIPT_DETAIL = "scriptDetail"
     }
 
     object Ranking {

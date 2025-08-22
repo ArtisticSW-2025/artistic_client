@@ -59,7 +59,7 @@ fun NuvoNavHost(appState: NuvoAppState) {
             modifier = Modifier.padding(paddingValues),
         ) {
             homeGraph()
-            scriptGraph()
+            scriptGraph(appState = appState)
             rankingGraph()
             challengeGraph()
             profileGraph()

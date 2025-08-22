@@ -18,10 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.R
+import com.snacks.nuvo.Routes
 import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.script.component.ScriptChip
 import com.snacks.nuvo.ui.script.component.ScriptListItem
@@ -29,10 +29,10 @@ import com.snacks.nuvo.ui.script.component.ScriptSearchBar
 import com.snacks.nuvo.ui.script.component.ScriptToggleButton
 import com.snacks.nuvo.ui.theme.NuvoTheme
 
-@Preview
 @Composable
 internal fun ScriptScreen(
-    viewModel: ScriptViewModel = viewModel(),
+    appState: NuvoAppState,
+    viewModel: ScriptViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -93,7 +93,7 @@ internal fun ScriptScreen(
                     ScriptListItem(
                         title = item.title,
                         description = item.description,
-                        onClick = { viewModel.onScriptItemClick(item.id) }
+                        onClick = { appState.navigate("${Routes.Script.SCRIPT_DETAIL}/${item.id}?isSmallTalkMode=${uiState.isSmallTalkMode}&isEmergencyMode=${uiState.isEmergencyMode}") }
                     )
                     HorizontalDivider(
                         thickness = 1.dp,
