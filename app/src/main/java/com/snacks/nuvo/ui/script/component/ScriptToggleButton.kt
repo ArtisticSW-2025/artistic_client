@@ -34,7 +34,6 @@ internal fun ScriptToggleButton(
 ) {
     Box(
         modifier = modifier
-            .padding(horizontal = 12.dp, vertical = 4.dp)
             .clip(shape = RoundedCornerShape(5.dp))
             .background(
                 brush = if (isSelected) Brush.verticalGradient(
