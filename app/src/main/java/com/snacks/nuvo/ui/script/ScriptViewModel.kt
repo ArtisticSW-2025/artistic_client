@@ -53,8 +53,4 @@ class ScriptViewModel @Inject constructor() : ViewModel() {
     fun toggleEmergencyMode() {
         _uiState.value = _uiState.value.copy(isEmergencyMode = !_uiState.value.isEmergencyMode)
     }
-
-    fun onScriptItemClick(id: Int) {
-
-    }
 }
