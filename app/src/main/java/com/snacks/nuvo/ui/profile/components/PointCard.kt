@@ -12,8 +12,8 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
 fun PointCard(
+    modifier: Modifier = Modifier,
     points: String,
-    modifier: Modifier = Modifier
 ) {
     InfoCard(
         backgroundColor = NuvoTheme.colors.mainGreen,

@@ -21,9 +21,9 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
 fun StatsCard(
+    modifier: Modifier = Modifier,
     completedMissions: String,
     totalSpeakingTime: String,
-    modifier: Modifier = Modifier
 ) {
     ShadowCard(
         modifier = modifier.height(89.dp)

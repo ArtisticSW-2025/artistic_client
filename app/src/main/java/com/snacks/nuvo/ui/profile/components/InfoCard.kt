@@ -68,6 +68,7 @@ fun ShadowCard(
 // 정보 행 (왼쪽 텍스트, 오른쪽 콘텐츠)
 @Composable
 fun InfoRow(
+    modifier: Modifier = Modifier,
     leftText: String,
     leftTextStyle: TextStyle,
     leftTextColor: Color,
@@ -75,7 +76,6 @@ fun InfoRow(
     rightTextStyle: TextStyle? = null,
     rightTextColor: Color? = null,
     rightContent: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier

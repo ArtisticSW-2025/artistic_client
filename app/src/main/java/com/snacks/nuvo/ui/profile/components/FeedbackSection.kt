@@ -35,8 +35,8 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FeedbackSection(
+    modifier: Modifier = Modifier,
     feedbackItems: List<FeedbackData>,
-    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
@@ -56,10 +56,12 @@ fun FeedbackSection(
 }
 
 @Composable
-private fun FeedbackHeader() {
+private fun FeedbackHeader(
+    modifier: Modifier = Modifier,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(start = 20.dp)
+        modifier = modifier.padding(start = 20.dp)
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_chart_filled),
@@ -77,10 +79,14 @@ private fun FeedbackHeader() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun FeedbackPager(feedbackItems: List<FeedbackData>) {
+private fun FeedbackPager(
+    modifier: Modifier = Modifier,
+    feedbackItems: List<FeedbackData>) {
     val pagerState = rememberPagerState(pageCount = { feedbackItems.size })
 
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         HorizontalPager(
             state = pagerState,
             contentPadding = PaddingValues(horizontal = 20.dp),
@@ -119,10 +125,11 @@ private fun FeedbackPager(feedbackItems: List<FeedbackData>) {
 
 @Composable
 private fun FeedbackCard(
+    modifier: Modifier = Modifier,
     feedback: FeedbackData
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .width(324.dp)
             .height(261.dp)
             .background(
@@ -155,8 +162,8 @@ private fun FeedbackCard(
 
 @Composable
 private fun FeedbackTitle(
+    modifier: Modifier = Modifier,
     title: String,
-    modifier: Modifier = Modifier
 ) {
     Text(
         text = title,
@@ -168,8 +175,8 @@ private fun FeedbackTitle(
 
 @Composable
 private fun FeedbackItem(
+    modifier: Modifier = Modifier,
     text: String,
-    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier

@@ -19,9 +19,9 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
 fun ProfileHeader(
+    modifier: Modifier = Modifier,
     userName: String,
     onEditClick: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
