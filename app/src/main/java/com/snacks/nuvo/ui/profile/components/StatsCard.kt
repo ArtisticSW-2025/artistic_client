@@ -15,8 +15,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.R
-import com.snacks.nuvo.ui.profile.components.InfoRow
-import com.snacks.nuvo.ui.profile.components.ShadowCard
 import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable

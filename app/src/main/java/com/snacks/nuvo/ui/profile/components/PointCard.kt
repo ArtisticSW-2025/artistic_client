@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.snacks.nuvo.ui.profile.components.InfoCard
-import com.snacks.nuvo.ui.profile.components.InfoRow
 import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
