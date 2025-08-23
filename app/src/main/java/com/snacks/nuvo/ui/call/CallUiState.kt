@@ -21,6 +21,12 @@ data class CallUiState(
     val todayMission: String = "",
     val todayMissionDate: LocalDate? = null,
     val isTodayMissionFinish: Boolean = false,
+
+    val isDetailedResult: Boolean = false,
+    val result: String = "",
+    val feedback: String = "",
+    val score: Int = 0,
+
 )
 
 enum class CallStatus { OUTGOING, INCOMING }

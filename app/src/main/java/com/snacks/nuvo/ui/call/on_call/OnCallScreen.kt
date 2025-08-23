@@ -181,7 +181,12 @@ internal fun OnCallScreen(
                         colors = ButtonDefaults.buttonColors(
                             containerColor = NuvoTheme.colors.white
                         ),
-                        onClick = onCallEnded
+                        onClick = {
+                            if (uiState.isTodayMission)
+                                viewModel.setIsTodayMissionFinish()
+                            else
+                                onCallEnded()
+                        }
                     ) {
                         Text(
                             text = "통화 종료하기",

@@ -137,7 +137,7 @@ internal fun CallingScreen(
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = NuvoTheme.colors.white
                                 ),
-                                onClick = { viewModel.setIsReceived(true) }
+                                onClick = onConnected
                             ) {
                                 Image(
                                     painter = painterResource(R.drawable.ic_calling_filled),

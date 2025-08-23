@@ -28,6 +28,9 @@ class CallViewModel @Inject constructor() : ViewModel() {
         getCallStatus()
         getContactName()
         getCallScripts()
+        getResult()
+        getScore()
+        getFeedback()
         _uiState.value = _uiState.value.copy(isLoading = false)
     }
 
@@ -118,6 +121,37 @@ class CallViewModel @Inject constructor() : ViewModel() {
 
     fun stopTimer() {
         timerJob?.cancel()
+    }
+
+    fun setIsDetailedResult(isDetailedResult: Boolean) {
+        _uiState.value = _uiState.value.copy(isDetailedResult = isDetailedResult)
+    }
+
+    private fun getResult() {
+        _uiState.value = _uiState.value.copy(result = "말하기가 점점 더 좋아지고 있어요!")
+    }
+
+    private fun getScore() {
+        _uiState.value = _uiState.value.copy(score = 98)
+    }
+
+    private fun getFeedback() {
+        _uiState.value = _uiState.value.copy(
+            feedback = "요청하는 어조가 다소 직설적이거나 \n" +
+                "무례하게 들릴 수 있습니다. \n" +
+                "'바꿔주세요'보다는 '변경 가능할까요?'와 같이 \n" +
+                "질문 형태로 부드럽게 표현하면 \n" +
+                "더 정중한 인상을 줄 수 있습니다."
+        )
+    }
+
+    fun resetCall() {
+        stopTimer()
+        _uiState.value = _uiState.value.copy(
+            elapsedTime = 0,
+            isRecording = false,
+            isEndPossible = false,
+        )
     }
 
     override fun onCleared() {
