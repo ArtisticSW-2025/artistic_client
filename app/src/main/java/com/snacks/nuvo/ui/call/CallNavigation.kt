@@ -1,7 +1,5 @@
 package com.snacks.nuvo.ui.call
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
@@ -12,22 +10,13 @@ import com.snacks.nuvo.Routes
 import com.snacks.nuvo.ui.call.calling.CallingScreen
 import com.snacks.nuvo.ui.call.on_call.OnCallScreen
 import com.snacks.nuvo.ui.call.result.CallResultScreen
-import java.time.LocalDate
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.callGraph(appState: NuvoAppState) {
     navigation(startDestination = Routes.Call.CALLING, route = Routes.Call.ROUTE) {
         composable(Routes.Call.CALLING) {
             val callViewModel: CallViewModel = hiltViewModel(
                 remember(it) { appState.navController.getBackStackEntry(Routes.Call.ROUTE) }
             )
-//            callViewModel.setCallStatus(CallStatus.INCOMING)
-
-//            callViewModel.setPrevName("오늘의 미션")
-//            callViewModel.setIsTodayMission(true)
-//            callViewModel.setTodayMission("오늘 하루를 요약해서 말해보자")
-//            callViewModel.setTodayMissionDate(LocalDate.now())
-
             CallingScreen(
                 onNavigateBack = { appState.navController.popBackStack() },
                 viewModel = callViewModel,
