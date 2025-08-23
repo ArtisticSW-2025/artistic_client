@@ -150,11 +150,11 @@ private fun FeedbackCard(
             Divider(modifier = Modifier.width(292.dp))
 
             Spacer(modifier = Modifier.height(12.dp))
-            FeedbackItem(text = feedback.content)
+            FeedbackItem(text = feedback.content1)
             Spacer(modifier = Modifier.height(12.dp))
-            FeedbackItem(text = feedback.content)
+            FeedbackItem(text = feedback.content2)
             Spacer(modifier = Modifier.height(12.dp))
-            FeedbackItem(text = feedback.content)
+            FeedbackItem(text = feedback.content3)
             Spacer(modifier = Modifier.height(12.dp))
         }
     }
