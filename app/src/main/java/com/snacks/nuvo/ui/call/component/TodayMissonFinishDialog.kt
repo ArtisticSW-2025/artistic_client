@@ -32,7 +32,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun TodayMissionFinishDialog(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     date: LocalDate,
     onConfirm: () -> Unit
 ) {
@@ -106,7 +106,6 @@ fun TodayMissionFinishDialog(
 @Composable
 fun TodayMissionFinishDialogPreview() {
     TodayMissionFinishDialog(
-        modifier = Modifier,
         date = LocalDate.now(),
         onConfirm = { } ,
     )

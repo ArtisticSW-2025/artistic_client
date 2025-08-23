@@ -20,7 +20,7 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
 internal fun CallScriptCard(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     script: String,
     isAI: Boolean,
     isLast: Boolean,
@@ -63,7 +63,6 @@ internal fun CallScriptCard(
 @Composable
 internal fun CallScriptCardPreview() {
     CallScriptCard(
-        modifier = Modifier,
         script = "안녕하세요, 힐링내과입니다.\n" +
                 "무엇을 도와드릴까요?",
         isAI = true,
@@ -75,7 +74,6 @@ internal fun CallScriptCardPreview() {
 @Composable
 internal fun CallScriptCardPreview2() {
     CallScriptCard(
-        modifier = Modifier,
         script = "안녕하세요.\n" +
                 "초진 예약을 하고 싶어서 전화드렸어요.",
         isAI = false,
@@ -87,7 +85,6 @@ internal fun CallScriptCardPreview2() {
 @Composable
 internal fun CallScriptCardPreview3() {
     CallScriptCard(
-        modifier = Modifier,
         script = "네, 증상은 어떤 것이신가요?",
         isAI = true,
         isLast = true
