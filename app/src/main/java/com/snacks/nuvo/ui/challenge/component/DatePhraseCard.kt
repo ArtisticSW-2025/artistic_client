@@ -31,7 +31,7 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun DatePhraseCard(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     hazeState: HazeState,
     date: LocalDate?,
     phrase: String,
