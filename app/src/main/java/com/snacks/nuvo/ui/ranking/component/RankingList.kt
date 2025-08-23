@@ -10,10 +10,11 @@ import com.snacks.nuvo.ui.ranking.RankingItem
 
 @Composable
 internal fun RankingList(
+    modifier: Modifier = Modifier,
     rankings: List<RankingItem>,
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         itemsIndexed(rankings) { index, item ->

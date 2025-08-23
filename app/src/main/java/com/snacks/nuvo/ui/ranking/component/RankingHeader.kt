@@ -22,9 +22,10 @@ import com.snacks.nuvo.ui.ranking.RankingItem
 import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
-internal fun RankingHeader(topThree: List<RankingItem>) {
+internal fun RankingHeader(modifier: Modifier = Modifier,
+                           topThree: List<RankingItem>) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(RankingConstants.HeaderHeight)
             .background(
@@ -60,8 +61,8 @@ internal fun RankingHeader(topThree: List<RankingItem>) {
 
 @Composable
 internal fun TopThreeRankers(
+    modifier: Modifier = Modifier,
     topThree: List<RankingItem>,
-    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -87,11 +88,13 @@ internal fun TopThreeRankers(
 
 @Composable
 internal fun TopRankerItem(
+    modifier: Modifier = Modifier,
     ranker: RankingItem,
     imageSize: androidx.compose.ui.unit.Dp,
     isWinner: Boolean = false
 ) {
     Column(
+        modifier=modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 

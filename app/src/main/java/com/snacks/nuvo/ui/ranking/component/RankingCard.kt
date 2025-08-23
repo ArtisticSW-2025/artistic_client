@@ -27,13 +27,14 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
 internal fun RankingCard(
+    modifier: Modifier = Modifier,
     rank: Int,
     name: String,
     score: Int,
     profileImageUrl: String? = null
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 4.dp)
             .background(
@@ -81,8 +82,11 @@ internal fun RankingCard(
 }
 
 @Composable
-internal fun ScoreSection(score: Int) {
+internal fun ScoreSection(
+    modifier: Modifier = Modifier,
+    score: Int) {
     Row(
+        modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
@@ -103,11 +107,12 @@ internal fun ScoreSection(score: Int) {
 
 @Composable
 internal fun ProfileImage(
+    modifier: Modifier = Modifier,
     imageUrl: String?,
     size: androidx.compose.ui.unit.Dp
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(size)
             .clip(CircleShape)
             .background(NuvoTheme.colors.gray3)

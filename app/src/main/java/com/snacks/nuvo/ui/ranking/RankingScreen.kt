@@ -54,11 +54,11 @@ internal fun RankingContent(
     ) {
 
         if(uiState.isLoading){
-            RankingHeader(emptyList())
+            RankingHeader(topThree= emptyList())
             LoadingState()
         }
         else{
-            RankingHeader(uiState.topThreeRankings)
+            RankingHeader(topThree = uiState.topThreeRankings)
             Spacer(modifier = Modifier.height(20.dp))
             RankingList(
                 rankings = uiState.remainingRankings)
