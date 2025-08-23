@@ -41,7 +41,6 @@ fun NuvoNavHost(appState: NuvoAppState) {
                 AnimatedVisibility(
                     visible = appState.shouldShowBottomBar,
                     enter = slideInVertically { it },
-                    exit = slideOutVertically { it },
                 ) {
                     NuvoBottomNavigationBar(
                         destinations = appState.topLevelDestinations,
