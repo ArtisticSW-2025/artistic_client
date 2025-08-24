@@ -15,8 +15,8 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
 internal fun RegisterTopBar(
+    modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier

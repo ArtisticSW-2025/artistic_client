@@ -12,12 +12,13 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
 internal fun LoginFooter(
+    modifier: Modifier = Modifier,
     onFindIdClick: () -> Unit = {},
     onFindPasswordClick: () -> Unit = {},
     onRegisterClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(
             31.dp,
             alignment = Alignment.CenterHorizontally

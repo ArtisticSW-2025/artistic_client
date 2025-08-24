@@ -12,8 +12,12 @@ import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
-internal fun LoginHeader() {
+internal fun LoginHeader(
+    modifier: Modifier = Modifier,
+
+) {
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier.height(166.dp))

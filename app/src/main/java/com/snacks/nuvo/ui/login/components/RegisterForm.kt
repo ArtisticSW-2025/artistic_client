@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.ui.theme.NuvoTheme
 @Composable
 internal fun RegisterForm(
+    modifier: Modifier = Modifier,
     nicknameText: String,
     idText: String,
     passwordText: String,
@@ -17,7 +18,6 @@ internal fun RegisterForm(
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     showPasswordMismatchError: Boolean,
-    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.padding(horizontal = 38.dp)

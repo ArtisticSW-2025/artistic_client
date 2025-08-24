@@ -14,11 +14,11 @@ import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.ui.theme.NuvoTheme
 @Composable
 internal fun RegisterInputField(
+    modifier: Modifier = Modifier,
     label: String,
     placeholder: String,
     value: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
     isPassword: Boolean = false,
     isError: Boolean = false
 ) {

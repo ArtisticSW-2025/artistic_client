@@ -12,11 +12,11 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
 internal fun LoginForm(
+    modifier: Modifier = Modifier,
     idText: String,
     passwordText: String,
     onIdTextChange: (String) -> Unit,
     onPasswordTextChange: (String) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier,

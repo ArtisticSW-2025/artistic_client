@@ -14,9 +14,9 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
 internal fun LoginButton(
+    modifier: Modifier = Modifier,
     isEnabled: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
