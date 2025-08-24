@@ -1,18 +1,122 @@
 package com.snacks.nuvo.ui.challenge
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.snacks.nuvo.ui.challenge.component.CourseMap
+import com.snacks.nuvo.ui.challenge.component.DatePhraseCard
+import com.snacks.nuvo.ui.challenge.component.TodayMissionDialog
+import com.snacks.nuvo.ui.challenge.component.WeeklyMissionCard
+import com.snacks.nuvo.ui.component.LoadingIndicator
+import com.snacks.nuvo.ui.theme.NuvoTheme
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
 
+@SuppressLint("NewApi")
+@Preview
 @Composable
-internal fun ChallengeScreen() {
+internal fun ChallengeScreen(
+    viewModel: ChallengeViewModel = viewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val scrollState = rememberScrollState()
+    val hazeState = rememberHazeState()
+
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .hazeSource(state = hazeState, zIndex = 1f),
         contentAlignment = Alignment.Center
     ) {
-        Text("챌린지")
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .hazeSource(state = hazeState, zIndex = 0f),
+            contentAlignment = Alignment.Center,
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colorStops  = arrayOf(
+                                0.0f to NuvoTheme.colors.darkGradient1,
+                                0.4f to NuvoTheme.colors.lightGradient2,
+                                0.98f to NuvoTheme.colors.white,
+                            )
+                        )
+                    ),
+            )
+            CourseMap(
+                nodes = uiState.nodeList,
+                modifier = Modifier
+                    .width(width = 319.dp)
+                    .fillMaxSize()
+                    .verticalScroll(scrollState),
+                onNodeClick = { nodeId ->
+                    viewModel.onNodeClicked(nodeId)
+                }
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            DatePhraseCard(
+                modifier = Modifier,
+                hazeState = hazeState,
+                date = uiState.today,
+                phrase = uiState.phrase,
+            )
+            Spacer(Modifier.height(26.dp))
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+            ) {
+                WeeklyMissionCard(
+                    modifier = Modifier,
+                    hazeState = hazeState,
+                    mission = uiState.weeklyMission
+                ) {
+
+                }
+            }
+
+        }
+
+        if (uiState.isLoading) {
+            LoadingIndicator()
+        }
+    }
+
+    if (uiState.selectedNode !== null) {
+        TodayMissionDialog(
+            modifier = Modifier
+                .hazeSource(state = hazeState, zIndex = 2f),
+            hazeState = hazeState,
+            node = uiState.selectedNode!!,
+            onConfirm = { } ,
+            onDismiss = { viewModel.clearSelectedNode() },
+        )
     }
 }
