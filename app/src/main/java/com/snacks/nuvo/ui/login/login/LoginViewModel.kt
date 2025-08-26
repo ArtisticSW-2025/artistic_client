@@ -14,18 +14,6 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(LoginUiState.create())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-    init {
-        // ID와 패스워드 변경에 따른 로그인 버튼 활성화 상태 업데이트
-        combine(
-            _uiState,
-            _uiState
-        ) { state, _ ->
-            _uiState.value = state.copy(
-                isLoginButtonEnabled = state.idText.isNotEmpty() && state.passwordText.isNotEmpty()
-            )
-        }
-    }
-
     fun updateIdText(id: String) {
         val currentState = _uiState.value
         _uiState.value = currentState.copy(
