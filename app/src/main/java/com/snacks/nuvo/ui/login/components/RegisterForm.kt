@@ -50,7 +50,7 @@ internal fun RegisterForm(
             isPassword = true
         )
 
-        Spacer(Modifier.height(36.dp))
+        Spacer(Modifier.height(12.dp))
 
         RegisterInputField(
             label = "비밀번호 확인",
@@ -58,17 +58,7 @@ internal fun RegisterForm(
             value = confirmPasswordText,
             onValueChange = onConfirmPasswordChange,
             isPassword = true,
-            isError = showPasswordMismatchError
+            isError = showPasswordMismatchError,
         )
-
-        // 오류 메시지 표시
-        if (showPasswordMismatchError) {
-            Text(
-                text = "비밀번호가 일치하지 않습니다",
-                color = Color(0xFFFF0E0E),
-                style = NuvoTheme.typography.interRegular15,
-                modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)
-            )
-        }
     }
 }

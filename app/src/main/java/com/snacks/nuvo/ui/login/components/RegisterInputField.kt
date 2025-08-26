@@ -50,5 +50,13 @@ internal fun RegisterInputField(
             visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
             isError = isError
         )
+        if(isError){
+            Text(
+                text = "비밀번호가 일치하지 않습니다",
+                color = Color(0xFFFF0E0E),
+                style = NuvoTheme.typography.interRegular15,
+                modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)
+            )
+        }
     }
 }
