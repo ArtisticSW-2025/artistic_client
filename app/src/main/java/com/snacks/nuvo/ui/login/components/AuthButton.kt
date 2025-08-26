@@ -13,10 +13,11 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 
 
 @Composable
-internal fun LoginButton(
+internal fun AuthButton(
     modifier: Modifier = Modifier,
     isEnabled: Boolean,
     onClick: () -> Unit,
+    label : String
 ) {
     Box(
         modifier = modifier
@@ -35,7 +36,7 @@ internal fun LoginButton(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            "로그인",
+            label,
             style = NuvoTheme.typography.interSemiBold15,
             color = NuvoTheme.colors.white
         )

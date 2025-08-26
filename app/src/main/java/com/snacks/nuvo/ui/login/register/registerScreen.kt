@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.Routes
-import com.snacks.nuvo.ui.login.components.RegisterButton
+import com.snacks.nuvo.ui.login.components.AuthButton
 import com.snacks.nuvo.ui.login.components.RegisterForm
 import com.snacks.nuvo.ui.login.components.RegisterTopBar
 import com.snacks.nuvo.ui.theme.NuvoTheme
@@ -46,13 +46,14 @@ internal fun RegisterScreen(
 
             Spacer(Modifier.height(60.dp))
 
-            RegisterButton(
+            AuthButton(
                 isEnabled = uiState.canRegister,
                 onClick = {
                     viewModel.register {
                         appState.navigate(Routes.Login.WELCOME)
                     }
-                }
+                },
+                label = "회원가입"
             )
 
         }

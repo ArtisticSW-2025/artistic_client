@@ -6,10 +6,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.Routes
-import com.snacks.nuvo.ui.login.components.LoginButton
+import com.snacks.nuvo.ui.login.components.AuthButton
 import com.snacks.nuvo.ui.login.components.LoginFooter
 import com.snacks.nuvo.ui.login.components.LoginForm
 import com.snacks.nuvo.ui.login.components.LoginHeader
@@ -44,13 +43,14 @@ internal fun LoginScreen(
 
             Spacer(Modifier.height(30.dp))
 
-            LoginButton(
+            AuthButton(
                 isEnabled = uiState.isLoginButtonEnabled,
                 onClick = {
                     viewModel.login {
                         appState.navigate(Routes.Home.ROUTE)
                     }
-                }
+                },
+                label = "로그인"
             )
 
             Spacer(Modifier.height(20.dp))
