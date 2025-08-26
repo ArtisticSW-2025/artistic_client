@@ -16,12 +16,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.R
 import com.snacks.nuvo.Routes
+import com.snacks.nuvo.ui.theme.Inter
 import com.snacks.nuvo.ui.theme.NuvoTheme
 import kotlinx.coroutines.delay
 
@@ -60,14 +68,48 @@ internal fun WelcomScreen(appState: NuvoAppState? = null ) {
                     .alpha(0.4f) ,
             )
             Spacer(Modifier.height(47.dp))
-            Text("도도도님,\nNUVO에 오신걸 환영해요!",
-                style = NuvoTheme.typography.interSemiBold26,
+            Text(
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(
+                        fontFamily = Inter,
+                        fontWeight = FontWeight.Black,
+                        fontSize = 28.sp,
+                        letterSpacing = 0.sp,
+                        color = NuvoTheme.colors.white
+                    )
+                    ){
+                        append("도도도")
+                    }
+                    withStyle(style = SpanStyle(
+                        fontFamily = Inter,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 28.sp,
+                        color = NuvoTheme.colors.white
+                    ) ){
+                        append("님,")
+                    }
+                    withStyle(style = SpanStyle(
+                        fontFamily = Inter,
+                        fontWeight = FontWeight.Black,
+                        fontSize = 28.sp,
+                        color = NuvoTheme.colors.white
+                    )
+                    ){
+                        append("\nNUVO")
+                    }
+                    withStyle(style = SpanStyle(
+                        fontFamily = Inter,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 28.sp,
+                        color = NuvoTheme.colors.white
+                    ) ){
+                        append("에 오신걸 환영해요!")
+                    }
+                },
                 textAlign = TextAlign.Center,
-                color = NuvoTheme.colors.white
+                lineHeight = 28.sp
 
             )
-
-
             }
     }
 }
