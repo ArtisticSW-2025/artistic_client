@@ -413,4 +413,18 @@ data class Typo(
             trim = LineHeightStyle.Trim.None,
         )
     ),
+    val interRegular12: TextStyle = TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 12.sp,
+        letterSpacing = 0.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        ),
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        )
+    ),
 )

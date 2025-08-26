@@ -26,19 +26,19 @@ internal fun LoginFooter(
     ) {
         Text(
             "아이디 찾기",
-            style = NuvoTheme.typography.interRegular15,
+            style = NuvoTheme.typography.interRegular12,
             color = NuvoTheme.colors.gray6,
             modifier = Modifier.clickable { onFindIdClick() }
         )
         Text(
             "비밀번호 찾기",
-            style = NuvoTheme.typography.interRegular15,
+            style = NuvoTheme.typography.interRegular12,
             color = NuvoTheme.colors.gray6,
             modifier = Modifier.clickable { onFindPasswordClick() }
         )
         Text(
             "회원가입",
-            style = NuvoTheme.typography.interRegular15,
+            style = NuvoTheme.typography.interRegular12,
             color = NuvoTheme.colors.gray6,
             modifier = Modifier.clickable { onRegisterClick() }
         )
