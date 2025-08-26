@@ -40,18 +40,7 @@ class RankingViewModel @Inject constructor() : ViewModel() {
         }
     }
     private suspend fun fetchRankingsData(): List<RankingItem> {
-        return listOf(
-            RankingItem(1, "임유정꼬봉이정빈", 1200),
-            RankingItem(2, "송예진", 1100),
-            RankingItem(3, "신소미", 1000),
-            RankingItem(4, "이이이이이성원", 9100),
-            RankingItem(4, "이성원원원원원원원원원원원원원원원원", 900),
-            RankingItem(4, "이성원", 90000000),
-            RankingItem(4, "이성원", 900),
-            RankingItem(4, "이성원", 900),
-            RankingItem(4, "이성원", 900),
-            RankingItem(4, "이성원", 900),
-            RankingItem(4, "이성원", 900),
-        )
+        return uiState.value.rankings
+
     }
 }
