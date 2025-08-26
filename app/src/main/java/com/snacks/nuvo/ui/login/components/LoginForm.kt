@@ -40,7 +40,7 @@ internal fun LoginForm(
             label = { Text("아이디") }
         )
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(10.dp))
 
         OutlinedTextField(
             modifier = Modifier
