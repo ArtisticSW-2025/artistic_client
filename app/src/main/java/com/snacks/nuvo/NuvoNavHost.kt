@@ -21,6 +21,7 @@ import com.snacks.nuvo.ui.home.homeGraph
 import com.snacks.nuvo.ui.challenge.challengeGraph
 import com.snacks.nuvo.ui.component.BottomNavigationBar
 import com.snacks.nuvo.ui.component.BottomNavigationBarItem
+import com.snacks.nuvo.ui.login.loginGraph
 import com.snacks.nuvo.ui.profile.profileGraph
 import com.snacks.nuvo.ui.ranking.rankingGraph
 import com.snacks.nuvo.ui.script.scriptGraph
@@ -53,11 +54,13 @@ fun NuvoNavHost(appState: NuvoAppState) {
             }
         }
     ) { paddingValues ->
+
         NavHost(
             navController = navController,
             startDestination = Routes.Home.ROUTE,
             modifier = Modifier.padding(paddingValues),
         ) {
+            loginGraph(appState)
             homeGraph()
             scriptGraph()
             rankingGraph()
