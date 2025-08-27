@@ -20,6 +20,12 @@ object Routes {
     object Challenge {
         const val ROUTE = "challengeRoute"
     }
+    object Login {
+        const val LOGIN = "loginRoute"
+        const val REGISTER = "registerRoute"
+        const val WELCOME = "welcomeRoute"
+    }
+
 
     object Profile {
         const val ROUTE = "profileRoute"
