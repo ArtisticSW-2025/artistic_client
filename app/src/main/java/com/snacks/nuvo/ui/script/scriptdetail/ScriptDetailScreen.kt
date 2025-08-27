@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.R
-import com.snacks.nuvo.Routes
 import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.script.component.ScriptContentCard
 import com.snacks.nuvo.ui.script.component.ScriptGoalCard

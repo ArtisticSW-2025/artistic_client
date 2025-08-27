@@ -1,16 +1,29 @@
 package com.snacks.nuvo.ui.script
 
-data class ScriptUiState (
+data class ScriptUiState(
     val isLoading: Boolean = false,
     val selectedChipIndexes: Set<Int> = emptySet<Int>(),
     val isSmallTalkMode: Boolean = false,
-    val isEmergencyMode: Boolean=false,
-    val chipLabels: List<String> = listOf<String>("의료", "업무", "생활", "서비스/쇼핑", "교육", "개인", "공공기관", "긴급/신고"),
-    val scriptItems: List<ScriptItem> = emptyList<ScriptItem>()
+    val isEmergencyMode: Boolean = false,
+    val chipLabels: List<String> = ScriptLabel.entries.map { it.label },
+    val scriptItems: List<ScriptItem> = emptyList<ScriptItem>(),
 )
 
 data class ScriptItem(
     val id: Int,
     val title: String,
-    val description:  String
+    val description: String,
 )
+
+enum class ScriptLabel(
+    val label: String,
+) {
+    MEDICAL("의료"),
+    WORK("업무"),
+    LIFESTYLE("생활"),
+    SERVICE_SHOPPING("서비스/쇼핑"),
+    EDUCATION("교육"),
+    PERSONAL("개인"),
+    PUBLIC_INSTITUTION("공공기관"),
+    EMERGENCY("긴급/신고");
+}
