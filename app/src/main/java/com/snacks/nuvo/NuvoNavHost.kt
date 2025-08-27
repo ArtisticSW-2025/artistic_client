@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,10 +16,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
-import com.snacks.nuvo.ui.home.homeGraph
 import com.snacks.nuvo.ui.challenge.challengeGraph
 import com.snacks.nuvo.ui.component.BottomNavigationBar
 import com.snacks.nuvo.ui.component.BottomNavigationBarItem
+import com.snacks.nuvo.ui.home.homeGraph
 import com.snacks.nuvo.ui.login.loginGraph
 import com.snacks.nuvo.ui.profile.profileGraph
 import com.snacks.nuvo.ui.ranking.rankingGraph
@@ -54,7 +53,6 @@ fun NuvoNavHost(appState: NuvoAppState) {
             }
         }
     ) { paddingValues ->
-
         NavHost(
             navController = navController,
             startDestination = Routes.Home.ROUTE,
@@ -62,7 +60,7 @@ fun NuvoNavHost(appState: NuvoAppState) {
         ) {
             loginGraph(appState)
             homeGraph()
-            scriptGraph()
+            scriptGraph(appState = appState)
             rankingGraph()
             challengeGraph()
             profileGraph()
