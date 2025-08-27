@@ -75,7 +75,7 @@ internal fun ScriptDetailScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { appState.navigate(Routes.Script.ROUTE) }) {
+                            .clickable { appState.navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = null,
