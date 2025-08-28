@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
+import com.snacks.nuvo.ui.call.callGraph
+import com.snacks.nuvo.ui.home.homeGraph
 import com.snacks.nuvo.ui.challenge.challengeGraph
 import com.snacks.nuvo.ui.component.BottomNavigationBar
 import com.snacks.nuvo.ui.component.BottomNavigationBarItem
@@ -40,7 +42,6 @@ fun NuvoNavHost(appState: NuvoAppState) {
                 AnimatedVisibility(
                     visible = appState.shouldShowBottomBar,
                     enter = slideInVertically { it },
-                    exit = slideOutVertically { it },
                 ) {
                     NuvoBottomNavigationBar(
                         destinations = appState.topLevelDestinations,
@@ -64,6 +65,7 @@ fun NuvoNavHost(appState: NuvoAppState) {
             rankingGraph()
             challengeGraph()
             profileGraph()
+            callGraph(appState)
         }
     }
 }

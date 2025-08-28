@@ -246,6 +246,34 @@ data class NuvoTypography(
             trim = LineHeightStyle.Trim.None,
         )
     ),
+    val interBold14: TextStyle = TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp,
+        lineHeight = 14.sp,
+        letterSpacing = 0.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        ),
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        )
+    ),
+    val interSemiBold36: TextStyle = TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 36.sp,
+        lineHeight = 36.sp,
+        letterSpacing = 0.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        ),
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        )
+    ),
     val interSemiBold26: TextStyle = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.SemiBold,
