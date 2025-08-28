@@ -24,7 +24,7 @@ data class CallUiState(
 
     val isDetailedResult: Boolean = false,
     val result: String = "",
-    val feedback: String = "",
+    val feedbackContents: List<String> = emptyList<String>(),
     val score: Int = 0,
 
 )

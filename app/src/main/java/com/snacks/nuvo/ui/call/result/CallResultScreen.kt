@@ -2,6 +2,7 @@ package com.snacks.nuvo.ui.call.result
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.ui.call.CallViewModel
 import com.snacks.nuvo.ui.call.component.CallScreenLayout
+import com.snacks.nuvo.ui.component.ExpandableTextCard
 import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.theme.NuvoTheme
 import com.snacks.nuvo.util.dropShadow
@@ -71,56 +75,59 @@ internal fun CallResultScreen(
             contentAlignment = Alignment.TopCenter
         ) {
             if (uiState.isDetailedResult) {
-                Column(
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxSize()
+                        .padding(top = 75.dp, bottom = 240.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Spacer(Modifier.height(213.dp))
-                    Text(
-                        text = "다음에는 이런 점을\n개선해보세요!",
-                        style = NuvoTheme.typography.interSemiBold36.copy(color = NuvoTheme.colors.white),
-                        textAlign = TextAlign.Center,
-                        lineHeight = 50.sp
-                    )
-                    Spacer(Modifier.height(39.dp))
                     Column(
                         modifier = Modifier
-                            .padding(horizontal = 38.dp)
-                            .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(10.dp))
-                            .background(color = NuvoTheme.colors.white.copy(alpha = 0.5f)),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        Spacer(Modifier.height(9.dp))
                         Text(
-                            text = "Feedback",
-                            style = NuvoTheme.typography.interBlack16.copy(color = NuvoTheme.colors.mainGreen)
+                            text = "다음에는 이런 점을\n개선해보세요!",
+                            style = NuvoTheme.typography.interSemiBold36.copy(color = NuvoTheme.colors.white),
+                            textAlign = TextAlign.Center,
+                            lineHeight = 50.sp
                         )
-                        Spacer(Modifier.height(12.dp))
-                        Box(
+                        Spacer(Modifier.height(39.dp))
+                        Column(
                             modifier = Modifier
-                                .padding(horizontal = 16.dp)
+                                .padding(horizontal = 38.dp)
                                 .fillMaxWidth()
-                                .clip(shape = RoundedCornerShape(15.dp))
-                                .background(color = NuvoTheme.colors.white)
+                                .clip(shape = RoundedCornerShape(10.dp))
+                                .background(color = NuvoTheme.colors.white.copy(alpha = 0.5f)),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            Spacer(Modifier.height(9.dp))
                             Text(
-                                modifier = Modifier
-                                    .padding(vertical = 22.dp, horizontal = 20.dp)
-                                    .fillMaxWidth(),
-                                text = uiState.feedback,
-                                style = NuvoTheme.typography.interMedium13.copy(color = NuvoTheme.colors.black),
-                                textAlign = TextAlign.Center,
-                                lineHeight = 18.sp
+                                text = "Feedback",
+                                style = NuvoTheme.typography.interBlack16.copy(color = NuvoTheme.colors.mainGreen)
                             )
+                            Spacer(Modifier.height(12.dp))
+                            LazyColumn (
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 18.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                contentPadding = PaddingValues(start = 12.dp, end = 12.dp),
+                            ) {
+                                items(uiState.feedbackContents) { content ->
+                                    ExpandableTextCard(
+                                        modifier = Modifier,
+                                        text = content,
+                                        textStyle = NuvoTheme.typography.interBold14.copy(color = NuvoTheme.colors.mainGreen),
+                                    )
+                                }
+                            }
                         }
-                        Spacer(Modifier.height(18.dp))
                     }
                 }
                 Box(
                     modifier = Modifier
-                        .padding(bottom = 90.dp)
+                        .padding(bottom = 75.dp)
                         .fillMaxHeight(),
                     contentAlignment = Alignment.BottomCenter
                 ) {
