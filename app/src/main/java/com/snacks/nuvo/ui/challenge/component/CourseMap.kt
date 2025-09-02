@@ -1,6 +1,8 @@
 package com.snacks.nuvo.ui.challenge.component
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -21,13 +24,16 @@ import com.snacks.nuvo.ui.challenge.ChallengeNode
 import com.snacks.nuvo.ui.theme.NuvoTheme
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
+import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun CourseMap(
     nodes: List<ChallengeNode>,
     modifier: Modifier = Modifier,
-    onNodeClick: (Int?) -> Unit
+    onNodeClick: (Int?) -> Unit,
+    firstPosition: MutableState<Int>
 ) {
     // ## 레이아웃 설정값 ##
     val nodesPerRow = 4
@@ -135,10 +141,14 @@ fun CourseMap(
             drawPath(path, color = pathColor, style = Stroke(width = 25f))
         }
 
-        // ## 3. 계산된 좌표에 NodeComponent들을 배치 ##
+        val currentDate = LocalDate.now()
         nodes.zip(nodePixelPositions).forEach { (node, position) ->
             val xInDp = with(density) { position.x.toDp() }
             val yInDp = with(density) { position.y.toDp() }
+
+            if (node.date == currentDate) {
+                firstPosition.value = position.y.toInt()
+            }
 
             NodeComponent(
                 node = node,
