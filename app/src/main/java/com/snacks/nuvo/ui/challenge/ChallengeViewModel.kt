@@ -19,15 +19,10 @@ class ChallengeViewModel @Inject constructor() : ViewModel() {
 
     init {
         _uiState.value = _uiState.value.copy(isLoading = true)
-        getToday()
         getPhrase()
         getWeeklyMission()
         getDailyNodeList()
         _uiState.value = _uiState.value.copy(isLoading = false)
-    }
-
-    private fun getToday() {
-        _uiState.value = _uiState.value.copy(today = LocalDate.now())
     }
 
     private fun getPhrase() {
@@ -39,9 +34,8 @@ class ChallengeViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun getDailyNodeList() {
-        val today = LocalDate.now()
-        val firstDayOfMonth = today.withDayOfMonth(1)
-        val lastDayOfMonth = today.with(TemporalAdjusters.lastDayOfMonth())
+        val firstDayOfMonth = _uiState.value.today.withDayOfMonth(1)
+        val lastDayOfMonth = _uiState.value.today.with(TemporalAdjusters.lastDayOfMonth())
 
         val nodeList = mutableListOf<ChallengeNode>()
         var currentDate = firstDayOfMonth
@@ -59,7 +53,7 @@ class ChallengeViewModel @Inject constructor() : ViewModel() {
                     description = "오늘(${currentDate.dayOfMonth}일) 하루를 요약해서 말해보자",
                     date = currentDate,
                     status = when {
-                        currentDate.isAfter(today) -> NodeStatus.LOCKED
+                        currentDate.isAfter(_uiState.value.today) -> NodeStatus.LOCKED
                         else -> NodeStatus.COMPLETED
                     },
                 )
@@ -74,8 +68,9 @@ class ChallengeViewModel @Inject constructor() : ViewModel() {
     }
 
     fun onNodeClicked(id: Int?) {
-        _uiState.value = _uiState.value.copy(
-            selectedNode = _uiState.value.nodeList.find { node -> node.id == id }
-        )
+        val node = _uiState.value.nodeList.find { node -> node.id == id }
+        if (node == null || node.status == NodeStatus.LOCKED) return
+
+        _uiState.value = _uiState.value.copy(selectedNode = node)
     }
 }

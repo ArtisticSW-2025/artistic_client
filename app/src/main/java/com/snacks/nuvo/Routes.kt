@@ -34,6 +34,7 @@ object Routes {
     object Call {
         const val ROUTE = "call"
 
+        const val CALL_ENTRY = "call_entry"
         const val CALLING = "calling"
         const val ON_CALL = "on_call"
         const val RESULT = "result"

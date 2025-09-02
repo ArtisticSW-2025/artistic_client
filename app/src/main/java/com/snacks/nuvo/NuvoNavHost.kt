@@ -63,7 +63,7 @@ fun NuvoNavHost(appState: NuvoAppState) {
             homeGraph()
             scriptGraph(appState = appState)
             rankingGraph()
-            challengeGraph()
+            challengeGraph(appState = appState)
             profileGraph()
             callGraph(appState)
         }

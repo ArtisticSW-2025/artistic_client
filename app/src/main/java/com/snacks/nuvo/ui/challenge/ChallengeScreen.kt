@@ -25,6 +25,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.snacks.nuvo.NuvoAppState
+import com.snacks.nuvo.Routes
+import com.snacks.nuvo.rememberNuvoAppState
 import com.snacks.nuvo.ui.challenge.component.CourseMap
 import com.snacks.nuvo.ui.challenge.component.DatePhraseCard
 import com.snacks.nuvo.ui.challenge.component.TodayMissionDialog
@@ -35,9 +38,9 @@ import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 
 @SuppressLint("NewApi")
-@Preview
 @Composable
 internal fun ChallengeScreen(
+    appState: NuvoAppState,
     viewModel: ChallengeViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -128,8 +131,29 @@ internal fun ChallengeScreen(
                 .hazeSource(state = hazeState, zIndex = 2f),
             hazeState = hazeState,
             node = uiState.selectedNode!!,
-            onConfirm = { } ,
+            onConfirm = {
+                val prevName = "오늘의 미션"
+                val isTodayMission = true
+                val todayMission = uiState.selectedNode!!.description
+                val todayMissionDateString = uiState.selectedNode!!.date.toString()
+
+                val route = "${Routes.Call.ROUTE}?" +
+                        "prevName=$prevName&" +
+                        "isTodayMission=$isTodayMission&" +
+                        "todayMission=$todayMission&" +
+                        "todayMissionDateString=$todayMissionDateString"
+
+                appState.navController.navigate(route)
+
+                viewModel.clearSelectedNode()
+            } ,
             onDismiss = { viewModel.clearSelectedNode() },
         )
     }
+}
+
+@Preview
+@Composable
+fun ChallengeScreenPreview() {
+    ChallengeScreen(appState = rememberNuvoAppState())
 }

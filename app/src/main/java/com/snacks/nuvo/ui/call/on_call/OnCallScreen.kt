@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.call.CallViewModel
@@ -137,8 +138,11 @@ internal fun OnCallScreen(
                         if (uiState.isTodayMissionFinish) {
                             TodayMissionFinishDialog(
                                 modifier = Modifier,
-                                date = uiState.todayMissionDate!!,
-                                onConfirm = onNavigateBack,
+                                date = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) uiState.todayMissionDate!! else null,
+                                onConfirm = {
+                                    onNavigateBack()
+                                    viewModel.setIsTodayMissionFinish(false)
+                                },
                             )
                         }
                     } else {
@@ -183,7 +187,7 @@ internal fun OnCallScreen(
                         ),
                         onClick = {
                             if (uiState.isTodayMission)
-                                viewModel.setIsTodayMissionFinish()
+                                viewModel.setIsTodayMissionFinish(true)
                             else
                                 onCallEnded()
                         }
@@ -283,7 +287,7 @@ internal fun OnCallScreen(
 @Preview(name = "상태: 전화 중")
 @Composable
 fun CallScreenPreviewReceived() {
-    val viewModel = remember { CallViewModel() }
+    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
     OnCallScreen(
         viewModel = viewModel,
         onNavigateBack = { },
@@ -294,7 +298,7 @@ fun CallScreenPreviewReceived() {
 @Preview(name = "상태: 전화 중2")
 @Composable
 fun CallScreenPreviewPrevName() {
-    val viewModel = remember { CallViewModel() }
+    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
     viewModel.startRecording()
     viewModel.setIsEndPossible(true)
     OnCallScreen(
@@ -308,12 +312,12 @@ fun CallScreenPreviewPrevName() {
 @Preview(name = "상태: 오늘의 미션")
 @Composable
 fun CallScreenPreviewTodayMission() {
-    val viewModel = remember { CallViewModel() }
+    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
     viewModel.setPrevName("오늘의 미션")
     viewModel.setIsTodayMission(true)
     viewModel.setTodayMission("오늘 하루를 요약해서 말해보자")
-    viewModel.setIsTodayMissionFinish()
-    viewModel.setTodayMissionDate(LocalDate.now())
+    viewModel.setIsTodayMissionFinish(true)
+    viewModel.setTodayMissionDateString(LocalDate.now().toString())
     OnCallScreen(
         viewModel = viewModel,
         onNavigateBack = { },

@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.ui.call.CallViewModel
 import com.snacks.nuvo.ui.call.component.CallScreenLayout
@@ -238,7 +239,7 @@ internal fun CallResultScreen(
 @Preview(name = "상태: 전화 중")
 @Composable
 fun CallScreenPreviewReceived() {
-    val viewModel = remember { CallViewModel() }
+    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
     CallResultScreen(
         viewModel = viewModel,
         onNavigateBack = { },
@@ -250,7 +251,7 @@ fun CallScreenPreviewReceived() {
 @Preview(name = "상태: 전화 중2")
 @Composable
 fun CallScreenPreviewPrevName() {
-    val viewModel = remember { CallViewModel() }
+    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
     viewModel.setIsDetailedResult(true)
     CallResultScreen(
         viewModel = viewModel,

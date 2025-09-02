@@ -1,21 +1,41 @@
 package com.snacks.nuvo.ui.call
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
-class CallViewModel @Inject constructor() : ViewModel() {
+class CallViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    val prevName: StateFlow<String> = savedStateHandle.getStateFlow("prevName", "병원 초진 예약 전화")
+    val contactName: StateFlow<String> = savedStateHandle.getStateFlow("contactName", "힐링 병원")
+    val callStatus: StateFlow<CallStatus> =
+        savedStateHandle.getStateFlow("callStatus", CallStatus.OUTGOING.name)
+            .map { statusString ->
+                // 문자열을 enum으로 변환 (안전한 방식)
+                runCatching { CallStatus.valueOf(statusString) }
+                    .getOrDefault(CallStatus.OUTGOING)
+            }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), CallStatus.OUTGOING)
+    val isReceived: StateFlow<Boolean> = savedStateHandle.getStateFlow("isReceived", false)
+    val isTodayMission: StateFlow<Boolean> = savedStateHandle.getStateFlow("isTodayMission", false)
+    val todayMission: StateFlow<String> = savedStateHandle.getStateFlow("todayMission", "")
+    val todayMissionDateString: StateFlow<String> = savedStateHandle.getStateFlow("todayMissionDateString", "")
+
     private val _uiState = MutableStateFlow(CallUiState())
     val uiState: StateFlow<CallUiState> = _uiState.asStateFlow()
 
@@ -24,9 +44,15 @@ class CallViewModel @Inject constructor() : ViewModel() {
 
     init {
         _uiState.value = _uiState.value.copy(isLoading = true)
-        getPrevName()
-        getCallStatus()
-        getContactName()
+        setPrevName(prevName.value)
+        setCallStatus(callStatus.value)
+        setIsReceived(isReceived.value)
+        setContactName(contactName.value)
+
+        setIsTodayMission(isTodayMission.value)
+        setTodayMission(todayMission.value)
+        setTodayMissionDateString(todayMissionDateString.value)
+
         getCallScripts()
         getResult()
         getScore()
@@ -34,16 +60,8 @@ class CallViewModel @Inject constructor() : ViewModel() {
         _uiState.value = _uiState.value.copy(isLoading = false)
     }
 
-    private fun getPrevName() {
-        _uiState.value = _uiState.value.copy(prevName = "병원 초진 예약 전화")
-    }
-
     fun setPrevName(prevName: String) {
         _uiState.value = _uiState.value.copy(prevName = prevName)
-    }
-
-    private fun getCallStatus() {
-        _uiState.value = _uiState.value.copy(callStatus = CallStatus.OUTGOING)
     }
 
     fun setCallStatus(callStatus: CallStatus?) {
@@ -54,8 +72,8 @@ class CallViewModel @Inject constructor() : ViewModel() {
         _uiState.value = _uiState.value.copy(isReceived = isReceived)
     }
 
-    private fun getContactName() {
-        _uiState.value = _uiState.value.copy(contactName = "힐링 병원")
+    private fun setContactName(contactName: String) {
+        _uiState.value = _uiState.value.copy(contactName = contactName)
     }
 
     fun startRecording() {
@@ -90,12 +108,12 @@ class CallViewModel @Inject constructor() : ViewModel() {
         _uiState.value = _uiState.value.copy(todayMission = todayMission)
     }
 
-    fun setTodayMissionDate(todayMissionDate: LocalDate) {
-        _uiState.value = _uiState.value.copy(todayMissionDate = todayMissionDate)
+    fun setTodayMissionDateString(todayMissionDateString: String) {
+        _uiState.value = _uiState.value.copy(todayMissionDateString = todayMissionDateString)
     }
 
-    fun setIsTodayMissionFinish() {
-        _uiState.value = _uiState.value.copy(isTodayMissionFinish = true)
+    fun setIsTodayMissionFinish(isTodayMissionFinish: Boolean) {
+        _uiState.value = _uiState.value.copy(isTodayMissionFinish = isTodayMissionFinish)
     }
 
     private fun getCallScripts() {

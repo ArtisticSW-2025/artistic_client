@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.call.CallStatus
@@ -166,7 +167,7 @@ internal fun CallingScreen(
 @Preview(name = "상태: 발신 중")
 @Composable
 fun CallScreenPreviewOutgoing() {
-    val viewModel = remember { CallViewModel() }
+    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
     viewModel.setCallStatus(CallStatus.OUTGOING)
     CallingScreen(
         viewModel = viewModel,
@@ -178,7 +179,7 @@ fun CallScreenPreviewOutgoing() {
 @Preview(name = "상태: 수신 중")
 @Composable
 fun CallScreenPreviewIncoming() {
-    val viewModel = remember { CallViewModel() }
+    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
     viewModel.setCallStatus(CallStatus.INCOMING)
     CallingScreen(
         viewModel = viewModel,
