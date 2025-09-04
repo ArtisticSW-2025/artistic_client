@@ -1,5 +1,7 @@
 package com.snacks.nuvo.ui.call
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.time.LocalDate
 
 data class CallUiState(
@@ -19,15 +21,24 @@ data class CallUiState(
 
     val isTodayMission: Boolean = false,
     val todayMission: String = "",
-    val todayMissionDate: LocalDate? = null,
+    val todayMissionDateString: String = "",
     val isTodayMissionFinish: Boolean = false,
 
     val isDetailedResult: Boolean = false,
     val result: String = "",
     val feedbackContents: List<String> = emptyList<String>(),
     val score: Int = 0,
-
-)
+) {
+    val todayMissionDate: LocalDate?
+        @RequiresApi(Build.VERSION_CODES.O)
+        get() {
+            return if (todayMissionDateString.isNotEmpty()) {
+                runCatching { LocalDate.parse(todayMissionDateString) }.getOrNull()
+            } else {
+                null
+            }
+        }
+}
 
 enum class CallStatus { OUTGOING, INCOMING }
 

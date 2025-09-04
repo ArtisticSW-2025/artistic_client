@@ -33,7 +33,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TodayMissionFinishDialog(
     modifier: Modifier = Modifier,
-    date: LocalDate,
+    date: LocalDate?,
     onConfirm: () -> Unit
 ) {
     Dialog(onDismissRequest = onConfirm) {
@@ -71,7 +71,7 @@ fun TodayMissionFinishDialog(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Spacer(Modifier.height(height = 26.dp))
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (date != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         Text(
                             text = date.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")) ?: "",
                             style = NuvoTheme.typography.interMedium15.copy(color = NuvoTheme.colors.mainGreen)

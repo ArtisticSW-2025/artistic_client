@@ -1,10 +1,13 @@
 package com.snacks.nuvo.ui.challenge
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.time.LocalDate
 
-data class ChallengeUiState(
+@RequiresApi(Build.VERSION_CODES.O)
+data class ChallengeUiState (
     val isLoading: Boolean = false,
-    val today: LocalDate? = null,
+    val today: LocalDate = LocalDate.now(),
     val weeklyMission: String = "",
     val phrase: String = "",
     val selectedNode: ChallengeNode? = null,

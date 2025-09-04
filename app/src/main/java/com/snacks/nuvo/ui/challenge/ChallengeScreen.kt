@@ -12,14 +12,22 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.snacks.nuvo.NuvoAppState
+import com.snacks.nuvo.Routes
+import com.snacks.nuvo.rememberNuvoAppState
 import com.snacks.nuvo.ui.challenge.component.CourseMap
 import com.snacks.nuvo.ui.challenge.component.DatePhraseCard
 import com.snacks.nuvo.ui.challenge.component.TodayMissionDialog
@@ -30,14 +38,21 @@ import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 
 @SuppressLint("NewApi")
-@Preview
 @Composable
 internal fun ChallengeScreen(
+    appState: NuvoAppState,
     viewModel: ChallengeViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
     val hazeState = rememberHazeState()
+    val firstPosition: MutableState<Int> = remember { mutableIntStateOf(0) }
+    val density = LocalDensity.current
+
+    LaunchedEffect(firstPosition) {
+        val calculatedPosition = firstPosition.value - with(density) { 350.dp.toPx() }.toInt()
+        scrollState.scrollTo(calculatedPosition)
+    }
 
     Box(
         modifier = Modifier
@@ -73,7 +88,8 @@ internal fun ChallengeScreen(
                     .verticalScroll(scrollState),
                 onNodeClick = { nodeId ->
                     viewModel.onNodeClicked(nodeId)
-                }
+                },
+                firstPosition = firstPosition
             )
         }
 
@@ -115,8 +131,29 @@ internal fun ChallengeScreen(
                 .hazeSource(state = hazeState, zIndex = 2f),
             hazeState = hazeState,
             node = uiState.selectedNode!!,
-            onConfirm = { } ,
+            onConfirm = {
+                val prevName = "오늘의 미션"
+                val isTodayMission = true
+                val todayMission = uiState.selectedNode!!.description
+                val todayMissionDateString = uiState.selectedNode!!.date.toString()
+
+                val route = "${Routes.Call.ROUTE}?" +
+                        "prevName=$prevName&" +
+                        "isTodayMission=$isTodayMission&" +
+                        "todayMission=$todayMission&" +
+                        "todayMissionDateString=$todayMissionDateString"
+
+                appState.navController.navigate(route)
+
+                viewModel.clearSelectedNode()
+            } ,
             onDismiss = { viewModel.clearSelectedNode() },
         )
     }
+}
+
+@Preview
+@Composable
+fun ChallengeScreenPreview() {
+    ChallengeScreen(appState = rememberNuvoAppState())
 }
