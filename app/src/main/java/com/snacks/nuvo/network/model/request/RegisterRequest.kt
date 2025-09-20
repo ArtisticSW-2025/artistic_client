@@ -3,8 +3,7 @@ package com.snacks.nuvo.network.model.request
 import com.google.gson.annotations.SerializedName
 
 data class RegisterRequest(
-    @SerializedName("nickname")
-    val nickname: String,
+
     @SerializedName("password")
     val password: String,
     @SerializedName("username")
