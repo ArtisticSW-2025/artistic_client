@@ -56,7 +56,7 @@ fun NuvoNavHost(appState: NuvoAppState) {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = Routes.Home.ROUTE,
+            startDestination = Routes.Login.LOGIN,
             modifier = Modifier.padding(paddingValues),
         ) {
             loginGraph(appState)
