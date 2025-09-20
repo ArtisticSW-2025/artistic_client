@@ -20,7 +20,7 @@ internal fun RegisterInputField(
     value: String,
     onValueChange: (String) -> Unit,
     isPassword: Boolean = false,
-    isError: Boolean = false
+    errorMessage: String? = null
 ) {
     Column(modifier = modifier) {
         Text(
@@ -39,8 +39,8 @@ internal fun RegisterInputField(
             value = value,
             shape = RoundedCornerShape(10.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = if (isError) Color(0xFFFF0E0E) else NuvoTheme.colors.mainGreen,
-                unfocusedBorderColor = if (isError) Color(0xFFFF0E0E) else NuvoTheme.colors.gray3,
+                focusedBorderColor = if (errorMessage != null) Color(0xFFFF0E0E) else NuvoTheme.colors.mainGreen,
+                unfocusedBorderColor = if (errorMessage != null) Color(0xFFFF0E0E) else NuvoTheme.colors.gray3,
                 cursorColor = NuvoTheme.colors.mainGreen,
                 focusedLabelColor = NuvoTheme.colors.mainGreen,
                 unfocusedLabelColor = NuvoTheme.colors.gray5
@@ -48,11 +48,11 @@ internal fun RegisterInputField(
             onValueChange = onValueChange,
             label = { Text(placeholder) },
             visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-            isError = isError
+            isError = errorMessage != null
         )
-        if(isError){
+        if(errorMessage != null){
             Text(
-                text = "비밀번호가 일치하지 않습니다",
+                text = errorMessage,
                 color = Color(0xFFFF0E0E),
                 style = NuvoTheme.typography.interRegular15,
                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)

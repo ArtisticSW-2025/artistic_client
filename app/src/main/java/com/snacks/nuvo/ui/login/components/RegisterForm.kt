@@ -10,14 +10,15 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 internal fun RegisterForm(
     modifier: Modifier = Modifier,
     nicknameText: String,
-    idText: String,
+    emailText: String,
     passwordText: String,
     confirmPasswordText: String,
     onNicknameChange: (String) -> Unit,
-    onIdChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     showPasswordMismatchError: Boolean,
+    showPasswordLengthError: Boolean,
 ) {
     Column(
         modifier = modifier.padding(horizontal = 38.dp)
@@ -34,10 +35,13 @@ internal fun RegisterForm(
         Spacer(Modifier.height(36.dp))
 
         RegisterInputField(
-            label = "아이디",
-            placeholder = "아이디 입력",
-            value = idText,
-            onValueChange = onIdChange
+            label = "이메일",
+            placeholder = "이메일 입력",
+            value = emailText,
+            onValueChange = onEmailChange ,
+            errorMessage = if (emailText.isNotEmpty() && !emailText.contains("@")) {
+                "올바른 이메일 주소를 입력해주세요."
+            } else null
         )
 
         Spacer(Modifier.height(36.dp))
@@ -47,7 +51,8 @@ internal fun RegisterForm(
             placeholder = "비밀번호 입력",
             value = passwordText,
             onValueChange = onPasswordChange,
-            isPassword = true
+            isPassword = true,
+            errorMessage = if (showPasswordLengthError) "비밀번호는 8자 이상이어야 합니다." else null
         )
 
         Spacer(Modifier.height(12.dp))
@@ -58,7 +63,7 @@ internal fun RegisterForm(
             value = confirmPasswordText,
             onValueChange = onConfirmPasswordChange,
             isPassword = true,
-            isError = showPasswordMismatchError,
+            errorMessage = if (showPasswordMismatchError) "비밀번호가 일치하지 않습니다." else null
         )
     }
 }

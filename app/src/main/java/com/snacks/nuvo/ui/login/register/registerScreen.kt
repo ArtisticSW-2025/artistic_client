@@ -16,7 +16,7 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 internal fun RegisterScreen(
     appState: NuvoAppState,
     onBackClick: () -> Unit = {},
-    viewModel: RegisterViewModel = RegisterViewModel()
+    viewModel: RegisterViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -34,14 +34,15 @@ internal fun RegisterScreen(
 
             RegisterForm(
                 nicknameText = uiState.nicknameText,
-                idText = uiState.idText,
+                emailText = uiState.emailText,
                 passwordText = uiState.passwordText,
                 confirmPasswordText = uiState.confirmPasswordText,
                 onNicknameChange = viewModel::updateNicknameText,
-                onIdChange = viewModel::updateIdText,
+                onEmailChange = viewModel::updateEmailText,
                 onPasswordChange = viewModel::updatePasswordText,
                 onConfirmPasswordChange = viewModel::updateConfirmPasswordText,
                 showPasswordMismatchError = uiState.showPasswordMismatchError,
+                showPasswordLengthError = uiState.showPasswordLengthError,
             )
 
             Spacer(Modifier.height(60.dp))
@@ -50,7 +51,8 @@ internal fun RegisterScreen(
                 isEnabled = uiState.canRegister,
                 onClick = {
                     viewModel.register {
-                        appState.navigate(Routes.Login.WELCOME)
+                            nickname ->
+                        appState.navigate("${Routes.Login.WELCOME}/$nickname")
                     }
                 },
                 label = "회원가입"
