@@ -35,9 +35,9 @@ internal fun LoginScreen(
             Spacer(Modifier.height(48.dp))
 
             LoginForm(
-                idText = uiState.idText,
+                usernameText = uiState.usernameText,
                 passwordText = uiState.passwordText,
-                onIdTextChange = viewModel::updateIdText,
+                onUsernameTextChange = viewModel::updateUsernameText,
                 onPasswordTextChange = viewModel::updatePasswordText
             )
 
@@ -46,8 +46,8 @@ internal fun LoginScreen(
             AuthButton(
                 isEnabled = uiState.isLoginButtonEnabled,
                 onClick = {
-                    viewModel.login {
-                        appState.navigate(Routes.Home.ROUTE)
+                    viewModel.login { nickname ->
+                        appState.navigate("${Routes.Login.WELCOME}/$nickname")
                     }
                 },
                 label = "로그인"

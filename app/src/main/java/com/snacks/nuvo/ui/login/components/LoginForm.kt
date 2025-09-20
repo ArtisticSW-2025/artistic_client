@@ -14,9 +14,9 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 @Composable
 internal fun LoginForm(
     modifier: Modifier = Modifier,
-    idText: String,
+    usernameText: String,
     passwordText: String,
-    onIdTextChange: (String) -> Unit,
+    onUsernameTextChange: (String) -> Unit,
     onPasswordTextChange: (String) -> Unit,
 ) {
     Column(
@@ -28,7 +28,7 @@ internal fun LoginForm(
                 .fillMaxWidth()
                 .padding(horizontal = 36.dp)
                 .height(60.dp),
-            value = idText,
+            value = usernameText,
             shape = RoundedCornerShape(10.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = NuvoTheme.colors.mainGreen,
@@ -37,8 +37,8 @@ internal fun LoginForm(
                 focusedLabelColor = NuvoTheme.colors.mainGreen,
                 unfocusedLabelColor = NuvoTheme.colors.gray5
             ),
-            onValueChange = onIdTextChange,
-            label = { Text("아이디") }
+            onValueChange = onUsernameTextChange,
+            label = { Text("닉네임") }
         )
 
         Spacer(Modifier.height(10.dp))
