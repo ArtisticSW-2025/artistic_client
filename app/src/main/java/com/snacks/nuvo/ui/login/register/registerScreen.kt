@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material3.CircularProgressIndicator
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.Routes
 import com.snacks.nuvo.ui.login.components.AuthButton
@@ -58,6 +60,11 @@ internal fun RegisterScreen(
                 label = "회원가입"
             )
 
+        }
+        if (uiState.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 }

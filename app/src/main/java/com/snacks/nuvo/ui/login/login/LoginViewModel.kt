@@ -3,8 +3,9 @@ package com.snacks.nuvo.ui.login.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snacks.nuvo.TempAuthManager
-import com.snacks.nuvo.network.model.request.LoginRequest
+import com.snacks.nuvo.ui.login.login.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import com.snacks.nuvo.network.model.request.LoginRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
