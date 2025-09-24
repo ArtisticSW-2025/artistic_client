@@ -16,11 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +32,7 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 import kotlinx.coroutines.delay
 
 @Composable
-internal fun WelcomScreen(appState: NuvoAppState? = null ) {
+internal fun WelcomScreen(appState: NuvoAppState? = null, nickname: String ) {
     LaunchedEffect(Unit) {
         delay(3000) // 3초 대기
         appState?.navigate(Routes.Home.ROUTE) // 원하는 라우트로 이동
@@ -78,14 +76,16 @@ internal fun WelcomScreen(appState: NuvoAppState? = null ) {
                         color = NuvoTheme.colors.white
                     )
                     ){
-                        append("도도도")
+                        append(nickname)
                     }
                     withStyle(style = SpanStyle(
                         fontFamily = Inter,
                         fontWeight = FontWeight.SemiBold,
+
                         fontSize = 28.sp,
                         color = NuvoTheme.colors.white
-                    ) ){
+                    )
+                    ){
                         append("님,")
                     }
                     withStyle(style = SpanStyle(
@@ -107,7 +107,7 @@ internal fun WelcomScreen(appState: NuvoAppState? = null ) {
                     }
                 },
                 textAlign = TextAlign.Center,
-                lineHeight = 28.sp
+                lineHeight = 33.sp
 
             )
             }
@@ -118,5 +118,5 @@ internal fun WelcomScreen(appState: NuvoAppState? = null ) {
 @Composable
 fun a (){
 
-    WelcomScreen()
+    WelcomScreen(nickname = "도도도")
 }

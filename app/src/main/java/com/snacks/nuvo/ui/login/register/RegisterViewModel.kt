@@ -1,14 +1,20 @@
 package com.snacks.nuvo.ui.login.register
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.snacks.nuvo.network.model.request.RegisterRequest
+import com.snacks.nuvo.ui.login.login.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor() : ViewModel() {
+class RegisterViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterUiState.create())
     val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
@@ -19,9 +25,9 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
         updateValidationState()
     }
 
-    fun updateIdText(id: String) {
+    fun updateEmailText(email: String) {
         val currentState = _uiState.value
-        _uiState.value = currentState.copy(idText = id)
+        _uiState.value = currentState.copy(emailText = email)
         updateValidationState()
     }
 
@@ -43,33 +49,54 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
         val isConfirmPasswordValid = currentState.confirmPasswordText == currentState.passwordText &&
                 currentState.confirmPasswordText.isNotEmpty()
 
+        val isPasswordLengthValid = currentState.passwordText.length >= 8
+
         val isAllFieldsFilled = currentState.nicknameText.isNotEmpty() &&
-                currentState.idText.isNotEmpty() &&
+                currentState.emailText.isNotEmpty() &&
                 currentState.passwordText.isNotEmpty() &&
                 currentState.confirmPasswordText.isNotEmpty()
 
-        val canRegister = isAllFieldsFilled && isConfirmPasswordValid
+        val canRegister = isAllFieldsFilled && isConfirmPasswordValid && isPasswordLengthValid
 
         val showPasswordMismatchError = currentState.confirmPasswordText.isNotEmpty() &&
                 !isConfirmPasswordValid
 
+        val showPasswordLengthError = currentState.passwordText.isNotEmpty() &&
+                !isPasswordLengthValid
+
         _uiState.value = currentState.copy(
             isConfirmPasswordValid = isConfirmPasswordValid,
+            isPasswordLengthValid = isPasswordLengthValid,
             isAllFieldsFilled = isAllFieldsFilled,
             canRegister = canRegister,
-            showPasswordMismatchError = showPasswordMismatchError
+            showPasswordMismatchError = showPasswordMismatchError,
+            showPasswordLengthError = showPasswordLengthError
         )
     }
 
-    fun register(onSuccess: () -> Unit) {
+    fun register(onSuccess: (String) -> Unit) {
         val currentState = _uiState.value
         if (currentState.canRegister) {
-            _uiState.value = currentState.copy(isLoading = true)
+            viewModelScope.launch {
+                _uiState.value = currentState.copy(isLoading = true, error = null)
+                val result = authRepository.register(
+                    RegisterRequest(
+                        username = currentState.nicknameText,
+                        email = currentState.emailText,
+                        password = currentState.passwordText
+                    )
+                )
 
-            // 실제 회원가입 로직을 여기에 구현
-            // 예시: 회원가입 성공 시
-            _uiState.value = currentState.copy(isLoading = false)
-            onSuccess()
+                result.onSuccess {
+                    _uiState.value = _uiState.value.copy(isLoading = false)
+                    onSuccess(currentState.nicknameText)
+                }.onFailure {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = it.message ?: "An unknown error occurred"
+                    )
+                }
+            }
         }
     }
 }

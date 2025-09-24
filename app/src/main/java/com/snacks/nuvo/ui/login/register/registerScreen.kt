@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material3.CircularProgressIndicator
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.Routes
 import com.snacks.nuvo.ui.login.components.AuthButton
@@ -16,7 +18,7 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 internal fun RegisterScreen(
     appState: NuvoAppState,
     onBackClick: () -> Unit = {},
-    viewModel: RegisterViewModel = RegisterViewModel()
+    viewModel: RegisterViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -34,14 +36,15 @@ internal fun RegisterScreen(
 
             RegisterForm(
                 nicknameText = uiState.nicknameText,
-                idText = uiState.idText,
+                emailText = uiState.emailText,
                 passwordText = uiState.passwordText,
                 confirmPasswordText = uiState.confirmPasswordText,
                 onNicknameChange = viewModel::updateNicknameText,
-                onIdChange = viewModel::updateIdText,
+                onEmailChange = viewModel::updateEmailText,
                 onPasswordChange = viewModel::updatePasswordText,
                 onConfirmPasswordChange = viewModel::updateConfirmPasswordText,
                 showPasswordMismatchError = uiState.showPasswordMismatchError,
+                showPasswordLengthError = uiState.showPasswordLengthError,
             )
 
             Spacer(Modifier.height(60.dp))
@@ -50,12 +53,18 @@ internal fun RegisterScreen(
                 isEnabled = uiState.canRegister,
                 onClick = {
                     viewModel.register {
-                        appState.navigate(Routes.Login.WELCOME)
+                            nickname ->
+                        appState.navigate("${Routes.Login.WELCOME}/$nickname")
                     }
                 },
                 label = "회원가입"
             )
 
+        }
+        if (uiState.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 }

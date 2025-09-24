@@ -2,7 +2,9 @@ package com.snacks.nuvo.ui.login
 
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.Routes
 import com.snacks.nuvo.ui.login.login.LoginScreen
@@ -37,10 +39,13 @@ fun NavGraphBuilder.loginGraph(
     }
 
     composable(
-        route = Routes.Login.WELCOME
+        route = "${Routes.Login.WELCOME}/{nickname}",
+        arguments = listOf(navArgument("nickname") { type = NavType.StringType })
     ) {
+        val nickname = it.arguments?.getString("nickname") ?: ""
         WelcomScreen(
-            appState = appState
+            appState = appState,
+            nickname = nickname
         )
     }
 }

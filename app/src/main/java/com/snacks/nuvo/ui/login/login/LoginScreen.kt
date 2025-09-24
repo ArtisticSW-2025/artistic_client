@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material3.CircularProgressIndicator
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.Routes
 import com.snacks.nuvo.ui.login.components.AuthButton
@@ -35,9 +36,9 @@ internal fun LoginScreen(
             Spacer(Modifier.height(48.dp))
 
             LoginForm(
-                idText = uiState.idText,
+                usernameText = uiState.usernameText,
                 passwordText = uiState.passwordText,
-                onIdTextChange = viewModel::updateIdText,
+                onUsernameTextChange = viewModel::updateUsernameText,
                 onPasswordTextChange = viewModel::updatePasswordText
             )
 
@@ -46,8 +47,8 @@ internal fun LoginScreen(
             AuthButton(
                 isEnabled = uiState.isLoginButtonEnabled,
                 onClick = {
-                    viewModel.login {
-                        appState.navigate(Routes.Home.ROUTE)
+                    viewModel.login { nickname ->
+                        appState.navigate("${Routes.Login.WELCOME}/$nickname")
                     }
                 },
                 label = "로그인"
@@ -65,6 +66,11 @@ internal fun LoginScreen(
                 onRegisterClick = {
                     appState.navigate(Routes.Login.REGISTER)
                 }
+            )
+        }
+        if (uiState.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
             )
         }
     }
