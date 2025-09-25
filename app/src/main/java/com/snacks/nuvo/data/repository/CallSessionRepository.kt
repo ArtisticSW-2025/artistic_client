@@ -1,6 +1,6 @@
 package com.snacks.nuvo.data.repository
 
-import com.snacks.nuvo.network.model.response.CallSessionResponse
+import com.snacks.nuvo.ui.home.RecommendScript
 
 interface CallSessionRepository {
 
@@ -8,6 +8,6 @@ interface CallSessionRepository {
         count: Int,
         isBoolean: Boolean? = null,
         category: List<String>? = null,
-    ): List<CallSessionResponse>
+    ): List<RecommendScript>
 
 }
