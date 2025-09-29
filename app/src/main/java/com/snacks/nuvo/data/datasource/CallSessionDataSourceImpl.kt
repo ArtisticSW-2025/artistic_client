@@ -12,16 +12,40 @@ class CallSessionDataSourceImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : CallSessionDataSource {
 
+    override suspend fun getScripts(
+        isCall: Boolean?,
+        category: List<String>?,
+        search: String?,
+    ): List<CallSessionResponse> {
+        return withContext(ioDispatcher) {
+            callSessionService.getScripts(
+                isCall = isCall,
+                category = category,
+                search = search
+            )
+        }
+    }
+
     override suspend fun getRandomScripts(
         count: Int,
-        isBoolean: Boolean?,
+        isCall: Boolean?,
         category: List<String>?,
     ): List<CallSessionResponse> {
         return withContext(ioDispatcher) {
             callSessionService.getRandomScripts(
                 count = count,
-                isBoolean = isBoolean,
+                isCall = isCall,
                 category = category
+            )
+        }
+    }
+
+    override suspend fun getScriptDetail(
+        id: String,
+    ): CallSessionResponse {
+        return withContext(ioDispatcher) {
+            callSessionService.getScriptDetail(
+                id = id
             )
         }
     }
