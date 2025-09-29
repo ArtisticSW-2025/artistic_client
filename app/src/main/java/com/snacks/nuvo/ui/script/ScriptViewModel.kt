@@ -62,4 +62,22 @@ class ScriptViewModel @Inject constructor(
     fun toggleEmergencyMode() {
         _uiState.value = _uiState.value.copy(isEmergencyMode = !_uiState.value.isEmergencyMode)
     }
+
+    fun onValueChage(keyword: String) {
+        _uiState.value = _uiState.value.copy(searchKeyword = keyword)
+    }
+
+    fun onSearch() {
+        var keyword: String? = null
+
+        if (!_uiState.value.searchKeyword.isEmpty()) {
+            keyword = _uiState.value.searchKeyword
+        }
+
+        Log.d(TAG, "검색 키워드: $keyword")
+        viewModelScope.launch {
+            val scriptItems = callSessionRepository.getScripts(search = keyword)
+            _uiState.value = _uiState.value.copy(scriptItems = scriptItems)
+        }
+    }
 }

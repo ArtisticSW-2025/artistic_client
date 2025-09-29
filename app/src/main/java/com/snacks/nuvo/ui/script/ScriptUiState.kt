@@ -7,6 +7,7 @@ data class ScriptUiState(
     val isEmergencyMode: Boolean = false,
     val chipLabels: List<String> = ScriptLabel.entries.map { it.label },
     val scriptItems: List<ScriptItem> = emptyList<ScriptItem>(),
+    val searchKeyword: String = ""
 )
 
 data class ScriptItem(

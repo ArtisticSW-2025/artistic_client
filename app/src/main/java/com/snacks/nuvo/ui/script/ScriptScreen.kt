@@ -50,7 +50,12 @@ internal fun ScriptScreen(
                 modifier = Modifier.padding(start = 20.dp, top = 44.dp)
             )
             Spacer(Modifier.height(48.dp))
-            ScriptSearchBar(modifier = Modifier.padding(horizontal = 20.dp))
+            ScriptSearchBar(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                keyword = uiState.searchKeyword,
+                onValueChange = { it -> viewModel.onValueChage(it) },
+                onSearch = { viewModel.onSearch() }
+            )
             Spacer(Modifier.height(32.dp))
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
