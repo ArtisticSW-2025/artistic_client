@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.component.LoadingIndicator
@@ -39,15 +39,15 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 @Composable
 internal fun ScriptDetailScreen(
     appState: NuvoAppState,
-    viewModel: ScriptDetailViewModel = viewModel(),
-    id: Int,
+    viewModel: ScriptDetailViewModel = hiltViewModel(),
+    id: String?,
     isSmallTalkMode: Boolean,
     isEmergencyMode: Boolean,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(id, isSmallTalkMode, isEmergencyMode) {
-        viewModel.initParams(
+        viewModel.initScreen(
             id = id,
             isSmallTalkMode = isSmallTalkMode,
             isEmergencyMode = isEmergencyMode
