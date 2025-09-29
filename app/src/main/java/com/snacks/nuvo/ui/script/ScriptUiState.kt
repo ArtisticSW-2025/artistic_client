@@ -10,7 +10,7 @@ data class ScriptUiState(
 )
 
 data class ScriptItem(
-    val id: Int,
+    val id: String?,
     val title: String,
     val description: String,
 )
