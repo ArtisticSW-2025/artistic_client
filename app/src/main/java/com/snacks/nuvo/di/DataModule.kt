@@ -1,5 +1,13 @@
 package com.snacks.nuvo.di
 
+import com.snacks.nuvo.data.datasource.CallSessionDataSource
+import com.snacks.nuvo.data.datasource.CallSessionDataSourceImpl
+import com.snacks.nuvo.data.datasource.UserDataSource
+import com.snacks.nuvo.data.datasource.UserDataSourceImpl
+import com.snacks.nuvo.data.repository.CallSessionRepository
+import com.snacks.nuvo.data.repository.CallSessionRepositoryImpl
+import com.snacks.nuvo.data.repository.UserRepository
+import com.snacks.nuvo.data.repository.UserRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,7 +20,28 @@ abstract class DataModule {
     // DataSource/Repository 생성 시 모두 추가
     // 예:
     // @Binds
-    // abstract fun ${feature}Repository(
+    // abstract fun ${Feature}Repository(
     //      ${feature}Repository: ${feature}RepositoryImple,
-    // ): ${feature}Repository
+    // ): ${Feature}Repository
+
+    @Binds
+    abstract fun UserDataSource(
+        userDataSource: UserDataSourceImpl,
+    ): UserDataSource
+
+    @Binds
+    abstract fun UserRepository(
+        userRepository: UserRepositoryImpl,
+    ): UserRepository
+
+    @Binds
+    abstract fun CallSessionDataSource(
+        callSessionDataSource: CallSessionDataSourceImpl,
+    ): CallSessionDataSource
+
+    @Binds
+    abstract fun CallSessionRepository(
+        callSessionRepository: CallSessionRepositoryImpl,
+    ): CallSessionRepository
+
 }

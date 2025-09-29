@@ -1,5 +1,6 @@
 package com.snacks.nuvo.ui.login.login
 
+import com.snacks.nuvo.network.interceptor.AuthInterceptor
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -25,6 +26,7 @@ object AuthModule {
         }
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(AuthInterceptor())
             .build()
     }
 

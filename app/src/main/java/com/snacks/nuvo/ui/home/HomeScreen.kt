@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -30,20 +31,19 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.snacks.nuvo.R
+import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.home.component.RecommendScriptCard
 import com.snacks.nuvo.ui.home.component.TodayMissionCard
-import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.theme.NuvoTheme
-import androidx.compose.runtime.getValue
 import com.snacks.nuvo.util.toCommaFormat
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Preview
 @Composable
 internal fun HomeScreen(
-    viewModel: HomeViewModel = viewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp

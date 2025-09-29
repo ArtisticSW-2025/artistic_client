@@ -10,7 +10,7 @@ data class HomeUiState(
 )
 
 data class RecommendScript(
-    val id: Int,
+    val id: String?,
     val title: String,
     val description: String,
 )
