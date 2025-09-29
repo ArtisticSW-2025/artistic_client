@@ -1,6 +1,7 @@
 package com.snacks.nuvo.network.model.response
 
 import com.google.gson.annotations.SerializedName
+import com.snacks.nuvo.ui.script.scriptdetail.Dialogue
 
 data class CallSessionResponse(
     @SerializedName("id")
@@ -18,5 +19,5 @@ data class CallSessionResponse(
     @SerializedName("purpose")
     val purpose: String,
     @SerializedName("script")
-    val script: String
+    val script: List<Dialogue>
 )
