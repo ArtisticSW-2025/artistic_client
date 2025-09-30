@@ -68,6 +68,13 @@ internal fun HomeScreen(
                         )
                     )
             ) {
+                Image(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .offset(y = 20.dp),
+                    painter = painterResource(R.mipmap.home_character),
+                    contentDescription = null
+                )
                 Column(
                     modifier = Modifier
                         .padding(top = 60.dp, bottom = 90.dp)
