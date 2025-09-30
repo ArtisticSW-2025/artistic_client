@@ -7,6 +7,7 @@ data class HomeUiState(
     val score: Int? = null,
     val todayMission: String = "",
     val recommendScripts: List<RecommendScript> = emptyList<RecommendScript>(),
+    val todayMissionId: Int? = null,
 )
 
 data class RecommendScript(

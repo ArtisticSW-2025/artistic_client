@@ -3,6 +3,7 @@ package com.snacks.nuvo.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snacks.nuvo.data.repository.CallSessionRepository
+import com.snacks.nuvo.data.repository.MissionRecordRepository
 import com.snacks.nuvo.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val callSessionRepository: CallSessionRepository
+    private val callSessionRepository: CallSessionRepository,
+    private val missionRecordRepository: MissionRecordRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -39,7 +41,13 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getTodayMission() {
-        _uiState.value = _uiState.value.copy(todayMission = "오늘 하루를 요약해서 말해보자")
+        viewModelScope.launch {
+            val missionInfo = missionRecordRepository.getTodayMission()
+            _uiState.value = _uiState.value.copy(
+                todayMission = missionInfo.title,
+                todayMissionId = missionInfo.id
+            )
+        }
     }
 
     private fun getRecommendScripts() {

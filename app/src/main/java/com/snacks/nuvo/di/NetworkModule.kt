@@ -1,6 +1,7 @@
 package com.snacks.nuvo.di
 
 import com.snacks.nuvo.network.service.CallSessionService
+import com.snacks.nuvo.network.service.MissionRecordService
 import com.snacks.nuvo.network.service.UserService
 import dagger.Module
 import dagger.Provides
@@ -50,5 +51,10 @@ class NetworkModule {
     @Singleton
     fun providesCallSessionService(retrofit: Retrofit): CallSessionService =
         retrofit.create(CallSessionService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesMissionRecordService(retrofit: Retrofit): MissionRecordService =
+        retrofit.create(MissionRecordService::class.java)
 
 }
