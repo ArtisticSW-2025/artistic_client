@@ -25,8 +25,8 @@ object AuthModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
         return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
             .addInterceptor(AuthInterceptor())
+            .addInterceptor(loggingInterceptor)
             .build()
     }
 
