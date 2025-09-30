@@ -2,7 +2,7 @@ package com.snacks.nuvo.ui.script.scriptdetail
 
 data class ScriptDetailUiState(
     val isLoading: Boolean = false,
-    val id: Int? = null,
+    val id: String? = null,
     val isSmallTalkMode: Boolean = false,
     val isEmergencyMode: Boolean = false,
     val title: String = "",

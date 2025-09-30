@@ -1,14 +1,21 @@
 package com.snacks.nuvo.ui.script
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.snacks.nuvo.TAG
+import com.snacks.nuvo.data.repository.CallSessionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ScriptViewModel @Inject constructor() : ViewModel() {
+class ScriptViewModel @Inject constructor(
+    private val callSessionRepository: CallSessionRepository,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(ScriptUiState())
     val uiState: StateFlow<ScriptUiState> = _uiState.asStateFlow()
 
@@ -19,31 +26,33 @@ class ScriptViewModel @Inject constructor() : ViewModel() {
     }
 
     fun getScriptItems() {
-        val scriptItems = listOf<ScriptItem>(
-            ScriptItem(
-                id = 1,
-                title = "병원 초진 예약 전화",
-                description = "병원에 인사하고, 초진 예약을 할 때"
-            ),
-            ScriptItem(
-                id = 1,
-                title = "병원 초진 예약 전화",
-                description = "병원에 인사하고, 초진 예약을 할 때"
-            ),
-            ScriptItem(
-                id = 1,
-                title = "병원 초진 예약 전화",
-                description = "병원에 인사하고, 초진 예약을 할 때"
-            ),
-        )
-        _uiState.value = _uiState.value.copy(scriptItems = scriptItems)
+        viewModelScope.launch {
+            val scriptItems = callSessionRepository.getScripts()
+            _uiState.value = _uiState.value.copy(scriptItems = scriptItems)
+        }
     }
 
     fun onChipClick(index: Int) {
+        // 칩 ui 변경
         val updatedSelectedChipIndexes =
             if (index in _uiState.value.selectedChipIndexes) _uiState.value.selectedChipIndexes - index
             else _uiState.value.selectedChipIndexes + index
         _uiState.value = _uiState.value.copy(selectedChipIndexes = updatedSelectedChipIndexes)
+        Log.d(TAG, "선택된 카테고리 인덱스: $updatedSelectedChipIndexes")
+
+        // 스크립트 필터링 적용
+        var searchCategory: List<String>? = null
+        // 선택된 카테고리가 있다면, 검색 api 호출을 위해 List<Int>를 List<String>으로 변환
+        if (!updatedSelectedChipIndexes.isEmpty()) {
+            searchCategory = updatedSelectedChipIndexes.map { index ->
+                _uiState.value.chipLabels[index]
+            }
+        }
+        Log.d(TAG, "검색 카테고리: $searchCategory")
+        viewModelScope.launch {
+            val scriptItems = callSessionRepository.getScripts(category = searchCategory)
+            _uiState.value = _uiState.value.copy(scriptItems = scriptItems)
+        }
     }
 
     fun toggleSmallTalkMode() {
@@ -52,5 +61,23 @@ class ScriptViewModel @Inject constructor() : ViewModel() {
 
     fun toggleEmergencyMode() {
         _uiState.value = _uiState.value.copy(isEmergencyMode = !_uiState.value.isEmergencyMode)
+    }
+
+    fun onValueChage(keyword: String) {
+        _uiState.value = _uiState.value.copy(searchKeyword = keyword)
+    }
+
+    fun onSearch() {
+        var keyword: String? = null
+
+        if (!_uiState.value.searchKeyword.isEmpty()) {
+            keyword = _uiState.value.searchKeyword
+        }
+
+        Log.d(TAG, "검색 키워드: $keyword")
+        viewModelScope.launch {
+            val scriptItems = callSessionRepository.getScripts(search = keyword)
+            _uiState.value = _uiState.value.copy(scriptItems = scriptItems)
+        }
     }
 }

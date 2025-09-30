@@ -41,11 +41,10 @@ fun NavGraphBuilder.scriptGraph(
             }
         )
     ) { entry ->
-        val idString = entry.arguments?.getString("id") ?: "0"
+        val id = entry.arguments?.getString("id") ?: "0"
         val isSmallTalkMode = entry.arguments?.getBoolean("isSmallTalkMode") == true
         val isEmergencyMode = entry.arguments?.getBoolean("isEmergencyMode") == true
 
-        val id = idString.toInt()
         val viewModel: ScriptDetailViewModel = hiltViewModel()
 
         ScriptDetailScreen(

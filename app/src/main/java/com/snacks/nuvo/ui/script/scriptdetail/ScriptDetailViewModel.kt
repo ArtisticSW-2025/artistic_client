@@ -1,25 +1,36 @@
 package com.snacks.nuvo.ui.script.scriptdetail
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.snacks.nuvo.data.repository.CallSessionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ScriptDetailViewModel @Inject constructor() : ViewModel() {
+class ScriptDetailViewModel @Inject constructor(
+    private val callSessionRepository: CallSessionRepository,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(ScriptDetailUiState())
     val uiState: StateFlow<ScriptDetailUiState> = _uiState.asStateFlow()
 
-    init {
-        _uiState.value = _uiState.value.copy(isLoading = true)
-        getScriptDetail()
-        _uiState.value = _uiState.value.copy(isLoading = false)
+    fun initScreen(
+        id: String?,
+        isSmallTalkMode: Boolean,
+        isEmergencyMode: Boolean,
+    ) {
+        // 순차 실행을 위해 코루틴 사용
+        viewModelScope.launch {
+            initParams(id, isSmallTalkMode, isEmergencyMode)
+            getScriptDetail()
+        }
     }
 
     fun initParams(
-        id: Int,
+        id: String?,
         isSmallTalkMode: Boolean,
         isEmergencyMode: Boolean,
     ) {
@@ -30,55 +41,24 @@ class ScriptDetailViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    fun getScriptDetail() {
+    suspend fun getScriptDetail() {
+        if (_uiState.value.id == null) return
+
+        // 로딩 노출
+        _uiState.value = _uiState.value.copy(isLoading = true)
+
+        // 데이터 로드
+        val scriptInfo = callSessionRepository.getScriptDetail(_uiState.value.id!!)
         _uiState.value = _uiState.value.copy(
-            title = "병원 초진 예약 전화",
-            mission = "병원 초진 예약 전화를 성공적으로 완료하세요!",
-            goal = "• 병원에 인사하고, 초진 예약하고 싶다고 말하기\n• 증상 간단히 설명하기\n• 가능한 날짜/시간 물어보기\n• 예약 확정 및 마무리 인사하기",
-            dialogues = listOf(
-                Dialogue(
-                    speaker = "병원 직원",
-                    content = "안녕하세요, 힐링내과입니다. 무엇을 도와드릴까요?"
-                ),
-                Dialogue(
-                    speaker = "나",
-                    content = "안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요. 안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요. 안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요."
-                ),
-                Dialogue(
-                    speaker = "병원 직원",
-                    content = "안녕하세요, 힐링내과입니다. 무엇을 도와드릴까요?"
-                ),
-                Dialogue(
-                    speaker = "나",
-                    content = "안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요. 안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요. 안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요."
-                ),
-                Dialogue(
-                    speaker = "병원 직원",
-                    content = "안녕하세요, 힐링내과입니다. 무엇을 도와드릴까요?"
-                ),
-                Dialogue(
-                    speaker = "나",
-                    content = "안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요. 안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요. 안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요."
-                ),
-                Dialogue(
-                    speaker = "병원 직원",
-                    content = "안녕하세요, 힐링내과입니다. 무엇을 도와드릴까요?"
-                ),
-                Dialogue(
-                    speaker = "나",
-                    content = "안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요. 안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요. 안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요."
-                ),
-                Dialogue(
-                    speaker = "병원 직원",
-                    content = "안녕하세요, 힐링내과입니다. 무엇을 도와드릴까요?"
-                ),
-                Dialogue(
-                    speaker = "나",
-                    content = "안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요. 안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요. 안녕하세요. 초진 예약을 하고 싶어서 전화드렸어요."
-                ),
-            )
+            title = scriptInfo.name,
+            mission = scriptInfo.mission,
+            goal = scriptInfo.purpose,
+            dialogues = scriptInfo.script
         )
+
+        // 로딩 숨기기
+        _uiState.value = _uiState.value.copy(isLoading = false)
     }
 
-    fun startScript(id: Int) {}
+    fun startScript(id: String) {}
 }
