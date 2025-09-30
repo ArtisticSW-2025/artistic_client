@@ -43,14 +43,29 @@ fun FeedbackSection(
             .fillMaxSize()
             .background(color = NuvoTheme.colors.gray2)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 26.dp)
-        ) {
-            FeedbackHeader()
-            Spacer(modifier = Modifier.height(24.dp))
-            FeedbackPager(feedbackItems = feedbackItems)
+        if (feedbackItems.isEmpty()) {
+            // 피드백 없을 때
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
+            ) {
+                Text(
+                    text = "피드백이 없습니다",
+                    style = NuvoTheme.typography.interMedium15,
+                    color = NuvoTheme.colors.subNavy
+                )
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp, vertical = 26.dp)
+            ) {
+                FeedbackHeader()
+                Spacer(modifier = Modifier.height(24.dp))
+                FeedbackPager(feedbackItems = feedbackItems)
+            }
         }
     }
 }
@@ -143,18 +158,19 @@ private fun FeedbackCard(
         ) {
             Spacer(modifier = Modifier.height(28.dp))
 
-            FeedbackTitle(title = feedback.title)
+            FeedbackTitle(title = "임시값")
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Divider(modifier = Modifier.width(292.dp))
 
             Spacer(modifier = Modifier.height(12.dp))
-            FeedbackItem(text = feedback.content1)
-            Spacer(modifier = Modifier.height(12.dp))
-            FeedbackItem(text = feedback.content2)
-            Spacer(modifier = Modifier.height(12.dp))
-            FeedbackItem(text = feedback.content3)
+            Text(
+                text = feedback.content,
+                style = NuvoTheme.typography.interMedium13,
+                color = NuvoTheme.colors.subNavy,
+                modifier = Modifier.padding(horizontal = 20.dp),
+            )
             Spacer(modifier = Modifier.height(12.dp))
         }
     }
