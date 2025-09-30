@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.ui.ranking.component.RankingHeader
 import com.snacks.nuvo.ui.ranking.component.RankingList
@@ -34,7 +35,7 @@ object RankingConstants {
 
 @Composable
 internal fun RankingScreen(
-    viewModel: RankingViewModel = viewModel()
+    viewModel: RankingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
