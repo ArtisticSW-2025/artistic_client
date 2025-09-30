@@ -4,12 +4,16 @@ import com.snacks.nuvo.data.datasource.CallSessionDataSource
 import com.snacks.nuvo.data.datasource.CallSessionDataSourceImpl
 import com.snacks.nuvo.data.datasource.MissionRecordDataSource
 import com.snacks.nuvo.data.datasource.MissionRecordDataSourceImpl
+import com.snacks.nuvo.data.datasource.RankingDataSource
+import com.snacks.nuvo.data.datasource.RankingDataSourceImpl
 import com.snacks.nuvo.data.datasource.UserDataSource
 import com.snacks.nuvo.data.datasource.UserDataSourceImpl
 import com.snacks.nuvo.data.repository.CallSessionRepository
 import com.snacks.nuvo.data.repository.CallSessionRepositoryImpl
 import com.snacks.nuvo.data.repository.MissionRecordRepository
 import com.snacks.nuvo.data.repository.MissionRecordRepositoryImpl
+import com.snacks.nuvo.data.repository.RankingRepository
+import com.snacks.nuvo.data.repository.RankingRepositoryImpl
 import com.snacks.nuvo.data.repository.UserRepository
 import com.snacks.nuvo.data.repository.UserRepositoryImpl
 import dagger.Binds
@@ -58,4 +62,13 @@ abstract class DataModule {
         missionRecordRepository: MissionRecordRepositoryImpl,
     ): MissionRecordRepository
 
+    @Binds
+    abstract fun bindRankingDataSource(
+        rankingDataSourceImpl: RankingDataSourceImpl
+    ): RankingDataSource
+
+    @Binds
+    abstract fun bindRankingRepository(
+        rankingRepositoryImpl: RankingRepositoryImpl
+    ): RankingRepository
 }
