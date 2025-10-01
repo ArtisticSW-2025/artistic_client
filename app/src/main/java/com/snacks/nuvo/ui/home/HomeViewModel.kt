@@ -33,9 +33,9 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val userInfo = userRepository.getUserInfo()
             _uiState.value = _uiState.value.copy(
-                userName = userInfo[0].username,
-                rank = userInfo[0].rank ?: 0,
-                score = userInfo[0].points
+                userName = userInfo.username,
+                rank = userInfo.rank ?: 0,
+                score = userInfo.points
             )
         }
     }
