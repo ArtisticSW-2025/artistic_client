@@ -4,6 +4,6 @@ import com.snacks.nuvo.network.model.response.UserResponse
 
 interface UserRepository {
 
-    suspend fun getUserInfo() : List<UserResponse>
+    suspend fun getUserInfo() : UserResponse
 
 }
