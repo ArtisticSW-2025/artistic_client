@@ -45,8 +45,8 @@ class ProfileViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(
                         userName = userInfo.username,
                         points = userInfo.points.toString(),
-                        completedMissions = userInfo.missionCount.toString(),
-                        totalSpeakingTime = userInfo.totalCallDuration.toString(),
+                        completedMissions = if (userInfo.missionCount != 0) userInfo.missionCount.toString() else _uiState.value.completedMissions,
+                        totalSpeakingTime = if (userInfo.totalCallDuration != 0) userInfo.totalCallDuration.toString() else _uiState.value.totalSpeakingTime,
                         feedbackItems = feedback,
                         isLoading = false
                     )
