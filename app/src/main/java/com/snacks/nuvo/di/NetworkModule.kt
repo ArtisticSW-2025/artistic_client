@@ -1,6 +1,7 @@
 package com.snacks.nuvo.di
 
 import com.snacks.nuvo.network.service.CallSessionService
+import com.snacks.nuvo.network.service.FeedbackService
 import com.snacks.nuvo.network.service.MissionRecordService
 import com.snacks.nuvo.network.service.RankingService
 import com.snacks.nuvo.network.service.UserService
@@ -62,6 +63,10 @@ class NetworkModule {
     @Singleton
     fun providesRankingService(retrofit: Retrofit): RankingService =
         retrofit.create(RankingService::class.java)
-
+        
+    @Provides
+    @Singleton
+    fun providesFeedbackService(retrofit: Retrofit): FeedbackService =
+        retrofit.create(FeedbackService::class.java)
 
 }
