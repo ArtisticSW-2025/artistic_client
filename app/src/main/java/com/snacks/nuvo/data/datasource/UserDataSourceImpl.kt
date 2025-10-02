@@ -12,7 +12,7 @@ class UserDataSourceImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): UserDataSource {
 
-    override suspend fun getUserInfo(): List<UserResponse> {
+    override suspend fun getUserInfo(): UserResponse {
         return withContext(ioDispatcher) {
             userService.getUserInfo()
         }
