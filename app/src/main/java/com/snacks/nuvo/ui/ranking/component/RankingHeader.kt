@@ -71,20 +71,25 @@ internal fun TopThreeRankers(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.Bottom
     ) {
-        TopRankerItem(
-            ranker = topThree[1],
-            imageSize = RankingConstants.SecondThirdImageSize,
-        )
-        TopRankerItem(
-            ranker = topThree[0],
-            imageSize = RankingConstants.TopRankerImageSize,
-            isWinner = true
-        )
-        TopRankerItem(
-            ranker = topThree[2],
-            imageSize = RankingConstants.SecondThirdImageSize,
-        )
-
+        if (topThree.size > 1) {
+            TopRankerItem(
+                ranker = topThree[1],
+                imageSize = RankingConstants.SecondThirdImageSize,
+            )
+        }
+        if (topThree.isNotEmpty()) {
+            TopRankerItem(
+                ranker = topThree[0],
+                imageSize = RankingConstants.TopRankerImageSize,
+                isWinner = true
+            )
+        }
+        if (topThree.size > 2) {
+            TopRankerItem(
+                ranker = topThree[2],
+                imageSize = RankingConstants.SecondThirdImageSize,
+            )
+        }
     }
 }
 

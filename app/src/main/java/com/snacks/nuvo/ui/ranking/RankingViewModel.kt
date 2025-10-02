@@ -21,13 +21,12 @@ class RankingViewModel @Inject constructor(
     val uiState: StateFlow<RankingUiState> = _uiState.asStateFlow()
 
     init {
-        _uiState.value = _uiState.value.copy(isLoading = true)
         getRankingItems()
-        _uiState.value = _uiState.value.copy(isLoading = false)
     }
 
     fun getRankingItems() {
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
             try {
                 val rankingItems = rankingRepository.getRanking().map {
                     RankingItem(
@@ -40,6 +39,7 @@ class RankingViewModel @Inject constructor(
                 Log.d(TAG, "랭킹 아이템 불러오기 성공: $rankingItems")
             } catch (e: Exception) {
                 Log.e(TAG, "랭킹 불러오기 실패", e)
+            } finally {
                 _uiState.value = _uiState.value.copy(isLoading = false)
             }
         }
