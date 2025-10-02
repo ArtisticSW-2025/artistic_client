@@ -22,17 +22,19 @@ class ProfileViewModel @Inject constructor(
 
     private val _userId = MutableStateFlow<String?>(null)
 
-    fun setUserId(id: String) {
-        _userId.value = id
+    init {
+        _uiState.value = _uiState.value.copy(isLoading = true)
         loadProfileData()
+        _uiState.value = _uiState.value.copy(isLoading = false)
     }
+
 
     fun onEditProfileClick() {
         // 프로필 편집 로직
     }
 
     private fun loadProfileData() {
-        _userId.value?.let { id ->
+
             viewModelScope.launch {
                 try {
                     _uiState.value = _uiState.value.copy(isLoading = true)
@@ -55,7 +57,6 @@ class ProfileViewModel @Inject constructor(
                     )
                     // TODO: 에러 처리
                 }
-            }
         }
     }
 
