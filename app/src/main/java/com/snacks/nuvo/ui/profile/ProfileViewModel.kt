@@ -41,10 +41,10 @@ class ProfileViewModel @Inject constructor(
                     val feedback = feedbackRepository.getFeedback()
 
                     _uiState.value = _uiState.value.copy(
-                        userName = userInfo[0].username,
-                        points = userInfo[0].points.toString(),
-                        completedMissions = userInfo[0].missionCount.toString(),
-                        totalSpeakingTime = userInfo[0].totalCallDuration.toString(),
+                        userName = userInfo.username,
+                        points = userInfo.points.toString(),
+                        completedMissions = userInfo.missionCount.toString(),
+                        totalSpeakingTime = userInfo.totalCallDuration.toString(),
                         feedbackItems = feedback,
                         isLoading = false
                     )
