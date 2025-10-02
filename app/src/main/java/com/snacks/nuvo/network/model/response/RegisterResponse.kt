@@ -12,9 +12,9 @@ data class RegisterResponse(
     @SerializedName("username")
     val username: String,
     @SerializedName("email")
-    val email: String? = null,
+    val email: String,
     @SerializedName("accessToken")
-    val accessToken: String? = null,
+    val accessToken: String,
     @SerializedName("tokenType")
-    val tokenType: String? = null
+    val tokenType: String
 )
