@@ -2,6 +2,7 @@ package com.snacks.nuvo.ui.login.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.snacks.nuvo.TempAuthManager
 import com.snacks.nuvo.network.model.request.RegisterRequest
 import com.snacks.nuvo.ui.login.login.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -87,7 +88,8 @@ class RegisterViewModel @Inject constructor(
                     )
                 )
 
-                result.onSuccess {
+                result.onSuccess { response ->
+                    TempAuthManager.issueAndSaveToken(response.accessToken)
                     _uiState.value = _uiState.value.copy(isLoading = false)
                     onSuccess(currentState.nicknameText)
                 }.onFailure {
