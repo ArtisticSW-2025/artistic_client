@@ -3,12 +3,22 @@ package com.snacks.nuvo.network.model.response
 import com.google.gson.annotations.SerializedName
 
 data class RankingResponse(
-    @SerializedName("userId")
-    val userId: String,
-    @SerializedName("rankPosition")
-    val rankPosition: Int,
+    @SerializedName("email")
+    val email: String,
+    @SerializedName("id")
+    val id: String,
+    @SerializedName("missionCount")
+    val missionCount: Int,
+    @SerializedName("missionRecordCount")
+    val missionRecordCount: Int,
+    @SerializedName("missionTotalSeconds")
+    val missionTotalSeconds: Int,
     @SerializedName("points")
     val points: Int,
-    @SerializedName("updatedAt")
-    val updatedAt: String
+    @SerializedName("rank")
+    val rank: Int,
+    @SerializedName("totalCallDuration")
+    val totalCallDuration: Int,
+    @SerializedName("username")
+    val username: String
 )

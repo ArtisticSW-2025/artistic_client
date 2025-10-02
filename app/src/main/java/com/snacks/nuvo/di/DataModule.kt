@@ -6,6 +6,8 @@ import com.snacks.nuvo.data.datasource.FeedbackDataSource
 import com.snacks.nuvo.data.datasource.FeedbackDataSourceImpl
 import com.snacks.nuvo.data.datasource.MissionRecordDataSource
 import com.snacks.nuvo.data.datasource.MissionRecordDataSourceImpl
+import com.snacks.nuvo.data.datasource.RankingDataSource
+import com.snacks.nuvo.data.datasource.RankingDataSourceImpl
 import com.snacks.nuvo.data.datasource.UserDataSource
 import com.snacks.nuvo.data.datasource.UserDataSourceImpl
 import com.snacks.nuvo.data.repository.CallSessionRepository
@@ -14,6 +16,8 @@ import com.snacks.nuvo.data.repository.FeedbackRepository
 import com.snacks.nuvo.data.repository.FeedbackRepositoryImpl
 import com.snacks.nuvo.data.repository.MissionRecordRepository
 import com.snacks.nuvo.data.repository.MissionRecordRepositoryImpl
+import com.snacks.nuvo.data.repository.RankingRepository
+import com.snacks.nuvo.data.repository.RankingRepositoryImpl
 import com.snacks.nuvo.data.repository.UserRepository
 import com.snacks.nuvo.data.repository.UserRepositoryImpl
 import dagger.Binds
@@ -63,10 +67,20 @@ abstract class DataModule {
     ): MissionRecordRepository
 
     @Binds
+    abstract fun bindRankingDataSource(
+        rankingDataSourceImpl: RankingDataSourceImpl
+    ): RankingDataSource
+
+    @Binds
+    abstract fun bindRankingRepository(
+        rankingRepositoryImpl: RankingRepositoryImpl
+    ): RankingRepository
+  
+    @Binds
     abstract fun FeedbackRepository(
         feedbackRepository: FeedbackRepositoryImpl,
     ): FeedbackRepository
-
+  
     @Binds
     abstract fun FeedbackDataSource(
         feedbackDataSource: FeedbackDataSourceImpl

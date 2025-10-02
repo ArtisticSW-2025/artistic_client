@@ -9,12 +9,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snacks.nuvo.ui.ranking.RankingConstants
@@ -69,20 +71,25 @@ internal fun TopThreeRankers(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.Bottom
     ) {
-        TopRankerItem(
-            ranker = topThree[1],
-            imageSize = RankingConstants.SecondThirdImageSize,
-        )
-        TopRankerItem(
-            ranker = topThree[0],
-            imageSize = RankingConstants.TopRankerImageSize,
-            isWinner = true
-        )
-        TopRankerItem(
-            ranker = topThree[2],
-            imageSize = RankingConstants.SecondThirdImageSize,
-        )
-
+        if (topThree.size > 1) {
+            TopRankerItem(
+                ranker = topThree[1],
+                imageSize = RankingConstants.SecondThirdImageSize,
+            )
+        }
+        if (topThree.isNotEmpty()) {
+            TopRankerItem(
+                ranker = topThree[0],
+                imageSize = RankingConstants.TopRankerImageSize,
+                isWinner = true
+            )
+        }
+        if (topThree.size > 2) {
+            TopRankerItem(
+                ranker = topThree[2],
+                imageSize = RankingConstants.SecondThirdImageSize,
+            )
+        }
     }
 }
 
@@ -116,6 +123,9 @@ internal fun TopRankerItem(
             text = ranker.name,
             style = NuvoTheme.typography.interBold16,
             color = NuvoTheme.colors.white,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.widthIn(max = 80.dp) // 최대 너비 제한
         )
 
         Text(
