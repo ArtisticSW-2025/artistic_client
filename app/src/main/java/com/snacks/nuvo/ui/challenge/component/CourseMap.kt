@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.ui.challenge.ChallengeNode
+import com.snacks.nuvo.ui.challenge.NodeStatus
 import com.snacks.nuvo.ui.theme.NuvoTheme
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
@@ -146,7 +147,7 @@ fun CourseMap(
             val xInDp = with(density) { position.x.toDp() }
             val yInDp = with(density) { position.y.toDp() }
 
-            if (node.date == currentDate) {
+            if (node.status == NodeStatus.UNLOCKED) {
                 firstPosition.value = position.y.toInt()
             }
 

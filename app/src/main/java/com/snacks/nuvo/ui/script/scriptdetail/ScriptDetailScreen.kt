@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.R
+import com.snacks.nuvo.Routes
 import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.script.component.ScriptContentCard
 import com.snacks.nuvo.ui.script.component.ScriptGoalCard
@@ -106,7 +107,16 @@ internal fun ScriptDetailScreen(
                     Spacer(Modifier.height(48.dp))
                     ScriptStartButton(
                         label = "START",
-                        onClick = { viewModel.startScript(id = uiState.id!!) }
+                        onClick = {
+                            val prevName = uiState.title
+                            val callSessionId = uiState.id
+
+                            val route = "${Routes.Call.ROUTE}?" +
+                                    "prevName=$prevName&" +
+                                    "callSessionId=$callSessionId"
+
+                            appState.navController.navigate(route)
+                        }
                     )
                 }
             }

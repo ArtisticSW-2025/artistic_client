@@ -26,7 +26,6 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeEffect
-import java.time.LocalDate
 
 @Composable
 fun NodeComponent(
@@ -64,7 +63,7 @@ fun NodeComponent(
                     shape = CircleShape,
                     color = when (node.status) {
                         NodeStatus.LOCKED -> NuvoTheme.colors.gray3
-                        NodeStatus.UNLOCKED -> NuvoTheme.colors.subLightGreen
+                        NodeStatus.UNLOCKED -> NuvoTheme.colors.gray3
                         NodeStatus.COMPLETED -> NuvoTheme.colors.mainGreen
                     }
                 ),
@@ -86,7 +85,7 @@ fun NodeComponent(
                     .background(
                         color = when (node.status) {
                             NodeStatus.LOCKED -> NuvoTheme.colors.white.copy(alpha = 0.8f)
-                            NodeStatus.UNLOCKED -> NuvoTheme.colors.subLightGreen.copy(alpha = 0.8f)
+                            NodeStatus.UNLOCKED -> NuvoTheme.colors.white.copy(alpha = 0.8f)
                             NodeStatus.COMPLETED -> NuvoTheme.colors.mainGreen.copy(alpha = 0.8f)
                         }
                     )
@@ -95,7 +94,7 @@ fun NodeComponent(
                 text = "${node.id}",
                 style = when (node.status) {
                     NodeStatus.LOCKED -> NuvoTheme.typography.interBold24.copy(color = NuvoTheme.colors.gray3)
-                    NodeStatus.UNLOCKED -> NuvoTheme.typography.interBold24.copy(color = NuvoTheme.colors.white)
+                    NodeStatus.UNLOCKED -> NuvoTheme.typography.interBold24.copy(color = NuvoTheme.colors.gray3)
                     NodeStatus.COMPLETED -> NuvoTheme.typography.interBold24.copy(color = NuvoTheme.colors.white)
                 }
             )
@@ -120,21 +119,17 @@ class NodePreviewParameterProvider : PreviewParameterProvider<ChallengeNode> {
     override val values = sequenceOf(
         ChallengeNode(
             id = null,
-            date = LocalDate.now(),
         ),
         ChallengeNode(
             id = 1,
-            date = LocalDate.now(),
             status = NodeStatus.LOCKED
         ),
         ChallengeNode(
             id = 2,
-            date = LocalDate.now(),
             status = NodeStatus.UNLOCKED
         ),
         ChallengeNode(
             id = 3,
-            date = LocalDate.now(),
             status = NodeStatus.COMPLETED
         ),
     )

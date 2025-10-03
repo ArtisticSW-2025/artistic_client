@@ -59,6 +59,4 @@ class ScriptDetailViewModel @Inject constructor(
         // 로딩 숨기기
         _uiState.value = _uiState.value.copy(isLoading = false)
     }
-
-    fun startScript(id: String) {}
 }

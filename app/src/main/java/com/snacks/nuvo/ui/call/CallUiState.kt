@@ -5,6 +5,9 @@ import androidx.annotation.RequiresApi
 import java.time.LocalDate
 
 data class CallUiState(
+    val userId: String = "",
+    val callSessionId: String = "",
+
     val isLoading: Boolean = false,
     val prevName: String = "",
     val callStatus: CallStatus? = null,
@@ -25,6 +28,7 @@ data class CallUiState(
     val isTodayMissionFinish: Boolean = false,
 
     val isDetailedResult: Boolean = false,
+    val isFeedbackFailed: Boolean = false,
     val result: String = "",
     val feedbackContents: List<String> = emptyList<String>(),
     val score: Int = 0,

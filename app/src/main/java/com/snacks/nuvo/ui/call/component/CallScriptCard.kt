@@ -2,8 +2,7 @@ package com.snacks.nuvo.ui.call.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -16,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
@@ -27,7 +27,6 @@ internal fun CallScriptCard(
 ) {
     Card(
         modifier = modifier
-            .height(120.dp)
             .width(350.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
@@ -37,22 +36,17 @@ internal fun CallScriptCard(
         Surface(
             color = Color.Transparent,
             modifier = Modifier
-                .fillMaxSize()
         ) {
             Box(
                 modifier = Modifier
                     .background(color = if (isLast) NuvoTheme.colors.white else NuvoTheme.colors.white.copy(alpha = 0.5f))
-                    .fillMaxSize(),
-            )
-            Box(
-                modifier = Modifier
-                    .background(color = if (isLast) NuvoTheme.colors.white else NuvoTheme.colors.white.copy(alpha = 0.5f))
-                    .fillMaxSize(),
+                    .width(350.dp)
+                    .padding(50.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     script,
-                    style = NuvoTheme.typography.interMedium15.copy(color = if (isAI) NuvoTheme.colors.mainGreen else NuvoTheme.colors.subNavy)
+                    style = NuvoTheme.typography.interMedium15.copy(color = if (isAI) NuvoTheme.colors.mainGreen else NuvoTheme.colors.subNavy, lineHeight = 21.sp),
                 )
             }
         }
@@ -74,7 +68,7 @@ internal fun CallScriptCardPreview() {
 @Composable
 internal fun CallScriptCardPreview2() {
     CallScriptCard(
-        script = "안녕하세요.\n" +
+        script = "안녕하세요." +
                 "초진 예약을 하고 싶어서 전화드렸어요.",
         isAI = false,
         isLast = true

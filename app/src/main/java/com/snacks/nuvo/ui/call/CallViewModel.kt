@@ -1,9 +1,21 @@
 package com.snacks.nuvo.ui.call
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Build
+import android.os.IBinder
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.snacks.nuvo.data.repository.UserRepository
+import com.snacks.nuvo.network.model.request.UserMissionRequest
+import com.snacks.nuvo.network.model.response.UserResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,18 +27,20 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.random.Random
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class CallViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
+    @ApplicationContext private val applicationContext: Context,
+    private val savedStateHandle: SavedStateHandle,
+    private val userRepository: UserRepository,
+) : ViewModel(), ServiceConnection {
+    val callSessionId: StateFlow<String> = savedStateHandle.getStateFlow("callSessionId", "123e4567-e89b-12d3-a456-426614174000")
     val prevName: StateFlow<String> = savedStateHandle.getStateFlow("prevName", "병원 초진 예약 전화")
     val contactName: StateFlow<String> = savedStateHandle.getStateFlow("contactName", "힐링 병원")
     val callStatus: StateFlow<CallStatus> =
         savedStateHandle.getStateFlow("callStatus", CallStatus.OUTGOING.name)
             .map { statusString ->
-                // 문자열을 enum으로 변환 (안전한 방식)
                 runCatching { CallStatus.valueOf(statusString) }
                     .getOrDefault(CallStatus.OUTGOING)
             }
@@ -39,12 +53,21 @@ class CallViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CallUiState())
     val uiState: StateFlow<CallUiState> = _uiState.asStateFlow()
 
-    private var waveformJob: Job? = null
     private var timerJob: Job? = null
+
+    private var callService: CallService? = null
+    private var isServiceBound = false
+    private var serviceStateJob: Job? = null
 
     init {
         _uiState.value = _uiState.value.copy(isLoading = true)
+        getUserInfo()
+
+        startAndBindService()
+
+        setCallSessionId(callSessionId.value)
         setPrevName(prevName.value)
+
         setCallStatus(callStatus.value)
         setIsReceived(isReceived.value)
         setContactName(contactName.value)
@@ -53,11 +76,56 @@ class CallViewModel @Inject constructor(
         setTodayMission(todayMission.value)
         setTodayMissionDateString(todayMissionDateString.value)
 
-        getCallScripts()
-        getResult()
-        getScore()
-        getFeedback()
+        getResult() //
         _uiState.value = _uiState.value.copy(isLoading = false)
+    }
+
+    private fun getUserInfo() {
+        viewModelScope.launch {
+            val userInfo = userRepository.getUserInfo()
+            _uiState.value = _uiState.value.copy(
+                userId = userInfo.id!!,
+            )
+        }
+    }
+
+    private fun startAndBindService() {
+        if (!isServiceBound) {
+            Intent(applicationContext, CallService::class.java).also { intent ->
+                ContextCompat.startForegroundService(applicationContext, intent)
+                applicationContext.bindService(intent, this, Context.BIND_AUTO_CREATE)
+            }
+        }
+    }
+
+    fun startListening(context: Context) {
+        if (!isServiceBound) {
+            return
+        }
+
+        callService?.startListening(context)
+    }
+
+    fun stopListening() {
+        callService?.stopListening()
+    }
+
+    fun startTimer() {
+        if (timerJob?.isActive == true) return
+        timerJob = viewModelScope.launch {
+            while (isActive) {
+                delay(1000L)
+                _uiState.value = _uiState.value.copy(elapsedTime = _uiState.value.elapsedTime + 1)
+            }
+        }
+    }
+
+    fun stopTimer() {
+        timerJob?.cancel()
+    }
+
+    fun setCallSessionId(callSessionId: String) {
+        _uiState.value = _uiState.value.copy(callSessionId = callSessionId)
     }
 
     fun setPrevName(prevName: String) {
@@ -74,26 +142,6 @@ class CallViewModel @Inject constructor(
 
     private fun setContactName(contactName: String) {
         _uiState.value = _uiState.value.copy(contactName = contactName)
-    }
-
-    fun startRecording() {
-        waveformJob?.cancel()
-        waveformJob = viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isRecording = true)
-            while (isActive) {
-                // 실제 앱에서는 여기서 마이크 입력 값을 받아옵니다.
-                // 지금은 랜덤 데이터로 시뮬레이션합니다.
-                val newLevels = List(_uiState.value.waveformLineCount) { Random.nextFloat() }
-                _uiState.value = _uiState.value.copy(waveformLevels = newLevels)
-
-                delay(100)
-            }
-        }
-    }
-
-    fun stopRecording() {
-        waveformJob?.cancel()
-        _uiState.value = _uiState.value.copy(isRecording = false)
     }
 
     fun setIsEndPossible(isEndPossible: Boolean) {
@@ -114,31 +162,6 @@ class CallViewModel @Inject constructor(
 
     fun setIsTodayMissionFinish(isTodayMissionFinish: Boolean) {
         _uiState.value = _uiState.value.copy(isTodayMissionFinish = isTodayMissionFinish)
-    }
-
-    private fun getCallScripts() {
-        _uiState.value = _uiState.value.copy(
-            callScripts = listOf<CallScript>(
-                CallScript(script = "안녕하세요, 힐링내과입니다.\n무엇을 도와드릴까요?", isAI = true),
-                CallScript(script = "안녕하세요.\n초진 예약을 하고 싶어서 전화드렸어요.", isAI = false),
-                CallScript(script = "네, 증상은 어떤 것이신가요?", isAI = true, isLast = true),
-            )
-        )
-    }
-
-    fun startTimer() {
-        if (timerJob?.isActive == true) return
-
-        timerJob = viewModelScope.launch {
-            while (isActive) {
-                delay(1000L)
-                _uiState.value = _uiState.value.copy(elapsedTime = _uiState.value.elapsedTime + 1)
-            }
-        }
-    }
-
-    fun stopTimer() {
-        timerJob?.cancel()
     }
 
     fun setIsDetailedResult(isDetailedResult: Boolean) {
@@ -163,18 +186,103 @@ class CallViewModel @Inject constructor(
         )
     }
 
+    fun endCallAndGetFeedback() {
+        _uiState.value = _uiState.value.copy(isLoading = true)
+
+        stopTimer()
+        stopListening()
+        callService?.requestFeedback()
+    }
+
+    private fun addMissionResult(score: Int, feedback: List<String>) {
+        viewModelScope.launch {
+            val feedbackString = feedback.joinToString("\n")
+
+            userRepository.addMissionResult(
+                userMissionRequest = UserMissionRequest(
+                    callDuration = _uiState.value.elapsedTime,
+                    score = score,
+                    feedback = feedbackString
+                )
+            )
+        }
+    }
+
     fun resetCall() {
         stopTimer()
         _uiState.value = _uiState.value.copy(
             elapsedTime = 0,
             isRecording = false,
             isEndPossible = false,
+            callScripts = emptyList(),
         )
     }
 
     override fun onCleared() {
         super.onCleared()
-        waveformJob?.cancel()
+        stopListening()
         stopTimer()
+        if (isServiceBound) {
+            callService?.disconnectWebSocket()
+            applicationContext.unbindService(this)
+            isServiceBound = false
+        }
+        Intent(applicationContext, CallService::class.java).also { intent ->
+            applicationContext.stopService(intent)
+        }
+    }
+
+    override fun onServiceConnected(
+        name: ComponentName?,
+        service: IBinder?
+    ) {
+        val binder = service as CallService.CallBinder
+        callService = binder.getService()
+        isServiceBound = true
+
+        callService?.connectWebSocket(_uiState.value.userId, _uiState.value.callSessionId)
+
+        serviceStateJob = viewModelScope.launch {
+            callService?.uiState?.collect { serviceState ->
+                if (serviceState.isFeedbackFailed && !_uiState.value.isFeedbackFailed) {
+                    getScore()      // 더미 점수 생성
+                    getFeedback()   // 더미 피드백 생성
+                } else if (serviceState.score > 0 && serviceState.score != _uiState.value.score) {
+                    _uiState.value = _uiState.value.copy(
+                        score = serviceState.score,
+                        feedbackContents = serviceState.feedbackContents
+                    )
+
+                    addMissionResult(serviceState.score, serviceState.feedbackContents)
+                }
+
+                _uiState.value = _uiState.value.copy(
+                    isLoading = serviceState.isLoading,
+                    isRecording = serviceState.isRecording,
+                    callScripts = serviceState.callScripts,
+                    waveformLevels = serviceState.waveformLevels,
+                )
+            }
+        }
+    }
+
+    override fun onServiceDisconnected(name: ComponentName?) {
+        isServiceBound = false
+        serviceStateJob?.cancel()
+    }
+}
+
+class FakeUserRepository : UserRepository {
+    override suspend fun getUserInfo(): UserResponse {
+        return UserResponse(
+            username = "홍길동",
+            points = 0,
+            createdAt = "",
+            updatedAt = ""
+        )
+    }
+
+    override suspend fun addMissionResult(userMissionRequest: UserMissionRequest): UserResponse {
+        TODO("Not yet implemented")
     }
 }

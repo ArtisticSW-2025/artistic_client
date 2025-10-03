@@ -1,5 +1,7 @@
 package com.snacks.nuvo.ui.call
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,10 +16,12 @@ import com.snacks.nuvo.ui.call.calling.CallingScreen
 import com.snacks.nuvo.ui.call.on_call.OnCallScreen
 import com.snacks.nuvo.ui.call.result.CallResultScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.callGraph(appState: NuvoAppState) {
     navigation(
         route = "${Routes.Call.ROUTE}?" +
                 "prevName={prevName}&" +
+                "callSessionId={callSessionId}&" +
                 "contactName={contactName}&" +
                 "callStatus={callStatus}&" +
                 "isReceived={isReceived}&" +
@@ -26,6 +30,7 @@ fun NavGraphBuilder.callGraph(appState: NuvoAppState) {
                 "todayMissionDateString={todayMissionDateString}",
         arguments = listOf(
             navArgument("prevName") { defaultValue = "병원 초진 예약 전화" },
+            navArgument("callSessionId") { defaultValue = "123e4567-e89b-12d3-a456-426614174000" },
             navArgument("contactName") { defaultValue = "힐링 병원" },
             navArgument("callStatus")
             {
