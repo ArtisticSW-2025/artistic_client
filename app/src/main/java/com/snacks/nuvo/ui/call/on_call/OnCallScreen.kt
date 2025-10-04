@@ -1,6 +1,10 @@
 package com.snacks.nuvo.ui.call.on_call
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,13 +38,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.call.CallViewModel
+import com.snacks.nuvo.ui.call.FakeUserRepository
 import com.snacks.nuvo.ui.call.WaveformMode
 import com.snacks.nuvo.ui.call.component.CallScreenLayout
 import com.snacks.nuvo.ui.call.component.CallScriptCard
@@ -52,12 +59,15 @@ import com.snacks.nuvo.util.dropShadow
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun OnCallScreen(
     viewModel: CallViewModel = viewModel(),
     onNavigateBack: () -> Unit,
     onCallEnded: () -> Unit
 ) {
+    val context = LocalContext.current
+
     val uiState by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
 
@@ -65,14 +75,60 @@ internal fun OnCallScreen(
     val seconds = uiState.elapsedTime % 60
     val timeFormatted = String.format("%02d:%02d", minutes, seconds)
 
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            // 권한이 허용
+        } else {
+            // 권한이 거부
+        }
+    }
+
+    val recordButtonFunction = {
+        when (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO)) {
+            PackageManager.PERMISSION_GRANTED -> {
+                if (uiState.isRecording) {
+                    viewModel.stopListening()
+                } else {
+                    viewModel.startListening(context)
+                }
+            }
+            else -> {
+                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            }
+        }
+    }
+
+    val recordIconPainter = if (uiState.isRecording) {
+        painterResource(R.drawable.ic_stop_filled)
+    } else {
+        painterResource(R.drawable.ic_microphone_filled)
+    }
+
+    val recordIconSize = if (uiState.isRecording) 40.dp else 59.dp
+
     LaunchedEffect(true) {
         viewModel.startTimer()
         delay(2000)
         viewModel.setIsEndPossible(true)
     }
 
-    LaunchedEffect(key1 = uiState.callScripts.size) {
-        listState.animateScrollToItem(index = uiState.callScripts.size - 1)
+    LaunchedEffect(key1 = uiState.callScripts.lastOrNull()) {
+        val targetIndex = uiState.callScripts.size - 1
+
+        if (targetIndex >= 0) {
+            listState.animateScrollToItem(index = targetIndex)
+        }
+    }
+
+    LaunchedEffect(uiState.score, uiState.feedbackContents) {
+        if (uiState.score > 0 && uiState.feedbackContents.isNotEmpty()) {
+            if (uiState.isTodayMission)
+                viewModel.setIsTodayMissionFinish(true)
+            else
+                onCallEnded()
+        }
     }
 
     CallScreenLayout(
@@ -93,13 +149,22 @@ internal fun OnCallScreen(
                 ),
             contentAlignment = Alignment.TopCenter
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_call_filled),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(top = 322.dp)
-                    .size(225.dp),
-            )
+            if (uiState.isTodayMission) {
+                Image(
+                    painter = painterResource(R.mipmap.call_character),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(top = 322.dp)
+                )
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_call_filled),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(top = 322.dp)
+                        .size(225.dp),
+                )
+            }
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -130,6 +195,7 @@ internal fun OnCallScreen(
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
+                                modifier = Modifier.padding(20.dp),
                                 text = uiState.todayMission,
                                 style = NuvoTheme.typography.interSemiBold20.copy(color = NuvoTheme.colors.mainGreen),
                             )
@@ -186,10 +252,7 @@ internal fun OnCallScreen(
                             containerColor = NuvoTheme.colors.white
                         ),
                         onClick = {
-                            if (uiState.isTodayMission)
-                                viewModel.setIsTodayMissionFinish(true)
-                            else
-                                onCallEnded()
+                            viewModel.endCallAndGetFeedback()
                         }
                     ) {
                         Text(
@@ -218,76 +281,56 @@ internal fun OnCallScreen(
                     style = NuvoTheme.typography.interRegular24.copy(color = NuvoTheme.colors.white),
                 )
                 Spacer(Modifier.height(25.dp))
-                if (uiState.isRecording) {
-                    Button(
+                Button(
+                    modifier = Modifier.size(80.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                    ),
+                    onClick = recordButtonFunction
+                ) {
+                    Box(
                         modifier = Modifier
-                            .size(80.dp),
-                        contentPadding = PaddingValues(0.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent,
-                        ),
-                        onClick = { viewModel.stopRecording() }
+                            .size(80.dp)
+                            .border(
+                                width = 1.dp,
+                                color = NuvoTheme.colors.subNavy,
+                                shape = CircleShape
+                            ),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(80.dp)
-                                .border(
-                                    width = 1.dp,
-                                    color = NuvoTheme.colors.subNavy,
-                                    shape = CircleShape
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_stop_filled),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(color = NuvoTheme.colors.subNavy),
-                                modifier = Modifier.size(40.dp)
-                            )
-                        }
-                    }
-                } else {
-                    Button(
-                        modifier = Modifier
-                            .size(80.dp),
-                        contentPadding = PaddingValues(0.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent,
-                        ),
-                        onClick = { viewModel.startRecording() }
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(80.dp)
-                                .border(
-                                    width = 1.dp,
-                                    color = NuvoTheme.colors.subNavy,
-                                    shape = CircleShape
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_microphone_filled),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(color = NuvoTheme.colors.subNavy),
-                                modifier = Modifier.size(59.dp)
-                            )
-                        }
+                        Image(
+                            painter = recordIconPainter,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(color = NuvoTheme.colors.subNavy),
+                            modifier = Modifier.size(recordIconSize)
+                        )
                     }
                 }
             }
         }
 
         if (uiState.isLoading) {
-            LoadingIndicator()
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                LoadingIndicator()
+            }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(name = "상태: 전화 중")
 @Composable
 fun CallScreenPreviewReceived() {
-    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
+    val context = LocalContext.current
+    val viewModel = remember { CallViewModel(
+        savedStateHandle = SavedStateHandle(),
+        userRepository = FakeUserRepository(),
+        applicationContext = context
+    ) }
     OnCallScreen(
         viewModel = viewModel,
         onNavigateBack = { },
@@ -295,11 +338,17 @@ fun CallScreenPreviewReceived() {
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(name = "상태: 전화 중2")
 @Composable
 fun CallScreenPreviewPrevName() {
-    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
-    viewModel.startRecording()
+    val context = LocalContext.current
+    val viewModel = remember { CallViewModel(
+        savedStateHandle = SavedStateHandle(),
+        userRepository = FakeUserRepository(),
+        applicationContext = context
+    ) }
+    viewModel.startListening(context = LocalContext.current)
     viewModel.setIsEndPossible(true)
     OnCallScreen(
         viewModel = viewModel,
@@ -312,11 +361,16 @@ fun CallScreenPreviewPrevName() {
 @Preview(name = "상태: 오늘의 미션")
 @Composable
 fun CallScreenPreviewTodayMission() {
-    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
+    val context = LocalContext.current
+    val viewModel = remember { CallViewModel(
+        savedStateHandle = SavedStateHandle(),
+        userRepository = FakeUserRepository(),
+        applicationContext = context
+    ) }
     viewModel.setPrevName("오늘의 미션")
     viewModel.setIsTodayMission(true)
     viewModel.setTodayMission("오늘 하루를 요약해서 말해보자")
-    viewModel.setIsTodayMissionFinish(true)
+//    viewModel.setIsTodayMissionFinish(true)
     viewModel.setTodayMissionDateString(LocalDate.now().toString())
     OnCallScreen(
         viewModel = viewModel,

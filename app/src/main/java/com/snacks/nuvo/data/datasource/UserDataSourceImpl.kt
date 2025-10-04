@@ -1,6 +1,7 @@
 package com.snacks.nuvo.data.datasource
 
 import com.snacks.nuvo.di.IoDispatcher
+import com.snacks.nuvo.network.model.request.UserMissionRequest
 import com.snacks.nuvo.network.model.response.UserResponse
 import com.snacks.nuvo.network.service.UserService
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,6 +16,12 @@ class UserDataSourceImpl @Inject constructor(
     override suspend fun getUserInfo(): UserResponse {
         return withContext(ioDispatcher) {
             userService.getUserInfo()
+        }
+    }
+
+    override suspend fun addMissionResult(userMissionRequest: UserMissionRequest): UserResponse {
+        return withContext(ioDispatcher) {
+            userService.addMissionResult(userMissionRequest)
         }
     }
 

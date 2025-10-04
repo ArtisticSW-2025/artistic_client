@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
 import com.snacks.nuvo.R
-import com.snacks.nuvo.ui.challenge.ChallengeNode
 import com.snacks.nuvo.ui.theme.NuvoTheme
 import com.snacks.nuvo.util.dropShadow
 import dev.chrisbanes.haze.HazeState
@@ -49,7 +48,8 @@ import java.time.format.DateTimeFormatter
 fun TodayMissionDialog(
     modifier: Modifier,
     hazeState: HazeState,
-    node: ChallengeNode,
+    date: LocalDate?,
+    title: String = "",
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -115,7 +115,7 @@ fun TodayMissionDialog(
                 ) {
                     Spacer(Modifier.height(height = 26.dp))
                     Text(
-                        text = node.date.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")) ?: "",
+                        text = date?.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")) ?: "",
                         style = NuvoTheme.typography.interMedium15.copy(color = NuvoTheme.colors.subLemon)
                     )
                     Spacer(Modifier.height(height = 11.dp))
@@ -154,7 +154,7 @@ fun TodayMissionDialog(
                         ) {
                             Spacer(Modifier.height(height = 53.dp))
                             Text(
-                                text = node.description,
+                                text = title,
                                 style = NuvoTheme.typography.interSemiBold15.copy(color = NuvoTheme.colors.gray6)
                             )
                             Spacer(Modifier.height(height = 102.dp))
@@ -185,10 +185,8 @@ fun PreviewTodayMissionDialog() {
     TodayMissionDialog(
         modifier = Modifier,
         hazeState = HazeState(),
-        node = ChallengeNode(
-            description = "오늘 하루를 요약해서 말해보자",
-            date = LocalDate.now(),
-        ),
+        date = LocalDate.now(),
+        title = "오늘 하루 요약하기",
         onConfirm = { } ,
         onDismiss = { }
     )

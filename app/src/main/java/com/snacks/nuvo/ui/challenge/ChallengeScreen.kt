@@ -1,6 +1,7 @@
 package com.snacks.nuvo.ui.challenge
 
-import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +25,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.Routes
 import com.snacks.nuvo.rememberNuvoAppState
@@ -37,11 +40,11 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 
-@SuppressLint("NewApi")
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun ChallengeScreen(
     appState: NuvoAppState,
-    viewModel: ChallengeViewModel = viewModel(),
+    viewModel: ChallengeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
@@ -52,6 +55,10 @@ internal fun ChallengeScreen(
     LaunchedEffect(firstPosition) {
         val calculatedPosition = firstPosition.value - with(density) { 350.dp.toPx() }.toInt()
         scrollState.scrollTo(calculatedPosition)
+    }
+
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+         viewModel.loadChallengeData()
     }
 
     Box(
@@ -130,12 +137,13 @@ internal fun ChallengeScreen(
             modifier = Modifier
                 .hazeSource(state = hazeState, zIndex = 2f),
             hazeState = hazeState,
-            node = uiState.selectedNode!!,
+            date = uiState.today,
+            title = uiState.todayMissionTitle,
             onConfirm = {
                 val prevName = "오늘의 미션"
                 val isTodayMission = true
-                val todayMission = uiState.selectedNode!!.description
-                val todayMissionDateString = uiState.selectedNode!!.date.toString()
+                val todayMission = uiState.todayMissionDescription
+                val todayMissionDateString = uiState.today.toString()
 
                 val route = "${Routes.Call.ROUTE}?" +
                         "prevName=$prevName&" +
@@ -152,6 +160,7 @@ internal fun ChallengeScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun ChallengeScreenPreview() {

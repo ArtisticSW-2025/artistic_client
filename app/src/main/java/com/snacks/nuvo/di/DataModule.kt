@@ -1,5 +1,7 @@
 package com.snacks.nuvo.di
 
+import com.snacks.nuvo.data.datasource.CallDataSource
+import com.snacks.nuvo.data.datasource.CallDataSourceImpl
 import com.snacks.nuvo.data.datasource.CallSessionDataSource
 import com.snacks.nuvo.data.datasource.CallSessionDataSourceImpl
 import com.snacks.nuvo.data.datasource.FeedbackDataSource
@@ -10,6 +12,8 @@ import com.snacks.nuvo.data.datasource.RankingDataSource
 import com.snacks.nuvo.data.datasource.RankingDataSourceImpl
 import com.snacks.nuvo.data.datasource.UserDataSource
 import com.snacks.nuvo.data.datasource.UserDataSourceImpl
+import com.snacks.nuvo.data.repository.CallRepository
+import com.snacks.nuvo.data.repository.CallRepositoryImpl
 import com.snacks.nuvo.data.repository.CallSessionRepository
 import com.snacks.nuvo.data.repository.CallSessionRepositoryImpl
 import com.snacks.nuvo.data.repository.FeedbackRepository
@@ -85,4 +89,14 @@ abstract class DataModule {
     abstract fun FeedbackDataSource(
         feedbackDataSource: FeedbackDataSourceImpl
     ): FeedbackDataSource
+
+    @Binds
+    abstract fun CallDataSource(
+        callDataSource: CallDataSourceImpl
+    ): CallDataSource
+
+    @Binds
+    abstract fun CallRepository(
+        callRepository: CallRepositoryImpl
+    ): CallRepository
 }

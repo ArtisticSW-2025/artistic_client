@@ -1,5 +1,7 @@
 package com.snacks.nuvo.ui.call.calling
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -24,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,12 +35,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.call.CallStatus
 import com.snacks.nuvo.ui.call.CallViewModel
+import com.snacks.nuvo.ui.call.FakeUserRepository
 import com.snacks.nuvo.ui.call.component.CallScreenLayout
 import com.snacks.nuvo.ui.call.component.PulsingCircleAnimation
 import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.theme.NuvoTheme
 import kotlinx.coroutines.delay
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun CallingScreen(
     viewModel: CallViewModel = viewModel(),
@@ -164,10 +169,16 @@ internal fun CallingScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(name = "상태: 발신 중")
 @Composable
 fun CallScreenPreviewOutgoing() {
-    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
+    val context = LocalContext.current
+    val viewModel = remember { CallViewModel(
+        savedStateHandle = SavedStateHandle(),
+        userRepository = FakeUserRepository(),
+        applicationContext = context
+    ) }
     viewModel.setCallStatus(CallStatus.OUTGOING)
     CallingScreen(
         viewModel = viewModel,
@@ -176,10 +187,16 @@ fun CallScreenPreviewOutgoing() {
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(name = "상태: 수신 중")
 @Composable
 fun CallScreenPreviewIncoming() {
-    val viewModel = remember { CallViewModel(savedStateHandle = SavedStateHandle()) }
+    val context = LocalContext.current
+    val viewModel = remember { CallViewModel(
+        savedStateHandle = SavedStateHandle(),
+        userRepository = FakeUserRepository(),
+        applicationContext = context
+    ) }
     viewModel.setCallStatus(CallStatus.INCOMING)
     CallingScreen(
         viewModel = viewModel,

@@ -1,5 +1,7 @@
 [versions]
 agp = "8.10.1"
+googleCloudSpeech = "4.70.0"
+grpcOkhttp = "1.75.0"
 haze = "1.6.10"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
@@ -21,6 +23,8 @@ composeMaterial3 = "1.5.0-beta03"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+google-cloud-speech = { module = "com.google.cloud:google-cloud-speech", version.ref = "googleCloudSpeech" }
+grpc-okhttp = { module = "io.grpc:grpc-okhttp", version.ref = "grpcOkhttp" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

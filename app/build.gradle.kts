@@ -40,6 +40,12 @@ android {
     buildFeatures {
         compose = true
     }
+    packaging {
+        resources {
+            excludes += "META-INF/INDEX.LIST"
+            excludes += "META-INF/DEPENDENCIES"
+        }
+    }
 }
 
 dependencies {
@@ -75,6 +81,7 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.okhttp3)
     implementation(libs.chucker.library)
+    implementation(libs.grpc.okhttp)
 
     // hilt
     kapt(libs.hilt.android.compiler)
@@ -87,4 +94,6 @@ dependencies {
     // background blur
     implementation(libs.haze)
 
+    // Google Cloud Speech-to-Text
+    implementation(libs.google.cloud.speech)
 }
