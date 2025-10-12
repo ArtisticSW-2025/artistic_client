@@ -2,6 +2,7 @@ package com.snacks.nuvo.ui.call.result
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,16 +23,22 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -50,6 +57,7 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 import com.snacks.nuvo.util.dropShadow
 import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun CallResultScreen(
@@ -59,6 +67,7 @@ internal fun CallResultScreen(
     onNextScript: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect(true) {
         viewModel.startTimer()
@@ -135,13 +144,40 @@ internal fun CallResultScreen(
                         }
                     }
                 }
+
+
                 Box(
                     modifier = Modifier
                         .padding(bottom = 75.dp)
                         .fillMaxHeight(),
+
                     contentAlignment = Alignment.BottomCenter
                 ) {
-                    Column {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Button(
+                            modifier = Modifier
+                                .width(width = 160.dp)
+                                .height(height = 40.dp)
+                            ,
+
+                            contentPadding = PaddingValues(0.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent
+                            ),
+                            border = BorderStroke(1.dp, color = NuvoTheme.colors.white),
+
+                            onClick = { showBottomSheet = true },
+                        ) {
+                            Text(
+                                text = "문장 피드백 확인하기",
+                                style = NuvoTheme.typography.interMedium13.copy(color = NuvoTheme.colors.white),
+
+                            )
+                        }
+                        Spacer(Modifier.height(68.dp))
+
                         Button(
                             modifier = Modifier
                                 .width(width = 320.dp)
@@ -245,6 +281,26 @@ internal fun CallResultScreen(
             }
         }
 
+        if (showBottomSheet) {
+            val sheetState = rememberModalBottomSheetState (
+                skipPartiallyExpanded = true
+            )
+            ModalBottomSheet (
+                onDismissRequest = { showBottomSheet = false },
+                sheetState = sheetState,
+                containerColor = NuvoTheme.colors.white,
+            ) {
+                FeedbackSheet(
+                    feedbackItems = listOf(
+                        SentenceFeedbackItems("두 번째 문장", "예의 능동성 정확성", "예의 능동성 정확성"),
+                        SentenceFeedbackItems("두 번째 문장", "예의 능동성 정확성", "예의 능동성 정확성"),
+                        SentenceFeedbackItems("두 번째 문장", "예의 능동성 정확성", "예의 능동성 정확성"),
+                    ),
+
+                    onClose = { showBottomSheet = false }
+                )
+            }
+        }
         if (uiState.isLoading) {
             LoadingIndicator()
         }
