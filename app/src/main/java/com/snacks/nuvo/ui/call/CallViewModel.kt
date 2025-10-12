@@ -7,7 +7,6 @@ import android.content.ServiceConnection
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,7 +33,7 @@ class CallViewModel @Inject constructor(
     @ApplicationContext private val applicationContext: Context,
     private val savedStateHandle: SavedStateHandle,
     private val userRepository: UserRepository,
-) : ViewModel(), ServiceConnection {
+) : ViewModel() {
     val callSessionId: StateFlow<String> = savedStateHandle.getStateFlow("callSessionId", "123e4567-e89b-12d3-a456-426614174000")
     val prevName: StateFlow<String> = savedStateHandle.getStateFlow("prevName", "병원 초진 예약 전화")
     val contactName: StateFlow<String> = savedStateHandle.getStateFlow("contactName", "힐링 병원")
@@ -59,11 +58,29 @@ class CallViewModel @Inject constructor(
     private var isServiceBound = false
     private var serviceStateJob: Job? = null
 
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as CallService.CallBinder
+            callService = binder.getService()
+            isServiceBound = true
+
+            val currentUiState = _uiState.value
+            if (currentUiState.userId.isNotBlank() && currentUiState.callSessionId.isNotBlank()) {
+                callService?.connectWebSocket(currentUiState.userId, currentUiState.callSessionId)
+            }
+
+            observeServiceState()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            isServiceBound = false
+            serviceStateJob?.cancel()
+        }
+    }
+
     init {
         _uiState.value = _uiState.value.copy(isLoading = true)
         getUserInfo()
-
-        startAndBindService()
 
         setCallSessionId(callSessionId.value)
         setPrevName(prevName.value)
@@ -89,12 +106,18 @@ class CallViewModel @Inject constructor(
         }
     }
 
-    private fun startAndBindService() {
-        if (!isServiceBound) {
-            Intent(applicationContext, CallService::class.java).also { intent ->
-                ContextCompat.startForegroundService(applicationContext, intent)
-                applicationContext.bindService(intent, this, Context.BIND_AUTO_CREATE)
-            }
+    fun startAndBindService(context: Context) {
+        if (isServiceBound) return
+        Intent(context, CallService::class.java).also { intent ->
+            context.startService(intent)
+            context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    fun unbindService(context: Context) {
+        if (isServiceBound) {
+            context.unbindService(serviceConnection)
+            isServiceBound = false
         }
     }
 
@@ -224,7 +247,7 @@ class CallViewModel @Inject constructor(
         stopTimer()
         if (isServiceBound) {
             callService?.disconnectWebSocket()
-            applicationContext.unbindService(this)
+            applicationContext.unbindService(serviceConnection)
             isServiceBound = false
         }
         Intent(applicationContext, CallService::class.java).also { intent ->
@@ -232,16 +255,7 @@ class CallViewModel @Inject constructor(
         }
     }
 
-    override fun onServiceConnected(
-        name: ComponentName?,
-        service: IBinder?
-    ) {
-        val binder = service as CallService.CallBinder
-        callService = binder.getService()
-        isServiceBound = true
-
-        callService?.connectWebSocket(_uiState.value.userId, _uiState.value.callSessionId)
-
+    private fun observeServiceState() {
         serviceStateJob = viewModelScope.launch {
             callService?.uiState?.collect { serviceState ->
                 if (serviceState.isFeedbackFailed && !_uiState.value.isFeedbackFailed) {
@@ -264,11 +278,6 @@ class CallViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    override fun onServiceDisconnected(name: ComponentName?) {
-        isServiceBound = false
-        serviceStateJob?.cancel()
     }
 }
 

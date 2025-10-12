@@ -144,7 +144,7 @@ class CallDataSourceImpl @Inject constructor(
 
     /** WebSocket 연결 및 메시지 수신을 Flow로 변환 */
     override fun connectWebSocket(user: String, sessionId: String): Flow<String> = callbackFlow {
-        val request = Request.Builder().url("wss://ai.choies.dev/ws?user=$user&session_id=$sessionId").build()
+        val request = Request.Builder().url("ws://websocket-artsw.duckdns.org/ws?user=$user&session_id=$sessionId").build()
         val webSocketListener = object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {
                 trySend(text) // 수신된 메시지를 Flow로 방출

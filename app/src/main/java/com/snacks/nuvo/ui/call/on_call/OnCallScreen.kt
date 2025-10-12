@@ -1,10 +1,6 @@
 package com.snacks.nuvo.ui.call.on_call
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -75,28 +71,11 @@ internal fun OnCallScreen(
     val seconds = uiState.elapsedTime % 60
     val timeFormatted = String.format("%02d:%02d", minutes, seconds)
 
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            // 권한이 허용
-        } else {
-            // 권한이 거부
-        }
-    }
-
     val recordButtonFunction = {
-        when (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO)) {
-            PackageManager.PERMISSION_GRANTED -> {
-                if (uiState.isRecording) {
-                    viewModel.stopListening()
-                } else {
-                    viewModel.startListening(context)
-                }
-            }
-            else -> {
-                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-            }
+        if (uiState.isRecording) {
+            viewModel.stopListening()
+        } else {
+            viewModel.startListening(context)
         }
     }
 
