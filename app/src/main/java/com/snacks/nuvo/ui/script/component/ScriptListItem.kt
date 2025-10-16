@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.R
@@ -40,11 +41,12 @@ internal fun ScriptListItem(
             .fillMaxWidth(),
         color = Color.Transparent,
     ) {
-        Box(modifier = Modifier.padding(end = 12.dp)) {
+        Box() {
             Row(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .height(IntrinsicSize.Min)
+                    .padding(vertical = 16.dp, horizontal = 12.dp)
+                    .height(IntrinsicSize.Min),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
@@ -52,37 +54,46 @@ internal fun ScriptListItem(
                         .background(NuvoTheme.colors.subLightGreen)
                         .fillMaxHeight()
                 )
-                Spacer(Modifier.width(8.dp))
-                Column {
+                Column(
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 20.dp)
+                        .weight(1f)
+                ) {
                     Text(
                         title,
                         style = NuvoTheme.typography.interSemiBold14,
-                        color = NuvoTheme.colors.subNavy
+                        color = NuvoTheme.colors.subNavy,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
                         description,
                         style = NuvoTheme.typography.interMedium12,
-                        color = NuvoTheme.colors.black
+                        color = NuvoTheme.colors.black,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
-            }
-            Surface(
-                modifier = Modifier
-                    .size(36.dp)
-                    .align(Alignment.CenterEnd),
-                shadowElevation = 4.dp,
-                color = NuvoTheme.colors.gray1,
-                shape = CircleShape,
-                onClick = onClick,
-            ) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_calling_filled),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(color = NuvoTheme.colors.subNavy),
-                        modifier = Modifier.size(20.dp)
-                    )
+                Surface(
+                    modifier = Modifier
+                        .size(36.dp),
+                    shadowElevation = 4.dp,
+                    color = NuvoTheme.colors.gray1,
+                    shape = CircleShape,
+                    onClick = onClick,
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_calling_filled),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(color = NuvoTheme.colors.subNavy),
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
                 }
             }
         }
@@ -94,5 +105,14 @@ internal fun ScriptListItem(
 internal fun ScriptListItemPreview() {
     ScriptListItem(
         title = "병원 초진 예약 전화", description = "병원에 인사하고, 초진 예약을 할 때"
+    ) {}
+}
+
+@Preview(showBackground = true)
+@Composable
+internal fun ScriptListItemPreview2() {
+    ScriptListItem(
+        title = "병원 초진 예약 전화병원 초진 예약 전화병원 초진 예약 전화",
+        description = "병원에 인사하고, 초진 예약을 할 때병원에 인사하고, 초진 예약을 할 때병원에 인사하고, 초진 예약을 할 때병원에 인사하고, 초진 예약을 할 때병원에 인사하고, 초진 예약을 할 때"
     ) {}
 }
