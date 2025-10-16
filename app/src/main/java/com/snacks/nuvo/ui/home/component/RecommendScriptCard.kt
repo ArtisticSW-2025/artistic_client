@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.component.NoRippleInteractionSource
 import com.snacks.nuvo.ui.theme.NuvoTheme
@@ -61,11 +63,13 @@ internal fun RecommendScriptCard(
                 modifier = Modifier
                     .background(color = NuvoTheme.colors.white)
                     .padding(horizontal = 16.dp, vertical = 24.dp)
-                    .fillMaxSize()
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
                 Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier
+                        .height(IntrinsicSize.Min),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     // 네모박스
                     Box(
@@ -82,14 +86,16 @@ internal fun RecommendScriptCard(
                     ) {
                         Text(
                             title,
-                            style = NuvoTheme.typography.interBlack20.copy(color = NuvoTheme.colors.subNavy),
+                            style = NuvoTheme.typography.interBlack20,
+                            color = NuvoTheme.colors.subNavy,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
                             description,
-                            style = NuvoTheme.typography.interMedium12.copy(color = NuvoTheme.colors.gray5),
+                            style = NuvoTheme.typography.interMedium12.copy(lineHeight = 15.sp),
+                            color = NuvoTheme.colors.gray5,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -118,7 +124,7 @@ internal fun RecommendScriptCard(
 
 @Preview
 @Composable
-internal fun PreviewREcommentScriptCard() {
+internal fun PreviewReccommentScriptCard() {
     RecommendScriptCard(
         modifier = Modifier,
         title = "안녕",
@@ -128,7 +134,17 @@ internal fun PreviewREcommentScriptCard() {
 
 @Preview
 @Composable
-internal fun PreviewREcommentScriptCard2() {
+internal fun PreviewRecommentScriptCard2() {
+    RecommendScriptCard(
+        modifier = Modifier,
+        title = "안녕",
+        description = "안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕"
+    ) { }
+}
+
+@Preview
+@Composable
+internal fun PreviewRecommentScriptCard3() {
     RecommendScriptCard(
         modifier = Modifier,
         title = "안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕",
