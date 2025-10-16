@@ -26,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.theme.NuvoTheme
 
@@ -41,7 +42,7 @@ internal fun ScriptListItem(
             .fillMaxWidth(),
         color = Color.Transparent,
     ) {
-        Box() {
+        Box {
             Row(
                 modifier = Modifier
                     .padding(vertical = 16.dp, horizontal = 12.dp)
@@ -69,7 +70,7 @@ internal fun ScriptListItem(
                     Spacer(Modifier.height(4.dp))
                     Text(
                         description,
-                        style = NuvoTheme.typography.interMedium12,
+                        style = NuvoTheme.typography.interMedium12.copy(lineHeight = 15.sp),
                         color = NuvoTheme.colors.black,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
