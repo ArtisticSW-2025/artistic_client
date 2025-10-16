@@ -34,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.R
 import com.snacks.nuvo.Routes
+import com.snacks.nuvo.TopLevelDestination
 import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.home.component.RecommendScriptCard
 import com.snacks.nuvo.ui.home.component.TodayMissionCard
@@ -154,8 +155,9 @@ internal fun HomeScreen(
         ) {
             TodayMissionCard(
                 modifier = Modifier,
-                mission = uiState.todayMission
-            ) { }
+                mission = uiState.todayMission,
+                onClick = { appState.navigateToTopLevelDestination(TopLevelDestination.Challenge) }
+            )
         }
         if (uiState.isLoading) {
             LoadingIndicator()
