@@ -14,8 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
@@ -48,8 +50,9 @@ internal fun ScriptMissionCard(
             Spacer(Modifier.height(12.dp))
             Text(
                 mission,
-                style = NuvoTheme.typography.interSemiBold15,
-                color = NuvoTheme.colors.subNavy
+                style = NuvoTheme.typography.interSemiBold15.copy(lineHeight = 22.sp),
+                color = NuvoTheme.colors.subNavy,
+                textAlign = TextAlign.Center
             )
         }
     }
@@ -60,5 +63,13 @@ internal fun ScriptMissionCard(
 fun ScriptMissionCardPreview() {
     ScriptMissionCard(
         mission = "병원 초진 예약 전화를 성공적으로 완료하세요!"
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ScriptMissionCardPreview2() {
+    ScriptMissionCard(
+        mission = "병원 초진 예약 전화를 성공적으로 완료하세요!병원 초진 예약 전화를 성공적으로 완료하세요!병원 초진 예약 전화를 성공적으로 완료하세요!병원 초진 예약 전화를 성공적으로 완료하세요!병원 초진 예약 전화를 성공적으로 완료하세요!병원 초진 예약 전화를 성공적으로 완료하세요!병원 초진 예약 전화를 성공적으로 완료하세요!"
     )
 }

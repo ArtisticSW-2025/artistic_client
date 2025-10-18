@@ -5,8 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,8 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.component.NoRippleInteractionSource
 import com.snacks.nuvo.ui.theme.NuvoTheme
@@ -58,32 +62,45 @@ internal fun RecommendScriptCard(
             Box(
                 modifier = Modifier
                     .background(color = NuvoTheme.colors.white)
-                    .padding(start = 16.dp, end = 20.dp)
-                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 24.dp)
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
                 Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier
+                        .height(IntrinsicSize.Min),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    // 네모박스
                     Box(
                         modifier = Modifier
                             .width(8.dp)
-                            .height(70.dp)
+                            .fillMaxHeight()
                             .background(color = NuvoTheme.colors.mainGreen)
                     )
-                    Spacer(Modifier.width(20.dp))
-                    Column {
+                    // 글씨들
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .weight(1f)
+                    ) {
                         Text(
                             title,
-                            style = NuvoTheme.typography.interBlack20.copy(color = NuvoTheme.colors.subNavy)
+                            style = NuvoTheme.typography.interBlack20,
+                            color = NuvoTheme.colors.subNavy,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
                             description,
-                            style = NuvoTheme.typography.interMedium12.copy(color = NuvoTheme.colors.gray5)
+                            style = NuvoTheme.typography.interMedium12.copy(lineHeight = 15.sp),
+                            color = NuvoTheme.colors.gray5,
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
-                    Spacer(Modifier.weight(1f))
+                    // 이미지
                     Box(
                         modifier = Modifier
                             .size(56.dp)
@@ -107,10 +124,30 @@ internal fun RecommendScriptCard(
 
 @Preview
 @Composable
-internal fun PreviewREcommentScriptCard() {
+internal fun PreviewReccommentScriptCard() {
     RecommendScriptCard(
         modifier = Modifier,
         title = "안녕",
         description = "안녕안녕안녕"
+    ) { }
+}
+
+@Preview
+@Composable
+internal fun PreviewRecommentScriptCard2() {
+    RecommendScriptCard(
+        modifier = Modifier,
+        title = "안녕",
+        description = "안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕"
+    ) { }
+}
+
+@Preview
+@Composable
+internal fun PreviewRecommentScriptCard3() {
+    RecommendScriptCard(
+        modifier = Modifier,
+        title = "안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕",
+        description = "안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕"
     ) { }
 }
