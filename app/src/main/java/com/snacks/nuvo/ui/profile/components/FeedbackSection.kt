@@ -137,7 +137,6 @@ private fun FeedbackPager(
         }
     }
 }
-
 @Composable
 private fun FeedbackCard(
     modifier: Modifier = Modifier,
@@ -165,12 +164,11 @@ private fun FeedbackCard(
             Divider(modifier = Modifier.width(292.dp))
 
             Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = feedback.content,
-                style = NuvoTheme.typography.interMedium13,
-                color = NuvoTheme.colors.subNavy,
-                modifier = Modifier.padding(horizontal = 20.dp),
-            )
+            FeedbackItem(text = feedback.totalFeedback.accuracy)
+            Spacer(modifier = Modifier.height(12.dp))
+            FeedbackItem(text = feedback.totalFeedback.politeness)
+            Spacer(modifier = Modifier.height(12.dp))
+            FeedbackItem(text = feedback.totalFeedback.proactiveness)
             Spacer(modifier = Modifier.height(12.dp))
         }
     }

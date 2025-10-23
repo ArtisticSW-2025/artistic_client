@@ -20,12 +20,9 @@ class ProfileViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
-    private val _userId = MutableStateFlow<String?>(null)
 
     init {
-        _uiState.value = _uiState.value.copy(isLoading = true)
         loadProfileData()
-        _uiState.value = _uiState.value.copy(isLoading = false)
     }
 
 
@@ -40,13 +37,26 @@ class ProfileViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(isLoading = true)
 
                     val userInfo = userRepository.getUserInfo()
-                    val feedback = feedbackRepository.getFeedback()
+                    val feedback = try {
+                        feedbackRepository.getFeedback()
+                    } catch (e: Exception) {
+                        emptyList()
+                    }
+
+                    // Format missionCount to "00개" format
+                    val formattedMissionCount = String.format("%02d", userInfo.missionCount)
+
+                    // Format totalCallDuration (assuming seconds) to "0H 00M" format
+                    val durationInSeconds = userInfo.totalCallDuration!!
+                    val hours = durationInSeconds / 3600
+                    val minutes = (durationInSeconds % 3600) / 60
+                    val formattedDuration = "${hours}H ${String.format("%02d", minutes)}M"
 
                     _uiState.value = _uiState.value.copy(
                         userName = userInfo.username,
                         points = userInfo.points.toString(),
-                        completedMissions = if (userInfo.missionCount != 0) userInfo.missionCount.toString() else _uiState.value.completedMissions,
-                        totalSpeakingTime = if (userInfo.totalCallDuration != 0) userInfo.totalCallDuration.toString() else _uiState.value.totalSpeakingTime,
+                        completedMissions = formattedMissionCount,
+                        totalSpeakingTime = formattedDuration,
                         feedbackItems = feedback,
                         isLoading = false
                     )
