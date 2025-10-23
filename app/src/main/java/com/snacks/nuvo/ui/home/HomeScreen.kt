@@ -29,10 +29,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.R
+import com.snacks.nuvo.Routes
+import com.snacks.nuvo.TopLevelDestination
 import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.home.component.RecommendScriptCard
 import com.snacks.nuvo.ui.home.component.TodayMissionCard
@@ -40,9 +42,9 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 import com.snacks.nuvo.util.toCommaFormat
 
 @SuppressLint("ConfigurationScreenWidthHeight")
-@Preview
 @Composable
 internal fun HomeScreen(
+    appState: NuvoAppState,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -137,8 +139,9 @@ internal fun HomeScreen(
                             RecommendScriptCard(
                                 modifier = Modifier,
                                 title = script.title,
-                                description = script.description
-                            ) {}
+                                description = script.description,
+                                onClick = { appState.navigate("${Routes.Script.SCRIPT_DETAIL}/${script.id}?isSmallTalkMode=false&isEmergencyMode=false") }
+                            )
                         }
                     }
                 }
@@ -152,8 +155,9 @@ internal fun HomeScreen(
         ) {
             TodayMissionCard(
                 modifier = Modifier,
-                mission = uiState.todayMission
-            ) { }
+                mission = uiState.todayMission,
+                onClick = { appState.navigateToTopLevelDestination(TopLevelDestination.Challenge) }
+            )
         }
         if (uiState.isLoading) {
             LoadingIndicator()

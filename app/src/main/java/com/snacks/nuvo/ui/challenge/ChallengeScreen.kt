@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.Routes
 import com.snacks.nuvo.rememberNuvoAppState
+import com.snacks.nuvo.ui.call.FakeUserRepository
 import com.snacks.nuvo.ui.challenge.component.CourseMap
 import com.snacks.nuvo.ui.challenge.component.DatePhraseCard
 import com.snacks.nuvo.ui.challenge.component.TodayMissionDialog
@@ -52,7 +53,7 @@ internal fun ChallengeScreen(
     val firstPosition: MutableState<Int> = remember { mutableIntStateOf(0) }
     val density = LocalDensity.current
 
-    LaunchedEffect(firstPosition) {
+    LaunchedEffect(key1 = firstPosition, key2 = uiState.nodeList) {
         val calculatedPosition = firstPosition.value - with(density) { 350.dp.toPx() }.toInt()
         scrollState.scrollTo(calculatedPosition)
     }
@@ -164,5 +165,12 @@ internal fun ChallengeScreen(
 @Preview
 @Composable
 fun ChallengeScreenPreview() {
-    ChallengeScreen(appState = rememberNuvoAppState())
+    val viewModel = remember { ChallengeViewModel(
+        userRepository = FakeUserRepository(),
+        missionRecordRepository = FakeMissionRecordRepository()
+    ) }
+    ChallengeScreen(
+        viewModel = viewModel,
+        appState = rememberNuvoAppState()
+    )
 }
