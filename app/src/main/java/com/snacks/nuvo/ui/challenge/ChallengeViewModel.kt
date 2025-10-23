@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snacks.nuvo.data.repository.MissionRecordRepository
 import com.snacks.nuvo.data.repository.UserRepository
+import com.snacks.nuvo.network.model.response.MissionRecordResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,7 +33,7 @@ class ChallengeViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(isLoading = true)
 
             val userInfo = userRepository.getUserInfo()
-            val missionCount = userInfo?.missionCount ?: 0
+            val missionCount = userInfo.missionCount ?: 0
 
             val missionInfo = missionRecordRepository.getTodayMission()
 
@@ -77,5 +78,15 @@ class ChallengeViewModel @Inject constructor(
         if (node == null || node.status == NodeStatus.LOCKED || node.status == NodeStatus.COMPLETED) return
 
         _uiState.value = _uiState.value.copy(selectedNode = node)
+    }
+}
+
+class FakeMissionRecordRepository : MissionRecordRepository {
+    override suspend fun getTodayMission(): MissionRecordResponse {
+        return MissionRecordResponse(
+            description = "오늘의 미션 설명",
+            id = 1,
+            title = "오늘"
+        )
     }
 }

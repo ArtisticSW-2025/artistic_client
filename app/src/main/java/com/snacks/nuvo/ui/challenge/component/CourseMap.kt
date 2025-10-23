@@ -36,6 +36,10 @@ fun CourseMap(
     onNodeClick: (Int?) -> Unit,
     firstPosition: MutableState<Int>
 ) {
+    if (nodes.isEmpty()) {
+        return
+    }
+
     // ## 레이아웃 설정값 ##
     val nodesPerRow = 4
     val rowHeight = 205.dp
