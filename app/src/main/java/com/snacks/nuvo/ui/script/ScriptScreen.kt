@@ -77,24 +77,24 @@ internal fun ScriptScreen(
                     )
                 }
             }
-            Spacer(Modifier.height(24.dp))
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                ScriptToggleButton(
-                    modifier = Modifier.padding(start = 20.dp),
-                    icon = R.drawable.ic_users_outlined,
-                    label = "스몰토크 모드",
-                    isSelected = uiState.isSmallTalkMode,
-                    onClick = { viewModel.toggleSmallTalkMode() }
-                )
-                ScriptToggleButton(
-                    icon = R.drawable.ic_danger_outlined,
-                    label = "돌발상황 모드",
-                    isSelected = uiState.isEmergencyMode,
-                    onClick = { viewModel.toggleEmergencyMode() }
-                )
-            }
+//            Spacer(Modifier.height(24.dp))
+//            Row(
+//                horizontalArrangement = Arrangement.spacedBy(12.dp)
+//            ) {
+//                ScriptToggleButton(
+//                    modifier = Modifier.padding(start = 20.dp),
+//                    icon = R.drawable.ic_users_outlined,
+//                    label = "스몰토크 모드",
+//                    isSelected = uiState.isSmallTalkMode,
+//                    onClick = { viewModel.toggleSmallTalkMode() }
+//                )
+//                ScriptToggleButton(
+//                    icon = R.drawable.ic_danger_outlined,
+//                    label = "돌발상황 모드",
+//                    isSelected = uiState.isEmergencyMode,
+//                    onClick = { viewModel.toggleEmergencyMode() }
+//                )
+//            }
             Spacer(Modifier.height(25.dp))
             LazyColumn(
                 modifier = Modifier.padding(horizontal = 20.dp)
