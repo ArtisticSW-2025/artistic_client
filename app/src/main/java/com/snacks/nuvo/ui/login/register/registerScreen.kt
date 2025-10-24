@@ -1,17 +1,23 @@
 package com.snacks.nuvo.ui.login.register
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.CircularProgressIndicator
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.Routes
+import com.snacks.nuvo.data.preferences.UserPreferences
+import com.snacks.nuvo.rememberNuvoAppState
 import com.snacks.nuvo.ui.login.components.AuthButton
 import com.snacks.nuvo.ui.login.components.RegisterForm
 import com.snacks.nuvo.ui.login.components.RegisterTopBar
+import com.snacks.nuvo.ui.login.login.FakeAuthRepository
 import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
@@ -31,8 +37,11 @@ internal fun RegisterScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             RegisterTopBar(
-                onBackClick = onBackClick
+                modifier = Modifier
+                    .clickable(onClick = onBackClick)
             )
+
+            Spacer(Modifier.height(36.dp))
 
             RegisterForm(
                 nicknameText = uiState.nicknameText,
@@ -59,7 +68,6 @@ internal fun RegisterScreen(
                 },
                 label = "회원가입"
             )
-
         }
         if (uiState.isLoading) {
             CircularProgressIndicator(
@@ -67,4 +75,19 @@ internal fun RegisterScreen(
             )
         }
     }
+}
+
+
+@Preview
+@Composable
+fun RegisterScreenPreview() {
+    val context = LocalContext.current
+    val viewModel = remember { RegisterViewModel(
+        authRepository = FakeAuthRepository(),
+        userPreferences = UserPreferences(context)
+    ) }
+    RegisterScreen(
+        appState = rememberNuvoAppState(),
+        viewModel = viewModel
+    )
 }

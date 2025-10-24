@@ -148,7 +148,6 @@ class CallService : Service(), TextToSpeech.OnInitListener {
 
         isFeedbackRequested = true
 
-//        val feedbackRequestMessage = "{\"action\": \"end_call\"}"
         val feedbackRequestMessage = "@feedback"
         serviceScope.launch {
             callRepository.sendUserMessage(feedbackRequestMessage)
@@ -157,17 +156,19 @@ class CallService : Service(), TextToSpeech.OnInitListener {
     }
 
     /** STT 음성 인식을 중지합니다. */
-    fun stopListening() {
+    fun stopListening(isEnd: Boolean) {
         listeningJob?.cancel()
 
         serviceScope.launch {
             callRepository.stopListening()
         }
 
-        val lastUserScript = _uiState.value.callScripts.lastOrNull { !it.isAI }
-        if (lastUserScript != null && lastUserScript.script.isNotBlank()) {
-            serviceScope.launch {
-                callRepository.sendUserMessage(lastUserScript.script)
+        if (!isEnd) {
+            val lastUserScript = _uiState.value.callScripts.lastOrNull { !it.isAI }
+            if (lastUserScript != null && lastUserScript.script.isNotBlank()) {
+                serviceScope.launch {
+                    callRepository.sendUserMessage(lastUserScript.script)
+                }
             }
         }
 
@@ -219,7 +220,8 @@ class CallService : Service(), TextToSpeech.OnInitListener {
                 score = feedbackResponse.total_feedback.total_score,
                 feedbackContents = feedbackList,
                 isLoading = false,
-                isFeedbackFailed = false
+                isFeedbackFailed = false,
+                sentenceFeedbacks = feedbackResponse.sentence_feedback
             )
             isFeedbackRequested = false
             Log.d("CallService", "Feedback response parsed successfully.")

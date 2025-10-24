@@ -15,7 +15,10 @@ data class FeedbackResponse(
     val createdAt: String,
 
     @SerializedName("sentenceFeedback")
-    val sentenceFeedback: SentenceFeedback,
+    val sentenceFeedback: List<SentenceFeedback>,
+
+    @SerializedName("title")
+    val title: String,
 
     @SerializedName("totalFeedback")
     val totalFeedback: TotalFeedback

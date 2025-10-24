@@ -23,8 +23,6 @@ internal fun RegisterForm(
     Column(
         modifier = modifier.padding(horizontal = 38.dp)
     ) {
-        Spacer(Modifier.height(20.dp))
-
         RegisterInputField(
             label = "닉네임",
             placeholder = "닉네임 입력",

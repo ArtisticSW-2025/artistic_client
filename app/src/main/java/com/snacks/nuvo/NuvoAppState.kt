@@ -40,8 +40,10 @@ class NuvoAppState(
 
     // 현재 루트가 TopLevel일 때만 BottomNavBar 노출
     val shouldShowBottomBar: Boolean
-        @Composable get() = currentDestination?.route ==
-                topLevelDestinations.find { it.route == currentDestination?.route }?.route
+        @Composable get() {
+            val currentRoute = currentDestination?.route ?: return false
+            return topLevelDestinations.any { it.route == currentRoute }
+        }
 
     // 스낵바
     fun showSnackBar(message: String) {

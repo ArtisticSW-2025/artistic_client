@@ -36,7 +36,7 @@ internal fun ScriptChip(
         ) {
             Text(
                 label,
-                style = if (isSelected) NuvoTheme.typography.interBlack13 else NuvoTheme.typography.interRegular13,
+                style = if (isSelected) NuvoTheme.typography.pretendardBlack13 else NuvoTheme.typography.interRegular13,
                 color = if (isSelected) NuvoTheme.colors.white else NuvoTheme.colors.gray4
             )
         }

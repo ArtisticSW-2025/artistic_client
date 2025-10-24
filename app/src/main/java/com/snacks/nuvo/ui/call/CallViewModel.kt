@@ -58,15 +58,23 @@ class CallViewModel @Inject constructor(
     private var isServiceBound = false
     private var serviceStateJob: Job? = null
 
+    private var getUserInfoJob: Job? = null
+
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as CallService.CallBinder
             callService = binder.getService()
             isServiceBound = true
 
-            val currentUiState = _uiState.value
-            if (currentUiState.userId.isNotBlank() && currentUiState.callSessionId.isNotBlank()) {
-                callService?.connectWebSocket(currentUiState.userId, currentUiState.callSessionId)
+            viewModelScope.launch {
+                getUserInfoJob?.join()
+
+                val currentUiState = _uiState.value
+                if (currentUiState.userId.isNotBlank() && currentUiState.callSessionId.isNotBlank()) {
+                    callService?.connectWebSocket(currentUiState.userId, currentUiState.callSessionId)
+                }
+
+                _uiState.value = _uiState.value.copy(isLoading = false)
             }
 
             observeServiceState()
@@ -80,7 +88,7 @@ class CallViewModel @Inject constructor(
 
     init {
         _uiState.value = _uiState.value.copy(isLoading = true)
-        getUserInfo()
+        getUserInfoJob = getUserInfo()
 
         setCallSessionId(callSessionId.value)
         setPrevName(prevName.value)
@@ -93,12 +101,11 @@ class CallViewModel @Inject constructor(
         setTodayMission(todayMission.value)
         setTodayMissionDateString(todayMissionDateString.value)
 
-        getResult() //
-        _uiState.value = _uiState.value.copy(isLoading = false)
+        getResult()
     }
 
-    private fun getUserInfo() {
-        viewModelScope.launch {
+    private fun getUserInfo(): Job {
+        return viewModelScope.launch {
             val userInfo = userRepository.getUserInfo()
             _uiState.value = _uiState.value.copy(
                 userId = userInfo.id!!,
@@ -129,8 +136,8 @@ class CallViewModel @Inject constructor(
         callService?.startListening(context)
     }
 
-    fun stopListening() {
-        callService?.stopListening()
+    fun stopListening(isEnd: Boolean = false) {
+        callService?.stopListening(isEnd)
     }
 
     fun startTimer() {
@@ -213,7 +220,7 @@ class CallViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isLoading = true)
 
         stopTimer()
-        stopListening()
+        stopListening(true)
         callService?.requestFeedback()
     }
 
@@ -264,7 +271,8 @@ class CallViewModel @Inject constructor(
                 } else if (serviceState.score > 0 && serviceState.score != _uiState.value.score) {
                     _uiState.value = _uiState.value.copy(
                         score = serviceState.score,
-                        feedbackContents = serviceState.feedbackContents
+                        feedbackContents = serviceState.feedbackContents,
+                        sentenceFeedbacks = serviceState.sentenceFeedbacks
                     )
 
                     addMissionResult(serviceState.score, serviceState.feedbackContents)

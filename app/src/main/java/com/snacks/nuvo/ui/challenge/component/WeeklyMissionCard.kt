@@ -44,7 +44,7 @@ internal fun WeeklyMissionCard(
 ) {
     Card (
         modifier = modifier
-            .height(height = 175.dp)
+            .height(height = 101.dp)
             .fillMaxWidth()
             .dropShadow(
                 shape = RoundedCornerShape(
@@ -89,6 +89,9 @@ internal fun WeeklyMissionCard(
             ) {
                 Column {
                     Row (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 27.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Image(
@@ -100,45 +103,43 @@ internal fun WeeklyMissionCard(
                         Column {
                             Text(
                                 text = "주간 미션",
-                                style = NuvoTheme.typography.interBlack20.copy(color = NuvoTheme.colors.subNavy)
+                                style = NuvoTheme.typography.pretendardBlack20.copy(color = NuvoTheme.colors.subNavy)
                             )
                             Spacer(Modifier.height(4.dp))
                             Text(
                                 text = mission,
-                                style = NuvoTheme.typography.interMedium15.copy(color = NuvoTheme.colors.subNavy)
+                                style = NuvoTheme.typography.pretendardMedium15.copy(color = NuvoTheme.colors.subNavy)
                             )
                         }
                     }
 
-                    Spacer(Modifier.height(26.dp))
-
-                    Button(
-                        modifier = Modifier
-                            .height(height = 47.dp)
-                            .fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                        contentPadding = PaddingValues(),
-                        onClick = onClick,
-                    ) {
-                        Box (
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(
-                                    brush = Brush.verticalGradient(
-                                        colors = listOf(
-                                            NuvoTheme.colors.lightGradient1,
-                                            NuvoTheme.colors.lightGradient2
-                                        )
-                                    ),
-                                ),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(
-                                text = "START",
-                                style = NuvoTheme.typography.interSemiBold20.copy(color = NuvoTheme.colors.white)
-                            )
-                        }
-                    }
+//                    Button(
+//                        modifier = Modifier
+//                            .height(height = 47.dp)
+//                            .fillMaxWidth(),
+//                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+//                        contentPadding = PaddingValues(),
+//                        onClick = onClick,
+//                    ) {
+//                        Box (
+//                            modifier = Modifier
+//                                .fillMaxSize()
+//                                .background(
+//                                    brush = Brush.verticalGradient(
+//                                        colors = listOf(
+//                                            NuvoTheme.colors.lightGradient1,
+//                                            NuvoTheme.colors.lightGradient2
+//                                        )
+//                                    ),
+//                                ),
+//                            contentAlignment = Alignment.Center,
+//                        ) {
+//                            Text(
+//                                text = "START",
+//                                style = NuvoTheme.typography.interSemiBold20.copy(color = NuvoTheme.colors.white)
+//                            )
+//                        }
+//                    }
                 }
             }
         }

@@ -16,5 +16,6 @@ data class TotalFeedback(
     val accuracy: String,
     val politeness: String,
     val proactiveness: String,
-    val total_score: Int
+    val total_score: Int,
+    val error: String? = null
 )

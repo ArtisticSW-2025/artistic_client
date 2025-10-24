@@ -14,6 +14,7 @@ data class ProfileUiState(
 
 data class FeedbackData(
     val id: String,
-    val sentenceFeedback: SentenceFeedback,
+    val title: String,
+    val sentenceFeedbacks: List<SentenceFeedback>,
     val totalFeedback: TotalFeedback,
 )

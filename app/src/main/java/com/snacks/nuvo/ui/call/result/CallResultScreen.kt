@@ -3,7 +3,6 @@ package com.snacks.nuvo.ui.call.result
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,17 +39,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.call.CallViewModel
 import com.snacks.nuvo.ui.call.FakeUserRepository
 import com.snacks.nuvo.ui.call.component.CallScreenLayout
+import com.snacks.nuvo.ui.call.component.FloatingGifImage
 import com.snacks.nuvo.ui.component.ExpandableTextCard
 import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.theme.NuvoTheme
@@ -71,8 +69,8 @@ internal fun CallResultScreen(
 
     LaunchedEffect(true) {
         viewModel.startTimer()
-        delay(2000)
-        viewModel.setIsEndPossible(true)
+        delay(5000)
+        viewModel.setIsDetailedResult(true)
     }
 
     CallScreenLayout(
@@ -107,7 +105,7 @@ internal fun CallResultScreen(
                     ) {
                         Text(
                             text = "다음에는 이런 점을\n개선해보세요!",
-                            style = NuvoTheme.typography.interSemiBold36.copy(color = NuvoTheme.colors.white),
+                            style = NuvoTheme.typography.pretendardSemiBold36.copy(color = NuvoTheme.colors.white),
                             textAlign = TextAlign.Center,
                             lineHeight = 50.sp
                         )
@@ -193,11 +191,11 @@ internal fun CallResultScreen(
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = NuvoTheme.colors.white
                             ),
-                            onClick = onRetry
+                            onClick = onRetry,
                         ) {
                             Text(
                                 text = "다시 연습하기",
-                                style = NuvoTheme.typography.interSemiBold20.copy(color = NuvoTheme.colors.subNavy),
+                                style = NuvoTheme.typography.pretendardSemiBold20.copy(color = NuvoTheme.colors.subNavy),
                             )
                         }
                         Spacer(Modifier.height(20.dp))
@@ -216,11 +214,11 @@ internal fun CallResultScreen(
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = NuvoTheme.colors.white
                             ),
-                            onClick = onNextScript
+                            onClick = onNextScript,
                         ) {
                             Text(
                                 text = "다른 스크립트 도전하기",
-                                style = NuvoTheme.typography.interSemiBold20.copy(color = NuvoTheme.colors.subNavy),
+                                style = NuvoTheme.typography.pretendardSemiBold20.copy(color = NuvoTheme.colors.subNavy),
                             )
                         }
                     }
@@ -234,14 +232,14 @@ internal fun CallResultScreen(
                     Spacer(Modifier.height(230.dp))
                     Text(
                         text = "성공적으로 \n통화 연습 완료!",
-                        style = NuvoTheme.typography.interBlack36.copy(color = NuvoTheme.colors.white),
+                        style = NuvoTheme.typography.pretendardBlack36.copy(color = NuvoTheme.colors.white),
                         textAlign = TextAlign.Center,
                         lineHeight = 50.sp
                     )
                     Spacer(Modifier.height(22.dp))
                     Text(
                         text = uiState.result,
-                        style = NuvoTheme.typography.interSemiBold20.copy(color = NuvoTheme.colors.subLemon)
+                        style = NuvoTheme.typography.pretendardSemiBold20.copy(color = NuvoTheme.colors.subLemon)
                     )
                     Spacer(Modifier.height(39.dp))
                     Column(
@@ -272,11 +270,10 @@ internal fun CallResultScreen(
                         )
                     }
                 }
-                Image(
+                FloatingGifImage(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .offset(y = 560.dp),
-                    painter = painterResource(R.mipmap.call_character),
-                    contentDescription = null
                 )
             }
         }
@@ -291,13 +288,8 @@ internal fun CallResultScreen(
                 containerColor = NuvoTheme.colors.white,
             ) {
                 FeedbackSheet(
-                    feedbackItems = listOf(
-                        SentenceFeedbackItems("두 번째 문장", "예의 능동성 정확성", "예의 능동성 정확성"),
-                        SentenceFeedbackItems("두 번째 문장", "예의 능동성 정확성", "예의 능동성 정확성"),
-                        SentenceFeedbackItems("두 번째 문장", "예의 능동성 정확성", "예의 능동성 정확성"),
-                    ),
-
-                    onClose = { showBottomSheet = false }
+                    modifier = Modifier,
+                    sentenceFeedbacks = uiState.sentenceFeedbacks
                 )
             }
         }

@@ -2,6 +2,7 @@ package com.snacks.nuvo.ui.call
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.snacks.nuvo.network.model.SentenceFeedback
 import java.time.LocalDate
 
 data class CallUiState(
@@ -32,6 +33,7 @@ data class CallUiState(
     val result: String = "",
     val feedbackContents: List<String> = emptyList<String>(),
     val score: Int = 0,
+    val sentenceFeedbacks: List<SentenceFeedback> = emptyList<SentenceFeedback>()
 ) {
     val todayMissionDate: LocalDate?
         @RequiresApi(Build.VERSION_CODES.O)

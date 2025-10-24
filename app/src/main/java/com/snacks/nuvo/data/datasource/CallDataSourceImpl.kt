@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.api.gax.rpc.ApiStreamObserver
 import com.google.auth.oauth2.GoogleCredentials
@@ -35,6 +36,8 @@ import kotlin.math.sqrt
 class CallDataSourceImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CallDataSource {
+
+    private val TAG = "CallDataSource"
 
     // --- 클라이언트 및 레코더 인스턴스 ---
     private var audioRecord: AudioRecord? = null
@@ -144,13 +147,34 @@ class CallDataSourceImpl @Inject constructor(
 
     /** WebSocket 연결 및 메시지 수신을 Flow로 변환 */
     override fun connectWebSocket(user: String, sessionId: String): Flow<String> = callbackFlow {
-        val request = Request.Builder().url("ws://websocket-artsw.duckdns.org/ws?user=$user&session_id=$sessionId").build()
+        val requestUrl = "ws://websocket-artsw.duckdns.org/ws?user=$user&session_id=$sessionId"
+        Log.d(TAG, "Connecting to WebSocket: $requestUrl")
+
+        val request = Request.Builder().url(requestUrl).build()
         val webSocketListener = object : WebSocketListener() {
+            override fun onOpen(webSocket: WebSocket, response: Response) {
+                super.onOpen(webSocket, response)
+                Log.i(TAG, "WebSocket connection opened.")
+            }
+
             override fun onMessage(webSocket: WebSocket, text: String) {
+                Log.d(TAG, "WebSocket <<< RECV: $text")
                 trySend(text) // 수신된 메시지를 Flow로 방출
             }
+
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-                close(t) // 에러 발생 시 Flow 종료
+                Log.e(TAG, "WebSocket onFailure: ${t.message}", t)
+                close(t)
+            }
+
+            override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+                super.onClosing(webSocket, code, reason)
+                Log.w(TAG, "WebSocket closing: $code / $reason")
+            }
+
+            override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+                super.onClosed(webSocket, code, reason)
+                Log.i(TAG, "WebSocket connection closed: $code / $reason")
             }
         }
         webSocket = okHttpClient.newWebSocket(request, webSocketListener)
@@ -161,12 +185,14 @@ class CallDataSourceImpl @Inject constructor(
 
     /** WebSocket 연결 종료 */
     override fun disconnectWebSocket() {
+        Log.d(TAG, "Disconnecting WebSocket...")
         webSocket?.close(1000, "Normal closure")
         webSocket = null
     }
 
     /** WebSocket으로 메시지 전송 */
     override fun sendUserMessage(message: String) {
+        Log.d(TAG, "WebSocket >>> SEND: $message")
         webSocket?.send(message)
     }
 }

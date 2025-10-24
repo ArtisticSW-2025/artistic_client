@@ -121,7 +121,7 @@ fun TodayMissionDialog(
                     Spacer(Modifier.height(height = 11.dp))
                     Text(
                         text = "오늘의 미션",
-                        style = NuvoTheme.typography.interBlack24.copy(color = NuvoTheme.colors.white)
+                        style = NuvoTheme.typography.pretendardBlack24.copy(color = NuvoTheme.colors.white)
                     )
                     Spacer(Modifier.height(height = 33.dp))
 
@@ -155,7 +155,7 @@ fun TodayMissionDialog(
                             Spacer(Modifier.height(height = 53.dp))
                             Text(
                                 text = title,
-                                style = NuvoTheme.typography.interSemiBold15.copy(color = NuvoTheme.colors.gray6)
+                                style = NuvoTheme.typography.pretendardSemiBold15.copy(color = NuvoTheme.colors.gray6)
                             )
                             Spacer(Modifier.height(height = 102.dp))
                             Button (

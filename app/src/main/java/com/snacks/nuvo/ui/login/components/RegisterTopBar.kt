@@ -18,29 +18,23 @@ import com.snacks.nuvo.ui.theme.NuvoTheme
 @Composable
 internal fun RegisterTopBar(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 26.dp, vertical = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(
-            onClick = onBackClick,
-            modifier = Modifier.size(48.dp)
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_back,),
-                contentDescription = "뒤로가기",
-                tint = NuvoTheme.colors.gray6
-            )
-        }
+        Icon(
+            painter = painterResource(R.drawable.ic_back,),
+            contentDescription = "뒤로가기",
+            tint = NuvoTheme.colors.black
+        )
 
         Text(
             text = "회원가입",
-            style = NuvoTheme.typography.interSemiBold20,
-            color = NuvoTheme.colors.gray6,
+            style = NuvoTheme.typography.pretendardBlack15,
+            color = NuvoTheme.colors.black,
             modifier = Modifier.padding(start = 8.dp)
         )
     }

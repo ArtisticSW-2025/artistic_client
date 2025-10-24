@@ -92,7 +92,7 @@ fun TodayMissionFinishDialog(
                     ) {
                         Text (
                             text = "확인",
-                            style = NuvoTheme.typography.interSemiBold15.copy(color = NuvoTheme.colors.white)
+                            style = NuvoTheme.typography.pretendardSemiBold15.copy(color = NuvoTheme.colors.white)
                         )
                     }
                 }

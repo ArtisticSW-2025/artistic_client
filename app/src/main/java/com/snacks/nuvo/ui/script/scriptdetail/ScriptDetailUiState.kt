@@ -9,6 +9,7 @@ data class ScriptDetailUiState(
     val mission: String = "",
     val goal: String = "",
     val dialogues: List<Dialogue> = emptyList<Dialogue>(),
+    val contactName: String = "",
 )
 
 data class Dialogue(
