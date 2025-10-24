@@ -90,14 +90,14 @@ internal fun CallingScreen(
                 Spacer(Modifier.height(16.dp))
                 Text(
                     text = uiState.contactName,
-                    style = NuvoTheme.typography.interBlack40.copy(color = NuvoTheme.colors.white),
+                    style = NuvoTheme.typography.pretendardBlack40.copy(color = NuvoTheme.colors.white),
                 )
                 Spacer(Modifier.height(18.dp))
                 Text(
                     modifier = Modifier
                         .height(23.dp),
                     text = if (uiState.callStatus == CallStatus.OUTGOING) "님께 전화 거는 중..." else "",
-                    style = NuvoTheme.typography.interBlack16.copy(color = NuvoTheme.colors.white),
+                    style = NuvoTheme.typography.pretendardBlack16.copy(color = NuvoTheme.colors.white),
                 )
                 if (uiState.callStatus == CallStatus.OUTGOING) {
                     Spacer(Modifier.height(270.dp))
@@ -155,7 +155,7 @@ internal fun CallingScreen(
                             Spacer(Modifier.height(16.dp))
                             Text(
                                 text = "수락",
-                                style = NuvoTheme.typography.interBlack20.copy(color = NuvoTheme.colors.white),
+                                style = NuvoTheme.typography.pretendardBlack20.copy(color = NuvoTheme.colors.white),
                             )
                         }
                     }
@@ -164,7 +164,12 @@ internal fun CallingScreen(
         }
 
         if (uiState.isLoading) {
-            LoadingIndicator()
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                LoadingIndicator()
+            }
         }
     }
 }

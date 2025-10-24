@@ -3,6 +3,7 @@ package com.snacks.nuvo.ui.login.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snacks.nuvo.TempAuthManager
+import com.snacks.nuvo.data.preferences.UserPreferences
 import com.snacks.nuvo.network.model.request.RegisterRequest
 import com.snacks.nuvo.ui.login.login.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userPreferences: UserPreferences
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterUiState.create())
@@ -91,6 +93,10 @@ class RegisterViewModel @Inject constructor(
                 result.onSuccess { response ->
                     TempAuthManager.issueAndSaveToken(response.accessToken)
                     _uiState.value = _uiState.value.copy(isLoading = false)
+                    userPreferences.saveCredentials(
+                        nickname = uiState.value.nicknameText,
+                        password = uiState.value.passwordText
+                    )
                     onSuccess(currentState.nicknameText)
                 }.onFailure {
                     _uiState.value = _uiState.value.copy(

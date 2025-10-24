@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.snacks.nuvo.data.repository.CallSessionRepository
 import com.snacks.nuvo.data.repository.MissionRecordRepository
 import com.snacks.nuvo.data.repository.UserRepository
+import com.snacks.nuvo.network.model.response.CallSessionResponse
+import com.snacks.nuvo.ui.script.ScriptItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -58,4 +60,72 @@ class HomeViewModel @Inject constructor(
             )
         }
     }
+}
+
+class FakeCallSessionRepository : CallSessionRepository {
+    override suspend fun getScripts(
+        isCall: Boolean?,
+        category: List<String>?,
+        search: String?
+    ): List<ScriptItem> {
+        return listOf(
+            ScriptItem(
+                id = "1",
+                title = "1",
+                description = "1"
+            ),
+            ScriptItem(
+                id = "2",
+                title = "2",
+                description = "2"
+            ),
+        )
+    }
+
+    override suspend fun getRandomScripts(
+        count: Int,
+        isBoolean: Boolean?,
+        category: List<String>?
+    ): List<RecommendScript> {
+        return listOf(
+            RecommendScript(
+                id = "1",
+                title = "1",
+                description = "1"
+            ),
+            RecommendScript(
+                id = "2",
+                title = "2",
+                description = "2"
+            ),
+            RecommendScript(
+                id = "3",
+                title = "3",
+                description = "3"
+            ),
+            RecommendScript(
+                id = "4",
+                title = "4",
+                description = "4"
+            ),
+            RecommendScript(
+                id = "5",
+                title = "5",
+                description = "5"
+            )
+        )
+    }
+
+    override suspend fun getScriptDetail(id: String): CallSessionResponse {
+        return CallSessionResponse(
+            categories = emptyList(),
+            isCall = true,
+            mission = "",
+            name = "",
+            prompts = "",
+            purpose = "",
+            script = emptyList()
+        )
+    }
+
 }

@@ -86,6 +86,6 @@ fun ExpandableTextCardPreview() {
         modifier = Modifier
             .padding(top = 50.dp),
         text = "예의: 모든 참석자와의 질의응답을 통해 회의를 마무리하였고, 끝으로 상호 감사 인사를 전했습니다.",
-        textStyle = NuvoTheme.typography.interSemiBold14.copy(color = NuvoTheme.colors.mainGreen)
+        textStyle = NuvoTheme.typography.pretendardSemiBold14.copy(color = NuvoTheme.colors.mainGreen)
     )
 }

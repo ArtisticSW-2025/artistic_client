@@ -54,7 +54,7 @@ internal fun ScriptContentCard(
                 Spacer(Modifier.width(8.dp))
                 Text(
                     "대본",
-                    style = NuvoTheme.typography.interBlack15,
+                    style = NuvoTheme.typography.pretendardBlack15,
                     color = NuvoTheme.colors.gray5
                 )
             }

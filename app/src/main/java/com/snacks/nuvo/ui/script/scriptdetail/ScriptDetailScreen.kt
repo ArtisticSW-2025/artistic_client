@@ -21,15 +21,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.R
 import com.snacks.nuvo.Routes
+import com.snacks.nuvo.rememberNuvoAppState
 import com.snacks.nuvo.ui.component.LoadingIndicator
+import com.snacks.nuvo.ui.home.FakeCallSessionRepository
+import com.snacks.nuvo.ui.script.ScriptScreen
+import com.snacks.nuvo.ui.script.ScriptViewModel
 import com.snacks.nuvo.ui.script.component.ScriptContentCard
 import com.snacks.nuvo.ui.script.component.ScriptGoalCard
 import com.snacks.nuvo.ui.script.component.ScriptIconToggleButton
@@ -101,7 +107,7 @@ internal fun ScriptDetailScreen(
                     Spacer(Modifier.height(76.dp))
                     Text(
                         uiState.title,
-                        style = NuvoTheme.typography.interBlack32,
+                        style = NuvoTheme.typography.pretendardBlack32,
                         color = NuvoTheme.colors.white
                     )
                     Spacer(Modifier.height(48.dp))
@@ -110,10 +116,12 @@ internal fun ScriptDetailScreen(
                         onClick = {
                             val prevName = uiState.title
                             val callSessionId = uiState.id
+                            val contactName = uiState.contactName
 
                             val route = "${Routes.Call.ROUTE}?" +
                                     "prevName=$prevName&" +
-                                    "callSessionId=$callSessionId"
+                                    "callSessionId=$callSessionId&" +
+                                    "contactName=$contactName"
 
                             appState.navController.navigate(route)
                         }
@@ -134,10 +142,25 @@ internal fun ScriptDetailScreen(
                     dialogues = uiState.dialogues
                 )
             }
-            Spacer(Modifier.height(28.dp))
+            Spacer(Modifier.height(78.dp))
         }
     }
     if (uiState.isLoading) {
         LoadingIndicator()
     }
+}
+
+@Preview
+@Composable
+fun ScriptDetailScreenPreview() {
+    val viewModel = remember { ScriptDetailViewModel(
+        callSessionRepository = FakeCallSessionRepository()
+    ) }
+    ScriptDetailScreen(
+        appState = rememberNuvoAppState(),
+        viewModel = viewModel,
+        id = "",
+        isSmallTalkMode = true,
+        isEmergencyMode = false
+    )
 }

@@ -13,14 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import com.snacks.nuvo.ui.call.callGraph
+import com.snacks.nuvo.ui.call.callRetryScreen
 import com.snacks.nuvo.ui.challenge.challengeGraph
 import com.snacks.nuvo.ui.component.BottomNavigationBar
 import com.snacks.nuvo.ui.component.BottomNavigationBarItem
 import com.snacks.nuvo.ui.home.homeGraph
-import com.snacks.nuvo.ui.login.loginGraph
+import com.snacks.nuvo.ui.login.authGraph
 import com.snacks.nuvo.ui.profile.profileGraph
 import com.snacks.nuvo.ui.ranking.rankingGraph
 import com.snacks.nuvo.ui.script.scriptGraph
@@ -54,16 +54,17 @@ fun NuvoNavHost(appState: NuvoAppState) {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = Routes.Login.LOGIN,
+            startDestination = Routes.Login.ROUTE,
             modifier = Modifier.padding(paddingValues),
         ) {
-            loginGraph(appState)
+            authGraph(appState)
             homeGraph(appState)
             scriptGraph(appState = appState)
             rankingGraph()
             challengeGraph(appState = appState)
-            profileGraph()
+            profileGraph(appState)
             callGraph(appState)
+            callRetryScreen(appState)
         }
     }
 }
@@ -93,6 +94,4 @@ private fun NuvoBottomNavigationBar(
 }
 
 private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
-    this?.hierarchy?.any {
-        it.route?.contains(destination.route, true) == true
-    } == true
+    this?.route == destination.route

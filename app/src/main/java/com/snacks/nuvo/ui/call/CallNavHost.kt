@@ -26,7 +26,8 @@ import com.snacks.nuvo.ui.call.result.CallResultScreen
 @Composable
 fun CallNavHost(
     appState: NuvoAppState,
-    viewModel: CallViewModel
+    viewModel: CallViewModel,
+    onRetry: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -122,13 +123,12 @@ fun CallNavHost(
             CallResultScreen(
                 viewModel = viewModel,
                 onNavigateBack = { appState.navController.popBackStack() },
-                onRetry = {
-                    viewModel.resetCall()
-                    innerNavController.navigate(Routes.Call.CALLING) {
-                        popUpTo(Routes.Call.RESULT) { inclusive = true }
+                onRetry = onRetry,
+                onNextScript = {
+                    appState.navController.navigate(Routes.Script.ROUTE) {
+                        popUpTo(Routes.Home.ROUTE) { inclusive = true }
                     }
-                },
-                onNextScript = { /* 다른 스크립트 선택 화면으로 이동 */ }
+                }
             )
         }
     }

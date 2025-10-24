@@ -50,7 +50,7 @@ internal fun ScriptMissionCard(
             Spacer(Modifier.height(12.dp))
             Text(
                 mission,
-                style = NuvoTheme.typography.interSemiBold15.copy(lineHeight = 22.sp),
+                style = NuvoTheme.typography.pretendardSemiBold15.copy(lineHeight = 22.sp),
                 color = NuvoTheme.colors.subNavy,
                 textAlign = TextAlign.Center
             )

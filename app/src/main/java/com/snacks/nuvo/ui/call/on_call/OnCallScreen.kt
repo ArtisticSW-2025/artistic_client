@@ -38,7 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snacks.nuvo.R
@@ -47,6 +47,7 @@ import com.snacks.nuvo.ui.call.FakeUserRepository
 import com.snacks.nuvo.ui.call.WaveformMode
 import com.snacks.nuvo.ui.call.component.CallScreenLayout
 import com.snacks.nuvo.ui.call.component.CallScriptCard
+import com.snacks.nuvo.ui.call.component.FloatingGifImage
 import com.snacks.nuvo.ui.call.component.TodayMissionFinishDialog
 import com.snacks.nuvo.ui.call.component.WaveformComponent
 import com.snacks.nuvo.ui.component.LoadingIndicator
@@ -129,10 +130,9 @@ internal fun OnCallScreen(
             contentAlignment = Alignment.TopCenter
         ) {
             if (uiState.isTodayMission) {
-                Image(
-                    painter = painterResource(R.mipmap.call_character),
-                    contentDescription = null,
+                FloatingGifImage(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(top = 322.dp)
                 )
             } else {
@@ -176,7 +176,8 @@ internal fun OnCallScreen(
                             Text(
                                 modifier = Modifier.padding(20.dp),
                                 text = uiState.todayMission,
-                                style = NuvoTheme.typography.interSemiBold20.copy(color = NuvoTheme.colors.mainGreen),
+                                style = NuvoTheme.typography.pretendardSemiBold20.copy(color = NuvoTheme.colors.mainGreen),
+                                lineHeight = 24.sp,
                             )
                         }
 
@@ -236,7 +237,7 @@ internal fun OnCallScreen(
                     ) {
                         Text(
                             text = "통화 종료하기",
-                            style = NuvoTheme.typography.interBlack16.copy(color = NuvoTheme.colors.mainGreen),
+                            style = NuvoTheme.typography.pretendardBlack16.copy(color = NuvoTheme.colors.mainGreen),
                         )
                     }
                 } else {
@@ -348,7 +349,7 @@ fun CallScreenPreviewTodayMission() {
     ) }
     viewModel.setPrevName("오늘의 미션")
     viewModel.setIsTodayMission(true)
-    viewModel.setTodayMission("오늘 하루를 요약해서 말해보자")
+    viewModel.setTodayMission("오늘 하루를\n요약해서 말해보자")
 //    viewModel.setIsTodayMissionFinish(true)
     viewModel.setTodayMissionDateString(LocalDate.now().toString())
     OnCallScreen(

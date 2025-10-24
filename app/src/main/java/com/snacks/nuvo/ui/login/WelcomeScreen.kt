@@ -1,6 +1,5 @@
 package com.snacks.nuvo.ui.login
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,9 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -25,17 +22,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snacks.nuvo.NuvoAppState
-import com.snacks.nuvo.R
 import com.snacks.nuvo.Routes
-import com.snacks.nuvo.ui.theme.Inter
+import com.snacks.nuvo.ui.login.components.HiGifImage
 import com.snacks.nuvo.ui.theme.NuvoTheme
+import com.snacks.nuvo.ui.theme.Pretendard
 import kotlinx.coroutines.delay
 
 @Composable
-internal fun WelcomScreen(appState: NuvoAppState? = null, nickname: String ) {
+internal fun WelcomeScreen(appState: NuvoAppState? = null, nickname: String ) {
     LaunchedEffect(Unit) {
         delay(3000) // 3초 대기
-        appState?.navigate(Routes.Home.ROUTE) // 원하는 라우트로 이동
+        appState?.navController?.navigate(Routes.Home.ROUTE) {
+            popUpTo(Routes.Login.ROUTE) { inclusive = true }
+        }
     }
     Box(
         modifier = Modifier
@@ -55,21 +54,17 @@ internal fun WelcomScreen(appState: NuvoAppState? = null, nickname: String ) {
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
-            Spacer(Modifier.height(264.dp))
+            Spacer(Modifier.weight(270f))
 
-            Image(
-                painter = painterResource(id = R.drawable.ic_login_logo_filled),
-                contentDescription = "Login Logo",
+            HiGifImage(
                 modifier = Modifier
-                    .width(285.dp)
-                    .height(183.dp)
-                    .alpha(0.4f) ,
+                    .width(350.dp),
             )
             Spacer(Modifier.height(47.dp))
             Text(
                 buildAnnotatedString {
                     withStyle(style = SpanStyle(
-                        fontFamily = Inter,
+                        fontFamily = Pretendard,
                         fontWeight = FontWeight.Black,
                         fontSize = 28.sp,
                         letterSpacing = 0.sp,
@@ -79,7 +74,7 @@ internal fun WelcomScreen(appState: NuvoAppState? = null, nickname: String ) {
                         append(nickname)
                     }
                     withStyle(style = SpanStyle(
-                        fontFamily = Inter,
+                        fontFamily = Pretendard,
                         fontWeight = FontWeight.SemiBold,
 
                         fontSize = 28.sp,
@@ -89,7 +84,7 @@ internal fun WelcomScreen(appState: NuvoAppState? = null, nickname: String ) {
                         append("님,")
                     }
                     withStyle(style = SpanStyle(
-                        fontFamily = Inter,
+                        fontFamily = Pretendard,
                         fontWeight = FontWeight.Black,
                         fontSize = 28.sp,
                         color = NuvoTheme.colors.white
@@ -98,7 +93,7 @@ internal fun WelcomScreen(appState: NuvoAppState? = null, nickname: String ) {
                         append("\nNUVO")
                     }
                     withStyle(style = SpanStyle(
-                        fontFamily = Inter,
+                        fontFamily = Pretendard,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 28.sp,
                         color = NuvoTheme.colors.white
@@ -110,7 +105,8 @@ internal fun WelcomScreen(appState: NuvoAppState? = null, nickname: String ) {
                 lineHeight = 33.sp
 
             )
-            }
+            Spacer(Modifier.weight(350f))
+        }
     }
 }
 
@@ -118,5 +114,5 @@ internal fun WelcomScreen(appState: NuvoAppState? = null, nickname: String ) {
 @Composable
 fun a (){
 
-    WelcomScreen(nickname = "도도도")
+    WelcomeScreen(nickname = "도도도")
 }

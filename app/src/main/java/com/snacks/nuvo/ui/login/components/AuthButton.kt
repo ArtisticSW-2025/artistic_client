@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.ui.theme.NuvoTheme
+import com.snacks.nuvo.util.dropShadow
 
 
 @Composable
@@ -24,6 +25,14 @@ internal fun AuthButton(
             .fillMaxWidth()
             .height(48.dp)
             .padding(horizontal = 36.dp)
+            .dropShadow(
+                shape = RoundedCornerShape(size = 15.dp),
+                offsetX = 0.dp,
+                offsetY = 6.dp,
+                blur = 12.dp,
+                spread = 0.dp,
+                color = NuvoTheme.colors.black.copy(alpha = 0.12f),
+            )
             .background(
                 color = if (isEnabled) {
                     NuvoTheme.colors.mainGreen
@@ -37,7 +46,7 @@ internal fun AuthButton(
     ) {
         Text(
             label,
-            style = NuvoTheme.typography.interSemiBold15,
+            style = NuvoTheme.typography.pretendardSemiBold15,
             color = NuvoTheme.colors.white
         )
     }

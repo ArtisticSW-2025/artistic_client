@@ -1,7 +1,14 @@
 package com.snacks.nuvo.ui.call
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -9,6 +16,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.Routes
+import com.snacks.nuvo.ui.call.retry.RetryScreen
+import kotlinx.coroutines.delay
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.callGraph(appState: NuvoAppState) {
@@ -39,7 +48,38 @@ fun NavGraphBuilder.callGraph(appState: NuvoAppState) {
     ) { backStackEntry ->
         CallNavHost(
             appState = appState,
-            viewModel = hiltViewModel(backStackEntry)
+            viewModel = hiltViewModel(backStackEntry),
+            onRetry = {
+                val queryString = backStackEntry.arguments?.let { bundle ->
+                    bundle.keySet().joinToString("&") { key ->
+                        "$key=${bundle.get(key)}"
+                    }
+                } ?: ""
+
+                val fullRouteWithArgs = "${Routes.Call.RETRY}?$queryString"
+
+                appState.navController.navigate(fullRouteWithArgs) {
+                    popUpTo(backStackEntry.destination.id) {
+                        inclusive = true
+                    }
+                }
+            }
+        )
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun NavGraphBuilder.callRetryScreen(appState: NuvoAppState) {
+    composable(
+        route = "${Routes.Call.RETRY}?{args}",
+        arguments = listOf(navArgument("args") { type = NavType.StringType })
+    ) { backStackEntry ->
+        val args = backStackEntry.arguments?.getString("args") ?: ""
+
+        RetryScreen(
+            appState = appState,
+            args = args,
+            prevDestinationId = backStackEntry.destination.id
         )
     }
 }

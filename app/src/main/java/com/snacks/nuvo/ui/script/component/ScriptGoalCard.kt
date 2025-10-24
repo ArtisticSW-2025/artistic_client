@@ -24,7 +24,7 @@ internal fun ScriptGoalCard(
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 "스크립트 목표",
-                style = NuvoTheme.typography.interSemiBold15,
+                style = NuvoTheme.typography.pretendardSemiBold15,
                 color = NuvoTheme.colors.mainGreen
             )
             Spacer(Modifier.height(12.dp))

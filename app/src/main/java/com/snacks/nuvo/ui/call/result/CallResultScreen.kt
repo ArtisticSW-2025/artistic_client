@@ -2,7 +2,7 @@ package com.snacks.nuvo.ui.call.result
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,34 +22,40 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.call.CallViewModel
 import com.snacks.nuvo.ui.call.FakeUserRepository
 import com.snacks.nuvo.ui.call.component.CallScreenLayout
+import com.snacks.nuvo.ui.call.component.FloatingGifImage
 import com.snacks.nuvo.ui.component.ExpandableTextCard
 import com.snacks.nuvo.ui.component.LoadingIndicator
 import com.snacks.nuvo.ui.theme.NuvoTheme
 import com.snacks.nuvo.util.dropShadow
 import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun CallResultScreen(
@@ -59,11 +65,12 @@ internal fun CallResultScreen(
     onNextScript: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect(true) {
         viewModel.startTimer()
-        delay(2000)
-        viewModel.setIsEndPossible(true)
+        delay(5000)
+        viewModel.setIsDetailedResult(true)
     }
 
     CallScreenLayout(
@@ -98,7 +105,7 @@ internal fun CallResultScreen(
                     ) {
                         Text(
                             text = "다음에는 이런 점을\n개선해보세요!",
-                            style = NuvoTheme.typography.interSemiBold36.copy(color = NuvoTheme.colors.white),
+                            style = NuvoTheme.typography.pretendardSemiBold36.copy(color = NuvoTheme.colors.white),
                             textAlign = TextAlign.Center,
                             lineHeight = 50.sp
                         )
@@ -135,13 +142,40 @@ internal fun CallResultScreen(
                         }
                     }
                 }
+
+
                 Box(
                     modifier = Modifier
                         .padding(bottom = 75.dp)
                         .fillMaxHeight(),
+
                     contentAlignment = Alignment.BottomCenter
                 ) {
-                    Column {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Button(
+                            modifier = Modifier
+                                .width(width = 160.dp)
+                                .height(height = 40.dp)
+                            ,
+
+                            contentPadding = PaddingValues(0.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent
+                            ),
+                            border = BorderStroke(1.dp, color = NuvoTheme.colors.white),
+
+                            onClick = { showBottomSheet = true },
+                        ) {
+                            Text(
+                                text = "문장 피드백 확인하기",
+                                style = NuvoTheme.typography.interMedium13.copy(color = NuvoTheme.colors.white),
+
+                            )
+                        }
+                        Spacer(Modifier.height(68.dp))
+
                         Button(
                             modifier = Modifier
                                 .width(width = 320.dp)
@@ -157,11 +191,11 @@ internal fun CallResultScreen(
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = NuvoTheme.colors.white
                             ),
-                            onClick = onRetry
+                            onClick = onRetry,
                         ) {
                             Text(
                                 text = "다시 연습하기",
-                                style = NuvoTheme.typography.interSemiBold20.copy(color = NuvoTheme.colors.subNavy),
+                                style = NuvoTheme.typography.pretendardSemiBold20.copy(color = NuvoTheme.colors.subNavy),
                             )
                         }
                         Spacer(Modifier.height(20.dp))
@@ -180,11 +214,11 @@ internal fun CallResultScreen(
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = NuvoTheme.colors.white
                             ),
-                            onClick = onNextScript
+                            onClick = onNextScript,
                         ) {
                             Text(
                                 text = "다른 스크립트 도전하기",
-                                style = NuvoTheme.typography.interSemiBold20.copy(color = NuvoTheme.colors.subNavy),
+                                style = NuvoTheme.typography.pretendardSemiBold20.copy(color = NuvoTheme.colors.subNavy),
                             )
                         }
                     }
@@ -198,14 +232,14 @@ internal fun CallResultScreen(
                     Spacer(Modifier.height(230.dp))
                     Text(
                         text = "성공적으로 \n통화 연습 완료!",
-                        style = NuvoTheme.typography.interBlack36.copy(color = NuvoTheme.colors.white),
+                        style = NuvoTheme.typography.pretendardBlack36.copy(color = NuvoTheme.colors.white),
                         textAlign = TextAlign.Center,
                         lineHeight = 50.sp
                     )
                     Spacer(Modifier.height(22.dp))
                     Text(
                         text = uiState.result,
-                        style = NuvoTheme.typography.interSemiBold20.copy(color = NuvoTheme.colors.subLemon)
+                        style = NuvoTheme.typography.pretendardSemiBold20.copy(color = NuvoTheme.colors.subLemon)
                     )
                     Spacer(Modifier.height(39.dp))
                     Column(
@@ -236,15 +270,29 @@ internal fun CallResultScreen(
                         )
                     }
                 }
-                Image(
+                FloatingGifImage(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .offset(y = 560.dp),
-                    painter = painterResource(R.mipmap.call_character),
-                    contentDescription = null
                 )
             }
         }
 
+        if (showBottomSheet) {
+            val sheetState = rememberModalBottomSheetState (
+                skipPartiallyExpanded = true
+            )
+            ModalBottomSheet (
+                onDismissRequest = { showBottomSheet = false },
+                sheetState = sheetState,
+                containerColor = NuvoTheme.colors.white,
+            ) {
+                FeedbackSheet(
+                    modifier = Modifier,
+                    sentenceFeedbacks = uiState.sentenceFeedbacks
+                )
+            }
+        }
         if (uiState.isLoading) {
             LoadingIndicator()
         }

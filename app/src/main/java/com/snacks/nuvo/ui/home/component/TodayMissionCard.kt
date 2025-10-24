@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.component.NoRippleInteractionSource
 import com.snacks.nuvo.ui.theme.NuvoTheme
+import com.snacks.nuvo.util.dropShadow
 
 @Composable
 internal fun TodayMissionCard(
@@ -41,10 +42,17 @@ internal fun TodayMissionCard(
             .clickable(
                 interactionSource = remember { NoRippleInteractionSource() },
                 indication = null
-            ) { onClick() },
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp,
-        ),
+            ) { onClick() }
+            .dropShadow(
+                shape = RoundedCornerShape(
+                    size = 15.dp,
+                ),
+                offsetX = 0.dp,
+                offsetY = 6.dp,
+                blur = 12.dp,
+                spread = 0.dp,
+                color = NuvoTheme.colors.black.copy(alpha = 0.12f),
+            ),
         shape = RoundedCornerShape(15.dp)
     ) {
         Box(
@@ -69,12 +77,12 @@ internal fun TodayMissionCard(
                 Column {
                     Text(
                         "오늘의 미션",
-                        style = NuvoTheme.typography.interBlack18.copy(color = NuvoTheme.colors.mainGreen)
+                        style = NuvoTheme.typography.pretendardBlack18.copy(color = NuvoTheme.colors.mainGreen)
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
                         mission,
-                        style = NuvoTheme.typography.interMedium12.copy(color = NuvoTheme.colors.subLightGreen)
+                        style = NuvoTheme.typography.pretendardMedium12.copy(color = NuvoTheme.colors.subLightGreen)
                     )
                     Spacer(Modifier.height(4.dp))
                 }

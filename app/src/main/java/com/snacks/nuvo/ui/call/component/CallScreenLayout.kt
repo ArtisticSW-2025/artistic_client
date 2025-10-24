@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.theme.NuvoTheme
@@ -48,7 +49,8 @@ internal fun CallScreenLayout(
             Spacer(Modifier.width(8.dp))
             Text(
                 text = prevName,
-                style = NuvoTheme.typography.interBlack15.copy(color = NuvoTheme.colors.white),
+                style = NuvoTheme.typography.pretendardBlack15.copy(color = NuvoTheme.colors.white),
+                lineHeight = 17.sp
             )
             Spacer(Modifier.width(8.dp))
         }

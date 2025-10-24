@@ -12,9 +12,9 @@ class FeedbackRepositoryImpl @Inject constructor(
         return response.map {
             FeedbackData(
                 id = it.id,
-                userId = it.userId,
-                content = it.content,
-                createdAt = it.createdAt
+                sentenceFeedbacks = it.sentenceFeedback,
+                title = it.title,
+                totalFeedback = it.totalFeedback
             )
         }
     }

@@ -20,21 +20,19 @@ internal fun LoginHeader(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(Modifier.height(166.dp))
-
         Image(
-            painter = painterResource(id = R.drawable.ic_login_logo_filled),
+            painter = painterResource(R.mipmap.call_character),
             contentDescription = "Login Logo",
             modifier = Modifier
                 .width(213.dp)
                 .height(137.dp)
         )
 
-        Spacer(Modifier.height(15.dp))
+        Spacer(Modifier.height(8.dp))
 
         Text(
             "NUVO",
-            style = NuvoTheme.typography.interBlack32,
+            style = NuvoTheme.typography.pretendardBlack32,
             color = NuvoTheme.colors.mainGreen
         )
 
@@ -42,7 +40,7 @@ internal fun LoginHeader(
 
         Text(
             "당신의 첫 통화 파트너",
-            style = NuvoTheme.typography.interSemiBold20,
+            style = NuvoTheme.typography.pretendardSemiBold20,
             color = NuvoTheme.colors.gray6
         )
     }

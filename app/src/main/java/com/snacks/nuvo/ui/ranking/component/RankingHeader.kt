@@ -2,7 +2,6 @@ package com.snacks.nuvo.ui.ranking.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,48 +14,47 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.snacks.nuvo.ui.ranking.RankingConstants
 import com.snacks.nuvo.ui.ranking.RankingItem
 import com.snacks.nuvo.ui.theme.NuvoTheme
 
 @Composable
-internal fun RankingHeader(modifier: Modifier = Modifier,
-                           topThree: List<RankingItem>) {
-    Box(
+internal fun RankingHeader(
+    modifier: Modifier = Modifier,
+    topThree: List<RankingItem>
+) {
+    Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(RankingConstants.HeaderHeight)
             .background(
                 color = NuvoTheme.colors.mainGreen,
                 shape = RoundedCornerShape(
-                    bottomEnd = RankingConstants.HeaderCornerRadius,
-                    bottomStart = RankingConstants.HeaderCornerRadius
+                    bottomEnd = 40.dp,
+                    bottomStart = 40.dp
                 )
             )
     ) {
+        Spacer(modifier = Modifier.height(46.dp))
+
         Text(
             text = "RANKING",
             color = NuvoTheme.colors.white,
             style = NuvoTheme.typography.interBlack24,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.W900,
             modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(start = 20.dp, top = 60.dp)
+                .padding(start = 20.dp)
         )
+
+        Spacer(modifier = Modifier.height(25.dp))
 
         if (topThree.isNotEmpty()) {
             TopThreeRankers(
                 topThree = topThree,
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 52.dp,)
             )
         }
+
+        Spacer(modifier = Modifier.height(52.dp))
     }
 }
 
@@ -74,20 +72,20 @@ internal fun TopThreeRankers(
         if (topThree.size > 1) {
             TopRankerItem(
                 ranker = topThree[1],
-                imageSize = RankingConstants.SecondThirdImageSize,
+                imageSize = 90.dp,
             )
         }
         if (topThree.isNotEmpty()) {
             TopRankerItem(
                 ranker = topThree[0],
-                imageSize = RankingConstants.TopRankerImageSize,
+                imageSize = 108.dp,
                 isWinner = true
             )
         }
         if (topThree.size > 2) {
             TopRankerItem(
                 ranker = topThree[2],
-                imageSize = RankingConstants.SecondThirdImageSize,
+                imageSize = 90.dp,
             )
         }
     }
@@ -101,7 +99,7 @@ internal fun TopRankerItem(
     isWinner: Boolean = false
 ) {
     Column(
-        modifier=modifier,
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -125,12 +123,11 @@ internal fun TopRankerItem(
             color = NuvoTheme.colors.white,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.widthIn(max = 80.dp) // 최대 너비 제한
+            modifier = Modifier.widthIn(max = 100.dp)
         )
 
         Text(
             text = ranker.score.toString(),
-
             color = NuvoTheme.colors.white,
             style = NuvoTheme.typography.interMedium15,
         )

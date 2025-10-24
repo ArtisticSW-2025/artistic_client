@@ -62,7 +62,7 @@ internal fun ScriptListItem(
                 ) {
                     Text(
                         title,
-                        style = NuvoTheme.typography.interSemiBold14,
+                        style = NuvoTheme.typography.pretendardSemiBold14,
                         color = NuvoTheme.colors.subNavy,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis

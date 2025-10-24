@@ -148,9 +148,7 @@ class CallService : Service(), TextToSpeech.OnInitListener {
 
         isFeedbackRequested = true
 
-//        val feedbackRequestMessage = "{\"action\": \"end_call\"}"
-        val feedbackRequestMessage = "지금까지 한 대화를 통해 {\"score\": (98과 같이 100점 만점의 숫자로된 점수), \"feedback\": {[ \"예의:한문장의 피드백 내용\", \"능동성:한문장의 피드백 내용\", \"정보의 정확성:한문장의 피드백 내용\" ](3개의 문자열이 포함된 배열)}} 형태로 응답해줘"
-
+        val feedbackRequestMessage = "@feedback"
         serviceScope.launch {
             callRepository.sendUserMessage(feedbackRequestMessage)
         }
@@ -158,17 +156,19 @@ class CallService : Service(), TextToSpeech.OnInitListener {
     }
 
     /** STT 음성 인식을 중지합니다. */
-    fun stopListening() {
+    fun stopListening(isEnd: Boolean) {
         listeningJob?.cancel()
 
         serviceScope.launch {
             callRepository.stopListening()
         }
 
-        val lastUserScript = _uiState.value.callScripts.lastOrNull { !it.isAI }
-        if (lastUserScript != null && lastUserScript.script.isNotBlank()) {
-            serviceScope.launch {
-                callRepository.sendUserMessage(lastUserScript.script)
+        if (!isEnd) {
+            val lastUserScript = _uiState.value.callScripts.lastOrNull { !it.isAI }
+            if (lastUserScript != null && lastUserScript.script.isNotBlank()) {
+                serviceScope.launch {
+                    callRepository.sendUserMessage(lastUserScript.script)
+                }
             }
         }
 
@@ -210,11 +210,18 @@ class CallService : Service(), TextToSpeech.OnInitListener {
     private fun parseFeedbackResponse(jsonResponse: String) {
         try {
             val feedbackResponse = Gson().fromJson(jsonResponse, CallFeedbackResult::class.java)
+            val feedbackList = listOf(
+                " ${feedbackResponse.total_feedback.accuracy}",
+                " ${feedbackResponse.total_feedback.politeness}",
+                " ${feedbackResponse.total_feedback.proactiveness}"
+            )
+
             _uiState.value = _uiState.value.copy(
-                score = feedbackResponse.score,
-                feedbackContents = feedbackResponse.feedback,
+                score = feedbackResponse.total_feedback.total_score,
+                feedbackContents = feedbackList,
                 isLoading = false,
-                isFeedbackFailed = false
+                isFeedbackFailed = false,
+                sentenceFeedbacks = feedbackResponse.sentence_feedback
             )
             isFeedbackRequested = false
             Log.d("CallService", "Feedback response parsed successfully.")

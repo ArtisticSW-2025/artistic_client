@@ -17,13 +17,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.snacks.nuvo.NuvoAppState
 import com.snacks.nuvo.R
 import com.snacks.nuvo.Routes
+import com.snacks.nuvo.rememberNuvoAppState
 import com.snacks.nuvo.ui.component.LoadingIndicator
+import com.snacks.nuvo.ui.home.FakeCallSessionRepository
 import com.snacks.nuvo.ui.script.component.ScriptChip
 import com.snacks.nuvo.ui.script.component.ScriptListItem
 import com.snacks.nuvo.ui.script.component.ScriptSearchBar
@@ -45,7 +49,7 @@ internal fun ScriptScreen(
         Column {
             Text(
                 "나에게 맞춘 스크립트",
-                style = NuvoTheme.typography.interBlack24,
+                style = NuvoTheme.typography.pretendardBlack24,
                 color = NuvoTheme.colors.subNavy,
                 modifier = Modifier.padding(start = 20.dp, top = 44.dp)
             )
@@ -112,4 +116,16 @@ internal fun ScriptScreen(
             LoadingIndicator()
         }
     }
+}
+
+@Preview
+@Composable
+fun ScriptScreenPreview() {
+    val viewModel = remember { ScriptViewModel(
+            callSessionRepository = FakeCallSessionRepository()
+    ) }
+    ScriptScreen(
+        appState = rememberNuvoAppState(),
+        viewModel = viewModel
+    )
 }

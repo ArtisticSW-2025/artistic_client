@@ -1,5 +1,8 @@
 package com.snacks.nuvo.ui.profile
 
+import com.snacks.nuvo.network.model.SentenceFeedback
+import com.snacks.nuvo.network.model.TotalFeedback
+
 data class ProfileUiState(
     val userName: String = "",
     val points: String = "0",
@@ -11,7 +14,7 @@ data class ProfileUiState(
 
 data class FeedbackData(
     val id: String,
-    val userId: String,
-    val content: String,
-    val createdAt: String
+    val title: String,
+    val sentenceFeedbacks: List<SentenceFeedback>,
+    val totalFeedback: TotalFeedback,
 )

@@ -53,7 +53,8 @@ class ScriptDetailViewModel @Inject constructor(
             title = scriptInfo.name,
             mission = scriptInfo.mission,
             goal = scriptInfo.purpose,
-            dialogues = scriptInfo.script
+            dialogues = scriptInfo.script,
+            contactName = scriptInfo.categories[0]
         )
 
         // 로딩 숨기기

@@ -93,7 +93,7 @@ internal fun DatePhraseCard(
                     Spacer(Modifier.height(1.dp))
                     Text(
                         text = phrase,
-                        style = NuvoTheme.typography.interSemiBold13.copy(color = NuvoTheme.colors.lightGradient2)
+                        style = NuvoTheme.typography.pretendardSemiBold13.copy(color = NuvoTheme.colors.lightGradient2)
                     )
                 }
             }

@@ -21,11 +21,12 @@ object Routes {
         const val ROUTE = "challengeRoute"
     }
     object Login {
+        const val ROUTE = "auth"
+        const val SPLASH = "splash"
         const val LOGIN = "loginRoute"
         const val REGISTER = "registerRoute"
         const val WELCOME = "welcomeRoute"
     }
-
 
     object Profile {
         const val ROUTE = "profileRoute"
@@ -38,5 +39,6 @@ object Routes {
         const val CALLING = "calling"
         const val ON_CALL = "on_call"
         const val RESULT = "result"
+        const val RETRY = "call_retry"
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import com.snacks.nuvo.R
 import com.snacks.nuvo.ui.component.NoRippleInteractionSource
 import com.snacks.nuvo.ui.theme.NuvoTheme
+import com.snacks.nuvo.util.dropShadow
 
 @Composable
 internal fun RecommendScriptCard(
@@ -44,14 +46,20 @@ internal fun RecommendScriptCard(
     Card(
         modifier = modifier
             .height(130.dp)
-            .width(344.dp)
             .clickable(
                 interactionSource = remember { NoRippleInteractionSource() },
                 indication = null
-            ) { onClick() },
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp,
-        ),
+            ) { onClick() }
+            .dropShadow(
+                shape = RoundedCornerShape(
+                    size = 15.dp,
+                ),
+                offsetX = 0.dp,
+                offsetY = 6.dp,
+                blur = 12.dp,
+                spread = 0.dp,
+                color = NuvoTheme.colors.black.copy(alpha = 0.12f),
+            ),
         shape = RoundedCornerShape(15.dp)
     ) {
         Surface(
@@ -86,7 +94,7 @@ internal fun RecommendScriptCard(
                     ) {
                         Text(
                             title,
-                            style = NuvoTheme.typography.interBlack20,
+                            style = NuvoTheme.typography.pretendardBlack20,
                             color = NuvoTheme.colors.subNavy,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
