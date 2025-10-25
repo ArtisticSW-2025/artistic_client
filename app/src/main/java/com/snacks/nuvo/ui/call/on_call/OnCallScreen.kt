@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale.Companion.Fit
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -152,25 +153,31 @@ internal fun OnCallScreen(
                 Spacer(Modifier.height(65.dp))
                 Box(
                     modifier = Modifier
-                        .padding(horizontal = 20.dp)
                         .fillMaxWidth()
-                        .height(266.dp),
+                        .padding(horizontal = 20.dp)
+                        .height(266.dp)
+                    ,
+                    contentAlignment = Alignment.Center
                 ) {
                     if (uiState.isTodayMission) {
                         Image(
                             modifier = Modifier
-                                .padding(top = 42.dp, start = 26.dp, end = 26.dp)
-                                .width(355.dp)
-                                .height(184.dp),
+//                                .padding(top = 42.dp, start = 26.dp, end = 26.dp)
+                                .fillMaxWidth()
+//                                .width(355.dp)
+                                .height(184.dp)
+                            ,
+                            contentScale = Fit,
                             painter = painterResource(R.drawable.ic_speech_balloon_filled),
                             contentDescription = null,
                             colorFilter = ColorFilter.tint(color = NuvoTheme.colors.white)
                         )
                         Box(
                             modifier = Modifier
-                                .padding(top = 42.dp, start = 26.dp, end = 26.dp)
-                                .width(355.dp)
-                                .height(155.dp),
+                                .padding(bottom = 30.dp, start = 26.dp, end = 26.dp)
+                                .fillMaxWidth()
+//                                .width(355.dp)
+                                ,
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
@@ -244,13 +251,17 @@ internal fun OnCallScreen(
                     Spacer(Modifier.height(40.dp))
                 }
                 WaveformComponent(
-                    modifier = Modifier,
+                    modifier = Modifier
+//                        .fillMaxWidth()
+                    ,
                     mode = if (uiState.isRecording) WaveformMode.REALTIME else WaveformMode.MINIMAL,
                     realtimeLevels = uiState.waveformLevels,
                     maxLinesCount = uiState.waveformLineCount,
                 )
                 Box(
                     modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = 35.dp)
                         .width(350.dp)
                         .height(1.dp)
                         .background(color = NuvoTheme.colors.white)
