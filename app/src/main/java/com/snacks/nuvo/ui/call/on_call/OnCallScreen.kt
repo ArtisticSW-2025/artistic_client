@@ -198,7 +198,7 @@ internal fun OnCallScreen(
                                 .height(210.dp),
                             state = listState,
                             userScrollEnabled = false,
-
+                            horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(12.dp),
                             contentPadding = PaddingValues(start = 12.dp, end = 12.dp),
                         ) {
