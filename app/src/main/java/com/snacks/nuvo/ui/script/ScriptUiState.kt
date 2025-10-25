@@ -19,6 +19,11 @@ data class ScriptItem(
 enum class ScriptLabel(
     val label: String,
 ) {
+    RESTARANT("음식점"),
+    RESERVATION("예약"),
+    CHANGE("주문 변경"),
+    SERVICE_CENTER("고객센터"),
+    AS("AS"),
     MEDICAL("의료"),
     WORK("업무"),
     LIFESTYLE("생활"),
