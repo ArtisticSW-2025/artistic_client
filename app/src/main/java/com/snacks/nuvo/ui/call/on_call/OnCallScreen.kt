@@ -162,21 +162,22 @@ internal fun OnCallScreen(
                     if (uiState.isTodayMission) {
                         Image(
                             modifier = Modifier
-//                                .padding(top = 42.dp, start = 26.dp, end = 26.dp)
-                                .fillMaxWidth()
-//                                .width(355.dp)
+                                .padding(top = 42.dp, start = 26.dp, end = 26.dp)
+//                                .fillMaxWidth()
+                                .width(355.dp)
                                 .height(184.dp)
                             ,
-                            contentScale = Fit,
+//                            contentScale = Fit,
                             painter = painterResource(R.drawable.ic_speech_balloon_filled),
                             contentDescription = null,
                             colorFilter = ColorFilter.tint(color = NuvoTheme.colors.white)
                         )
                         Box(
                             modifier = Modifier
-                                .padding(bottom = 30.dp, start = 26.dp, end = 26.dp)
-                                .fillMaxWidth()
-//                                .width(355.dp)
+                                .padding(top = 10.dp, start = 26.dp, end = 26.dp)
+//                                .fillMaxWidth()
+                                .width(355.dp)
+                                .height(155.dp)
                                 ,
                             contentAlignment = Alignment.Center,
                         ) {
@@ -360,7 +361,7 @@ fun CallScreenPreviewTodayMission() {
     ) }
     viewModel.setPrevName("오늘의 미션")
     viewModel.setIsTodayMission(true)
-    viewModel.setTodayMission("오늘 하루를\n요약해서 말해보자")
+    viewModel.setTodayMission("오늘 하루를\n요약해서 말해보자요약해서 말해보자\n요약해서 말해보자")
 //    viewModel.setIsTodayMissionFinish(true)
     viewModel.setTodayMissionDateString(LocalDate.now().toString())
     OnCallScreen(
