@@ -108,7 +108,7 @@ class CallViewModel @Inject constructor(
         return viewModelScope.launch {
             val userInfo = userRepository.getUserInfo()
             _uiState.value = _uiState.value.copy(
-                userId = userInfo.id!!,
+                userId = userInfo.username,
             )
         }
     }
