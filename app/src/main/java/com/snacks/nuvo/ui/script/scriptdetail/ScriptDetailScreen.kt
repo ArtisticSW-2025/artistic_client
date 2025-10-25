@@ -90,20 +90,23 @@ internal fun ScriptDetailScreen(
                         )
                     }
                     Spacer(Modifier.height(22.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        ScriptIconToggleButton(
-                            icon = R.drawable.ic_users_outlined,
-                            isSelected = uiState.isSmallTalkMode
-                        ) { }
-                        Spacer(Modifier.width(16.dp))
-                        ScriptIconToggleButton(
-                            icon = R.drawable.ic_danger_outlined,
-                            isSelected = uiState.isEmergencyMode
-                        ) {}
-                    }
+
+                    Spacer(Modifier.height(60.dp))
+//                    Row(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        horizontalArrangement = Arrangement.End
+//                    ) {
+//                        ScriptIconToggleButton(
+//                            icon = R.drawable.ic_users_outlined,
+//                            isSelected = uiState.isSmallTalkMode
+//                        ) { }
+//                        Spacer(Modifier.width(16.dp))
+//                        ScriptIconToggleButton(
+//                            icon = R.drawable.ic_danger_outlined,
+//                            isSelected = uiState.isEmergencyMode
+//                        ) {}
+//                    }
+
                     Spacer(Modifier.height(76.dp))
                     Text(
                         uiState.title,
