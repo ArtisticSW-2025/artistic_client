@@ -101,36 +101,75 @@ private fun ProfileScreenContent(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(NuvoTheme.colors.white)
-                    .onGloballyPositioned { coordinates ->
-                        topHeightPx = coordinates.size.height
-                    },
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.height(60.dp))
+            Box {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(NuvoTheme.colors.white)
+                        .onGloballyPositioned { coordinates ->
+                            topHeightPx = coordinates.size.height
+                        },
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.height(60.dp))
 
-                ProfileHeader(
-                    userName = uiState.userName,
-                    onEditClick = onEditProfileClick
-                )
+                    ProfileHeader(
+                        userName = uiState.userName,
+                        onEditClick = onEditProfileClick
+                    )
 
-                Spacer(modifier = Modifier.height(34.dp))
+                    Spacer(modifier = Modifier.height(34.dp))
 
-                PointCard(points = uiState.points)
+                    PointCard(points = uiState.points)
 
-                Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                StatsCard(
-                    modifier = Modifier,
-                    completedMissions = uiState.completedMissions,
-                    totalSpeakingTime = uiState.totalSpeakingTime
-                )
+                    StatsCard(
+                        modifier = Modifier,
+                        completedMissions = uiState.completedMissions,
+                        totalSpeakingTime = uiState.totalSpeakingTime
+                    )
 
-                Spacer(modifier = Modifier.height(50.dp))
+                    Spacer(modifier = Modifier.height(50.dp))
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 16.dp),
+                    contentAlignment = Alignment.TopEnd
+                ) {
+                    Box {
+                        IconButton(
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .size(size = 20.dp),
+                            onClick = { isMenuExpanded = true },
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_settings_filled),
+                                tint = NuvoTheme.colors.gray3,
+                                contentDescription = null
+                            )
+                        }
+
+                        DropdownMenu(
+                            modifier = Modifier.background(NuvoTheme.colors.white),
+                            expanded = isMenuExpanded,
+                            onDismissRequest = { isMenuExpanded = false },
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("로그아웃") },
+                                onClick = {
+                                    onLogoutClick()
+                                    isMenuExpanded = false
+                                }
+                            )
+                        }
+                    }
+                }
             }
+
 
             val topHeightDp = with(density) { topHeightPx.toDp() }
 
@@ -146,41 +185,7 @@ private fun ProfileScreenContent(
             )
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 16.dp),
-            contentAlignment = Alignment.TopEnd
-        ) {
-            Box {
-                IconButton(
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .size(size = 20.dp),
-                    onClick = { isMenuExpanded = true },
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_settings_filled),
-                        tint = NuvoTheme.colors.gray3,
-                        contentDescription = null
-                    )
-                }
 
-                DropdownMenu(
-                    modifier = Modifier.background(NuvoTheme.colors.white),
-                    expanded = isMenuExpanded,
-                    onDismissRequest = { isMenuExpanded = false },
-                ) {
-                    DropdownMenuItem(
-                        text = { Text("로그아웃") },
-                        onClick = {
-                            onLogoutClick()
-                            isMenuExpanded = false
-                        }
-                    )
-                }
-            }
-        }
 
         if (openBottomSheet && selectedFeedback != null) {
             ModalBottomSheet(
