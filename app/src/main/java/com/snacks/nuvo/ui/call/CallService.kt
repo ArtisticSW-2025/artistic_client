@@ -7,13 +7,20 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.cloud.texttospeech.v1.AudioConfig
+import com.google.cloud.texttospeech.v1.AudioEncoding
+import com.google.cloud.texttospeech.v1.SynthesisInput
+import com.google.cloud.texttospeech.v1.TextToSpeechClient
+import com.google.cloud.texttospeech.v1.TextToSpeechSettings
+import com.google.cloud.texttospeech.v1.VoiceSelectionParams
 import com.google.gson.Gson
 import com.snacks.nuvo.R
 import com.snacks.nuvo.data.repository.CallRepository
@@ -25,11 +32,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.Locale
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CallService : Service(), TextToSpeech.OnInitListener {
+class CallService : Service() {
 
     // Hilt를 통해 '데이터 총괄 매니저'인 Repository를 주입받습니다.
     @Inject
@@ -46,7 +54,8 @@ class CallService : Service(), TextToSpeech.OnInitListener {
     private val serviceScope = CoroutineScope(Dispatchers.IO + Job())
     private var listeningJob: Job? = null
     private var webSocketJob: Job? = null
-    private var tts: TextToSpeech? = null
+    // Google Cloud TTS client
+    private var ttsClient: TextToSpeechClient? = null
 
     // 피드백을 요청했는지 상태를 관리하는 플래그
     private var isFeedbackRequested = false
@@ -60,20 +69,23 @@ class CallService : Service(), TextToSpeech.OnInitListener {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-        tts = TextToSpeech(this, this)
+        initGcpTtsClient()
     }
 
-    override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            // 언어를 한국어로 설정
-            val result = tts?.setLanguage(Locale.KOREAN)
-            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.e("TTS", "한국어를 지원하지 않습니다.")
-            } else {
-                Log.d("TTS", "TTS 엔진 초기화 성공")
-            }
-        } else {
-            Log.e("TTS", "TTS 엔진 초기화 실패")
+    private fun initGcpTtsClient() {
+        try {
+            val credentials = GoogleCredentials.fromStream(
+                resources.openRawResource(R.raw.credential)
+            )
+
+            val settings = TextToSpeechSettings.newBuilder()
+                .setCredentialsProvider { credentials }
+                .build()
+
+            ttsClient = TextToSpeechClient.create(settings)
+            Log.d("TTS", "Google Cloud TTS Client 초기화 성공")
+        } catch (e: Exception) {
+            Log.e("TTS", "Google Cloud TTS 초기화 실패", e)
         }
     }
 
@@ -101,14 +113,46 @@ class CallService : Service(), TextToSpeech.OnInitListener {
             callRepository.disconnectWebSocket()
         }
 
-        tts?.stop()
-        tts?.shutdown()
+        ttsClient?.close()
+        ttsClient = null
     }
 
     private fun speakOut(text: String) {
-        // QUEUE_ADD: 현재 재생 중인 음성이 끝나면 이어서 재생
-        // QUEUE_FLUSH: 현재 재생 중인 음성을 중단하고 즉시 재생
-        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+        serviceScope.launch {
+            try {
+                val input = SynthesisInput.newBuilder()
+                    .setText(text)
+                    .build()
+
+                val languageCode = "ko-KR"
+                val voiceName = "${languageCode}-Chirp3-HD-Kore"
+
+                val voice = VoiceSelectionParams.newBuilder()
+                    .setName(voiceName)
+                    .setLanguageCode(languageCode)
+                    .build()
+
+                val audioConfig = AudioConfig.newBuilder()
+                    .setAudioEncoding(AudioEncoding.MP3)
+                    .build()
+
+                val response = ttsClient?.synthesizeSpeech(input, voice, audioConfig)
+                    ?: return@launch
+
+                val audioData = response.audioContent
+                val audioFile = File(cacheDir, "tts_audio.mp3")
+
+                FileOutputStream(audioFile).use { it.write(audioData.toByteArray()) }
+
+                val mediaPlayer = MediaPlayer()
+                mediaPlayer.setDataSource(audioFile.absolutePath)
+                mediaPlayer.prepare()
+                mediaPlayer.start()
+
+            } catch (e: Exception) {
+                Log.e("TTS", "Google Cloud TTS 오류", e)
+            }
+        }
     }
 
     // --- ViewModel이 호출할 공개 함수들 ---

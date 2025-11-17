@@ -97,6 +97,9 @@ dependencies {
     // Google Cloud Speech-to-Text
     implementation(libs.google.cloud.speech)
 
+    // Google Cloud Text-to-Speech
+    implementation(libs.google.cloud.texttospeech)
+
     // GIF
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
